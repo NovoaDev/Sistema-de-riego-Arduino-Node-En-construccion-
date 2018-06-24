@@ -1,0 +1,20 @@
+{
+  "name": "SistemaRiegoServer",
+  "version": "0.1.0",
+  "description": "MiniServer para SistemaRiegoArduino",
+  "main": "server.js",
+  "author": "Saycoron",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "*",
+    "express": "*",
+    "serialport": "^6.2.0",
+    "socket.io": "^2.1.1"
+  },
+  "devDependencies": {
+    "standard": "^11.0.1"
+  },
+  "scripts": {
+    "lint": "standard"
+  }
+}
