@@ -1,5 +1,4 @@
 #include <SimpleDHT.h>
-#include <Servo.h>
 
 //----------------------------------- Asociacion las salidas correspondiente.
 // Analogicas
@@ -14,7 +13,6 @@
 #define LED_ROJO 3
 #define LED_VERDE 4
 #define LED_AZUL 5
-#define SERVO 9
 
 //Variables
 int NIVEL_AGUA = 0;           //SENSOR NIVELAGUA
@@ -32,18 +30,13 @@ byte VALOR_TEMPERATURA = 0;   //SENSOR HUMEDAD/TEMP
 
 #define delayTime 10 //LEDS
 
-int POSICION = 0;             // SERVO 
-int IPOSICIONACTUAL = 1;      // SERVO 
-
 // Crear Obj
 SimpleDHT11 DHT11;
-Servo MYSERVO;  
 
 void setup(){
   Serial.begin(9600);
   
   pinMode(FOTOCELDA,INPUT); 
-  MYSERVO.attach(SERVO); 
 
   pinMode(LED_ROJO, OUTPUT);
   pinMode(LED_VERDE, OUTPUT);
@@ -56,34 +49,22 @@ void setup(){
 }
 
 void loop(){
-  delay(5000);
   obtenerOtros();
   obtenerValoresPlantas();
- delay(5000);
- //mover_Servo(1);
- //delay(1000);
- //mover_Servo(2);
- //delay(1000);
- //mover_Servo(3);
 }
 
 void obtenerOtros(){
   obtener_Nivel_Del_Agua();
+  delay(100);
   obtener_Humedad_Temperatura();
+  delay(100);
   obtener_Claridad();
-}
-
-void obtenerValoresPlantas(){
-  obtenerHumedadSuelo(1);
-  obtenerHumedadSuelo(2);
-  obtenerHumedadSuelo(3);
 }
 
 void obtener_Nivel_Del_Agua (){
   NIVEL_AGUA = analogRead(MEDIDOR_NIVEL_AGUA);
 
-  sprintf(PRINTBUFFER,"#0#",MEDIDOR_NIVEL_AGUA, NIVEL_AGUA);
-  Serial.println(PRINTBUFFER);
+  Serial.println("#0#"+(String((NIVEL_AGUA))));
 }
 
 void obtener_Claridad (){
@@ -113,22 +94,20 @@ void obtenerHumedadSuelo(int IPLANTA) {
 void obtener_Humedad_Temperatura () {
   byte DATA[40] = {0};
   if (DHT11.read(MEDIDOR_hUMEDAD_TEMP, &VALOR_TEMPERATURA, &VALOR_HUMEDAD, DATA)) {
-      Serial.println("#5#Error");
-      Serial.println("#6#Error");
+      Serial.println("Error");
     return;
   }
   Serial.println("#5#"+(String((int)VALOR_HUMEDAD)));
+  delay(100);
   Serial.println("#6#"+(String((int)VALOR_TEMPERATURA)));
 }
 
-void mover_Servo(int IPLANTA) {
-  if (IPLANTA == 1) {
-    MYSERVO.write(0); 
-  } else if (IPLANTA == 2) {
-    MYSERVO.write(90); 
-  } else if (IPLANTA == 3) {
-    MYSERVO.write(180); 
-  } 
+void obtenerValoresPlantas(){
+  obtenerHumedadSuelo(1);
+  delay(100);
+  obtenerHumedadSuelo(2);
+  delay(100);
+  obtenerHumedadSuelo(3);
 }
 
 void cambiarColorLed(String SCOLOR) {

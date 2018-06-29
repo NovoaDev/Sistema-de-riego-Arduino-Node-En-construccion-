@@ -1,65 +1,80 @@
-const express = require('express')
-const socketIo = require('socket.io')
 const http = require('http')
-const SerialPort = require('serialport')
+const express = require('express')
+const SocketIO = require('socket.io')
 
 const app = express()
 const server = http.createServer(app)
-const io = socketIo.listen(server)
+const io = SocketIO.listen(server)
+
+app.use(express.static(__dirname + '/public'))
+server.listen(3000, () => console.log('server on port 3000'))
+
+const SerialPort = require('serialport')
 const ReadLine = SerialPort.parsers.Readline
-const parser = new ReadLine()
 
-const port = 3000
+var arduinoModel = require('./arduinoModel')
+var sis = new arduinoModel()
 
-//app.get('/', (req, res, next) => {
-//	res.sendFile('index.html')
-//})
-
-
-app.get('/', function (req, res) {
-  res.sendfile('index.html')
+const port = new SerialPort("COM3", {
+  baudRate: 9600
 })
 
+const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
 
-const mySerial = new SerialPort('COM3', {
-	baudRate: 9600
+parser.on('open', function () {
+  console.log('connection is opened');
 })
 
-mySerial.on('open', function () {
-	console.log("Puerto serial abierto")
+parser.on('data', function (data) {
+  selectorDeVar(data.toString())
+
+  io.emit('selec0', sis.nivelAgua)
+  io.emit('selec1', sis.claridad)
+  io.emit('selec2', sis.humedadPlanta1)
+  io.emit('selec3', sis.humedadPlanta2)
+  io.emit('selec4', sis.humedadPlanta3)
+  io.emit('selec5', sis.humedadAmbiente)
+  io.emit('selec6', sis.tempAmbiente)
 })
 
+parser.on('error', (err) => console.log(err))
+port.on('error', (err) => console.log(err))
 
-mySerial.on('data', function (data) {
-	console.log(data.toString())
-	io.emit('arduino:data', {
-		value: data.toString()
-	})
-})
+function selectorDeVar (sDatosArduino) {
+	console.log(sDatosArduino)
+    var sDatos = sDatosArduino
+    var sDatosPrefijo = sDatos.substring(0, 3)
+    var iLargoDatos = sDatos.length
+    var sDatosFinal = sDatos.substring(3, iLargoDatos)
 
-mySerial.on('err', function (err) {
-	console.log(err.message())
-})
-
-app.listen(port, function () {
-  console.log('Arrancoo el Server puerto: ' + port + '!.')
-})
-
-
-//Sub string ejemplo
-function myFunction() {
-    var str = "Hello world!";
-    var res = str.substring(0, 4);
-    document.getElementById("demo").innerHTML = res;
+    if (sDatosPrefijo == "#0#") { validarNivelAgua(sDatosArduino) }
+    if (sDatosPrefijo == "#1#") { sis.setClaridad(sDatosFinal) }
+    if (sDatosPrefijo == "#2#") { sis.setHumedadPlanta1(sDatosFinal) }
+    if (sDatosPrefijo == "#3#") { sis.setHumedadPlanta2(sDatosFinal) }
+    if (sDatosPrefijo == "#4#") { sis.setHumedadPlanta3(sDatosFinal) }
+    if (sDatosPrefijo == "#5#") { sis.setHumedadAmbiente(sDatosFinal) }
+    if (sDatosPrefijo == "#6#") { sis.setTempAmbiente(sDatosFinal) }	
 }
 
-// falta modificar index.html para poder importar socket.io cliente que da error 
+function validarNivelAgua (sDatos) {
+	var iDatosObtenidos
+	var sDatosAModelo
 
+	iDatosObtenidos = parseInt(sDatos)
+	if (iDatosObtenidos > 360) { sDatosAModelo = "Full" }	
+	if ((iDatosObtenidos > 320) && (iDatosObtenidos < 360)) { sDatosAModelo = "Normal" }	
+	if ((iDatosObtenidos > 200) && (iDatosObtenidos < 320)) { sDatosAModelo = "Reserva" }	
+	if (iDatosObtenidos < 200) { sDatosAModelo = "Vacio" }
 
+	sis.setNiveAgua(sDatosAModelo)
+}
+function validarNivelAgua (sDatos) {
+	
+}
+function validarNivelAgua (sDatos, iPlanta) {
+	
+}
 
-
-
-
-
-
-
+function validarNivelAgua (sDatos) {
+	
+}
