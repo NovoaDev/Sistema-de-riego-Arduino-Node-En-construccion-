@@ -10,9 +10,6 @@
 
 //Digitales
 #define MEDIDOR_hUMEDAD_TEMP 2
-#define LED_ROJO 3
-#define LED_VERDE 4
-#define LED_AZUL 5
 
 //Variables
 int NIVEL_AGUA = 0;           //SENSOR NIVELAGUA
@@ -37,15 +34,6 @@ void setup(){
   Serial.begin(9600);
   
   pinMode(FOTOCELDA,INPUT); 
-
-  pinMode(LED_ROJO, OUTPUT);
-  pinMode(LED_VERDE, OUTPUT);
-  pinMode(LED_AZUL, OUTPUT);
-  
-  // Valores iniciales led
-  digitalWrite(LED_ROJO, LOW);
-  digitalWrite(LED_VERDE, LOW);
-  digitalWrite(LED_AZUL, LOW);
 }
 
 void loop(){
@@ -110,23 +98,4 @@ void obtenerValoresPlantas(){
   obtenerHumedadSuelo(3);
 }
 
-void cambiarColorLed(String SCOLOR) {
-  if (SCOLOR == "ROJO") {
-    digitalWrite(LED_ROJO, HIGH);
-    digitalWrite(LED_VERDE, LOW);
-    digitalWrite(LED_AZUL, LOW); 
-  } else if (SCOLOR == "VERDE") {
-    digitalWrite(LED_ROJO, LOW);
-    digitalWrite(LED_VERDE, HIGH);
-    digitalWrite(LED_AZUL, LOW);
-  } else if (SCOLOR == "AZUL") {
-    digitalWrite(LED_ROJO, LOW);
-    digitalWrite(LED_VERDE, LOW);
-    digitalWrite(LED_AZUL, HIGH); 
-  } else if (SCOLOR == "BLANCO") {
-    digitalWrite(LED_ROJO, LOW);
-    digitalWrite(LED_VERDE, LOW);
-    digitalWrite(LED_AZUL, LOW); 
-  } 
-}
 
