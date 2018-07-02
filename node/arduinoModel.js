@@ -1,4 +1,6 @@
 var SistemaDeRiego = function () {
+  this.nivelAguaValor = 0
+  this.claridadValor = 0
   this.nivelAgua = 0
   this.claridad = 0
   this.humedadPlanta1 = 0
@@ -6,6 +8,14 @@ var SistemaDeRiego = function () {
   this.humedadPlanta3 = 0
   this.humedadAmbiente = 0
   this.tempAmbiente = 0
+}
+
+SistemaDeRiego.prototype.setNiveAguaValor = function (stats) {
+  this.nivelAguaValor = stats
+}
+
+SistemaDeRiego.prototype.setClaridadValor = function (stats) {
+  this.claridadValor = stats
 }
 
 SistemaDeRiego.prototype.setNiveAgua = function (stats) {

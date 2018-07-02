@@ -1,46 +1,63 @@
 <!DOCTYPE html>
 <html> 
-  <head>
-    <meta charset="utf-8">
-    <title>Temperature with Nodejs</title>
-    <link href="/style.css" rel="stylesheet" type="text/css">
-  </head>
-  <body>
-    <div><h1>Riem0n</h1>
-        <div>
-          <div>
-            <p class="titulo"> Nivel Agua </p>
-            <p id="senso0"></p>
-          </div>
-          <div>
-            <p class="titulo"> Fotocelda </p>
-            <p id="senso1"></p>
-          </div>
-          <div>
-            <p class="titulo"> Humedad Planta 1 </p>
-            <p id="senso2"></p>
-          </div>
-          <div>
-            <p class="titulo"> Humedad Planta 2 </p>
-            <p id="senso3"></p>
-          </div>
-          <div>
-            <p class="titulo"> Humedad Planta 3 </p>
-            <p id="senso4"></p>
-          </div>
-          <div>
-            <p class="titulo"> Humedad ambiente </p>
-            <p id="senso5"></p>
-          </div>
-          <div>
-            <p class="titulo"> Temperatura ambiente </p>
-            <p id="senso6"></p> 
-          <div>
+    <head>
+        <meta charset="utf-8">
+        <title>Temperature with Nodejs</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="/css/style.css" rel="stylesheet" type="text/css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <img class="logo-xs"src="/img/riemon.jpg" class="rounded-circle">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <img class="logo-xs"src="/img/nivelAgua.png" class="rounded-circle">
+                    <p id="valor0" class="inline"></p>
+                    <p id="senso0" class="inline"></p>
+                </div>
+                <div class="col">
+                    <p class="titulo"> Fotocelda </p>
+                    <p id="valor1" class="inline"></p> 
+                    <p id="senso1" class="inline"></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p class="titulo"> Humedad ambiente </p>
+                    <p id="senso5"></p>
+                </div>
+                <div class="col">
+                    <p class="titulo"> Temperatura ambiente </p>
+                    <p id="senso6"></p> 
+                </div>
+            </div>
+            <div class="row">  
+                <div class="col">
+                    <p class="titulo"> Humedad Planta 1 </p>
+                    <p id="senso2"></p>
+                </div>
+                <div class="col">
+                    <p class="titulo"> Humedad Planta 2 </p>
+                    <p id="senso3"></p>
+                </div>
+                <div class="col">
+                    <p class="titulo"> Humedad Planta 3 </p>
+                    <p id="senso4"></p>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
+        <script src="socket.io/socket.io.js" charset="utf-8"></script>
+        <script src="/js/script.js" charset="utf-8"></script>
 
-    <script src="socket.io/socket.io.js" charset="utf-8"></script>
-    <script src="script.js" charset="utf-8"></script>
-  </body>
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="/js/bootstrap.min.js"></script>
+    </body>
 </html>
