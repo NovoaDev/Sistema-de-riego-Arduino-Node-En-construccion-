@@ -8,6 +8,7 @@
   "dependencies": {
     "body-parser": "*",
     "express": "*",
+    "nodemailer": "^4.6.7",
     "serialport": "^6.2.0",
     "socket.io": "^2.1.1"
   },

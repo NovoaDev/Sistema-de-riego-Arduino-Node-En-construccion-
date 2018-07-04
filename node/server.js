@@ -7,13 +7,15 @@ const server = http.createServer(app)
 const io = SocketIO.listen(server)
 
 app.use(express.static(__dirname + '/public'))
-server.listen(3000, () => console.log('server on port 3000'))
 
 const SerialPort = require('serialport')
 const ReadLine = SerialPort.parsers.Readline
 
 var arduinoModel = require('./arduinoModel')
 var sis = new arduinoModel()
+
+var mailer = require('./mailer')
+var mail = new mailer("99")
 
 const port = new SerialPort("COM3", {
   	baudRate: 9600
@@ -22,7 +24,7 @@ const port = new SerialPort("COM3", {
 const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
 
 parser.on('open', function () {
-  	console.log('connection is opened');
+  	console.log('connection is opened')
 })
 
 parser.on('data', function (data) {
@@ -37,6 +39,7 @@ parser.on('data', function (data) {
   	io.emit('selec6', sis.humedadPlanta3)
   	io.emit('selec7', sis.humedadAmbiente)
   	io.emit('selec8', sis.tempAmbiente)
+  	//var mail = new mailer("1")
 })
 
 parser.on('error', (err) => console.log(err))
@@ -60,6 +63,7 @@ function selectorDeVar (sDatosArduino) {
 		sis.setClaridadValor(sDatosFinal)
     	sis.setClaridad(sRetornoFunciones) 
     }
+    
     if (sDatosPrefijo == "#2#") { sis.setHumedadPlanta1(sDatosFinal+" %") }
     if (sDatosPrefijo == "#3#") { sis.setHumedadPlanta2(sDatosFinal+" %") }
     if (sDatosPrefijo == "#4#") { sis.setHumedadPlanta3(sDatosFinal+" %") }
@@ -93,3 +97,5 @@ function validarClaridad (sDatos) {
 
 	return sDatosAModelo
 }
+
+server.listen(3000, () => console.log('server on port 3000'))
