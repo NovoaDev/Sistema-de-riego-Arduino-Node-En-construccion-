@@ -55,9 +55,28 @@ void obtener_Nivel_Del_Agua (){
   Serial.println("#0#"+(String((NIVEL_AGUA))));
 }
 
+void obtener_Humedad_Temperatura () {
+  byte DATA[40] = {0};
+  if (DHT11.read(MEDIDOR_hUMEDAD_TEMP, &VALOR_TEMPERATURA, &VALOR_HUMEDAD, DATA)) {
+      Serial.println("Error");
+    return;
+  }
+  Serial.println("#5#"+(String((int)VALOR_HUMEDAD)));
+  delay(100);
+  Serial.println("#6#"+(String((int)VALOR_TEMPERATURA)));
+}
+
 void obtener_Claridad (){
   VALOR_CLARIDAD = analogRead(FOTOCELDA);
   Serial.println("#1#"+(String(VALOR_CLARIDAD)));
+}
+
+void obtenerValoresPlantas(){
+  obtenerHumedadSuelo(1);
+  delay(100);
+  obtenerHumedadSuelo(2);
+  delay(100);
+  obtenerHumedadSuelo(3);
 }
 
 void obtenerHumedadSuelo(int IPLANTA) {
@@ -77,25 +96,6 @@ void obtenerHumedadSuelo(int IPLANTA) {
     HUMEDADA_FINAL_3 = constrain (HUMEDADA_TEMP, 0, 100);   
     Serial.println("#4#"+(String((HUMEDADA_FINAL_3)))); 
   }
-}
-
-void obtener_Humedad_Temperatura () {
-  byte DATA[40] = {0};
-  if (DHT11.read(MEDIDOR_hUMEDAD_TEMP, &VALOR_TEMPERATURA, &VALOR_HUMEDAD, DATA)) {
-      Serial.println("Error");
-    return;
-  }
-  Serial.println("#5#"+(String((int)VALOR_HUMEDAD)));
-  delay(100);
-  Serial.println("#6#"+(String((int)VALOR_TEMPERATURA)));
-}
-
-void obtenerValoresPlantas(){
-  obtenerHumedadSuelo(1);
-  delay(100);
-  obtenerHumedadSuelo(2);
-  delay(100);
-  obtenerHumedadSuelo(3);
 }
 
 
