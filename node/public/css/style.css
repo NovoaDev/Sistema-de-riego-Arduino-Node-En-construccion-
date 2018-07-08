@@ -1,5 +1,4 @@
  body {
- 	font-size 0,1;
  	background-color: black;
  }
 
@@ -8,5 +7,10 @@
  }
 
  .logo-xs {
-    width:40%;
+    width:30%;
+
+ }
+
+ .float {
+ 	float:left;
  }
