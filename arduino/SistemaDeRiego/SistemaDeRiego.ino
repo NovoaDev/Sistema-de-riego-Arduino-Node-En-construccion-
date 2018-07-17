@@ -25,7 +25,15 @@ int HUMEDADA_FINAL_3;         //SENSOR HUMEDAD SUELO
 byte VALOR_HUMEDAD = 0;       //SENSOR HUMEDAD/TEMP
 byte VALOR_TEMPERATURA = 0;   //SENSOR HUMEDAD/TEMP
 
-#define delayTime 10 //LEDS
+//Valores para riego
+int NIVEL_AGUA_MIN = 30;
+int CLARIDAD_MIN = 300;
+int CLARIDAD_MAX = 500;
+int TEMPERATURA_MIN = 20;
+int TEMPERATURA_MAX = 30;
+int HUMEDAD_MIN_PLANTA_1 = 30;
+int HUMEDAD_MIN_PLANTA_2 = 30;
+int HUMEDAD_MIN_PLANTA_3 = 30;
 
 // Crear Obj
 SimpleDHT11 DHT11;
@@ -39,6 +47,7 @@ void setup(){
 void loop(){
   obtenerOtros();
   obtenerValoresPlantas();
+  analisisDeRiego();
 }
 
 void obtenerOtros(){
@@ -98,4 +107,26 @@ void obtenerHumedadSuelo(int IPLANTA) {
   }
 }
 
+void analisisDeRiego(){
+  // Condiciones de riego 
+  // Si el recipiente tiene agua
+  // Si la iluminacion es inferior al 30% (Valores de % a %)
+  // Si la temperatura es inferior al 30% (Valores de % a %)
+  // Si la humedad en el suelo es igual o inferior al valor que se asigna a cada maceta 
 
+  if (NIVEL_AGUA > NIVEL_AGUA_MIN) { 
+    if ((VALOR_CLARIDAD > CLARIDAD_MIN) and (VALOR_CLARIDAD < CLARIDAD_MAX)) {
+      if ((VALOR_TEMPERATURA > TEMPERATURA_MIN) and (VALOR_TEMPERATURA < TEMPERATURA_MAX)) {
+        if (HUMEDADA_FINAL_1 < HUMEDAD_MIN_PLANTA_1) { regarPlanta(1); }
+        if (HUMEDADA_FINAL_2 < HUMEDAD_MIN_PLANTA_2) { regarPlanta(2); }
+        if (HUMEDADA_FINAL_3 < HUMEDAD_MIN_PLANTA_3) { regarPlanta(3); }
+      }
+    }
+  }
+}
+
+void regarPlanta(int IPLANTA){
+ 
+
+  Serial.println("#99#Regando planta nº "+(String((IPLANTA))));
+}
