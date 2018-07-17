@@ -1,5 +1,6 @@
  body {
- 	background-color: black;
+ 	font-size: 3vw;
+ 	align-items: center;
  }
 
  .inline {
@@ -13,4 +14,13 @@
 
  .float {
  	float:left;
+ }
+
+ .texto_izq {
+ 	text-align: left;
+ 	left: 0;
+ }
+
+  .cloPadin {
+ 	padding: 2%;
  }

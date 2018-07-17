@@ -1,27 +1,64 @@
 const http = require('http')
 const express = require('express')
 const SocketIO = require('socket.io')
+const SerialPort = require('serialport')
+var bParser = require('body-parser')
+var arduinoModel = require('./arduinoModel')
+var mailer = require('./utilidades/mailer')
+var datab = require('./utilidades/mysql')
 
 const app = express()
 const server = http.createServer(app)
 const io = SocketIO.listen(server)
-
-app.use(express.static(__dirname + '/public'))
-
-const SerialPort = require('serialport')
 const ReadLine = SerialPort.parsers.Readline
 
-var arduinoModel = require('./arduinoModel')
 var sis = new arduinoModel()
+//var mail = new mailer("99")
 
-var mailer = require('./mailer')
-var mail = new mailer("99")
+app.use(express.static(__dirname + '/public'))
+app.use(bParser.urlencoded({extended: true}))
 
-const port = new SerialPort("COM3", {
-  	baudRate: 9600
+const port = new SerialPort("COM3", { baudRate: 9600 })
+const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
+
+app.get('/log', function (req, res) {
+  res.sendfile('public/login.html')
 })
 
-const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
+app.post('/entrar', function (req, res) {
+  var usu = req.body.usuario
+  var pass = req.body.password
+  var login = false
+  
+  console.log(usu)
+  console.log(pass)
+  datab.validarUsu(usu, pass, function (vali) {
+    if (vali) {
+      res.send('Bienvenido ')
+      var login = true
+	  
+    } else {
+      res.send('Usuario o clave incorrecta ')
+      var login = false
+    }
+  })
+})
+
+app.get('/crear', function (req, res) {
+  res.send('creando tablas')
+  //datab.crearTabla("usuarios")
+  //datab.crearTabla("plantas")
+  //datab.crearTabla("tipoPlanta")
+  //datab.crearTabla("mail")
+  //datab.crearUsuario("lola", "rica")
+  //datab.crearUsuario("lola2", "rica")
+  //datab.eliminarUsu("lola2")
+  //datab.crearCFGMail("1", "1", "1", "1", "1")
+  //datab.eliminarCFGMail("1")
+  var cfgCorreo = datab.selectMail()
+  console.log(cfgCorreo)
+
+})
 
 parser.on('open', function () {
   	console.log('connection is opened')
@@ -42,8 +79,7 @@ parser.on('data', function (data) {
   	//var mail = new mailer("1")
 })
 
-parser.on('error', (err) => console.log(err))
-port.on('error', (err) => console.log(err))
+
 
 function selectorDeVar (sDatosArduino) {
 	console.log(sDatosArduino)
@@ -59,8 +95,8 @@ function selectorDeVar (sDatosArduino) {
     	sis.setNiveAgua(sRetornoFunciones)
     }
     if (sDatosPrefijo == "#1#") { 
-		sRetornoFunciones = validarClaridad(sDatosFinal) 
-		sis.setClaridadValor(sDatosFinal)
+		  sRetornoFunciones = validarClaridad(sDatosFinal) 
+		  sis.setClaridadValor(sDatosFinal)
     	sis.setClaridad(sRetornoFunciones) 
     }
     
@@ -99,3 +135,6 @@ function validarClaridad (sDatos) {
 }
 
 server.listen(3000, () => console.log('server on port 3000'))
+
+
+
