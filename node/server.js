@@ -3,9 +3,10 @@ const express = require('express')
 const SocketIO = require('socket.io')
 const SerialPort = require('serialport')
 var bParser = require('body-parser')
-var arduinoModel = require('./modelos/arduinoModel')
 var mailer = require('./utilidades/mailer')
 var datab = require('./utilidades/mysql')
+var val = require('./utilidades/validarValoresSensores')
+var arduinoModel = require('./modelos/arduinoModel')
 
 const app = express()
 const server = http.createServer(app)
@@ -79,8 +80,6 @@ parser.on('data', function (data) {
   	//var mail = new mailer("1")
 })
 
-
-
 function selectorDeVar (sDatosArduino) {
 	console.log(sDatosArduino)
     var sDatos = sDatosArduino
@@ -90,12 +89,12 @@ function selectorDeVar (sDatosArduino) {
     var sRetornoFunciones
 
     if (sDatosPrefijo == "#0#") { 
-    	sRetornoFunciones = validarNivelAgua(sDatosFinal) 
+    	sRetornoFunciones = val.validarNivelAgua(sDatosFinal) 
     	sis.setNiveAguaValor(sDatosFinal)
     	sis.setNiveAgua(sRetornoFunciones)
     }
     if (sDatosPrefijo == "#1#") { 
-		  sRetornoFunciones = validarClaridad(sDatosFinal) 
+		  sRetornoFunciones = val.validarClaridad(sDatosFinal) 
 		  sis.setClaridadValor(sDatosFinal)
     	sis.setClaridad(sRetornoFunciones) 
     }
@@ -105,33 +104,6 @@ function selectorDeVar (sDatosArduino) {
     if (sDatosPrefijo == "#4#") { sis.setHumedadPlanta3(sDatosFinal+" %") }
     if (sDatosPrefijo == "#5#") { sis.setHumedadAmbiente(sDatosFinal+" %") }
     if (sDatosPrefijo == "#6#") { sis.setTempAmbiente(sDatosFinal) }	
-}
-
-function validarNivelAgua (sDatos) {
-	var iDatosObtenidos
-	var sDatosAModelo
-
-	iDatosObtenidos = parseInt(sDatos)
-	if (iDatosObtenidos > 360) { sDatosAModelo = "Full" }	
-	if ((iDatosObtenidos > 320) && (iDatosObtenidos < 360)) { sDatosAModelo = "Normal" }	
-	if ((iDatosObtenidos > 200) && (iDatosObtenidos < 320)) { sDatosAModelo = "Reserva" }	
-	if (iDatosObtenidos < 200) { sDatosAModelo = "Vacio" }
-
-	return sDatosAModelo
-}
-
-function validarClaridad (sDatos) {
-	var iDatosObtenidos
-	var sDatosAModelo
-
-	iDatosObtenidos = parseInt(sDatos)
-
-	if (iDatosObtenidos >= 600) { sDatosAModelo = "Noche" }	
-	if ((iDatosObtenidos >= 420) && (iDatosObtenidos < 600)) { sDatosAModelo = "Poca Luz" }	
-	if ((iDatosObtenidos >= 200) && (iDatosObtenidos < 420)) { sDatosAModelo = "Normal" }	
-	if (iDatosObtenidos < 200) { sDatosAModelo = "Mucha Luz" }
-
-	return sDatosAModelo
 }
 
 server.listen(3000, () => console.log('server on port 3000'))

@@ -1,8 +1,8 @@
 var tipoPlantaModel = function () {
-  this.planta[] = ""
-  this.humedad[] = ""
-  this.notas[] = ""
-  this.imagen[] = ""
+  this.planta  = []
+  this.humedad = [] 
+  this.notas   = []
+  this.imagen  = []
 }
 
 tipoPlantaModel.prototype.setPlanta = function (sStats, iNumero) {
