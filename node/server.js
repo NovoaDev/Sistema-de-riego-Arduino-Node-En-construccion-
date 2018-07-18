@@ -3,7 +3,7 @@ const express = require('express')
 const SocketIO = require('socket.io')
 const SerialPort = require('serialport')
 var bParser = require('body-parser')
-var arduinoModel = require('./arduinoModel')
+var arduinoModel = require('./modelos/arduinoModel')
 var mailer = require('./utilidades/mailer')
 var datab = require('./utilidades/mysql')
 

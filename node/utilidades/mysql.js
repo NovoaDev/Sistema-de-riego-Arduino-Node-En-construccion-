@@ -2,6 +2,12 @@ var mysql = require('mysql')
 var cfg = require('./cfg')
 var crypto = require('./crypto')
 
+var emailModel = require('../modelos/emailModel')
+var mail = new emailModel()
+
+var tipoPlantaModel = require('../modelos/tipoPlantaModel')
+var tPlanta = new tipoPlantaModel()
+
 var usuario = cfg.key.sqlUser
 var pass = cfg.key.sqlPassword
 var servidor = cfg.key.sqlServer
@@ -27,12 +33,12 @@ db.crearTabla = function crearTabla (sTabla) {
   }
   
   if (sTabla == "plantas") {
-    connection.query('CREATE TABLE IF NOT EXISTS plantas (id INT AUTO_INCREMENT PRIMARY KEY, maceta INT(1) UNIQUE, planta varchar(40) UNIQUE, humedad INT(2), imagen varchar(120))') 
+    connection.query('CREATE TABLE IF NOT EXISTS plantas (id INT AUTO_INCREMENT PRIMARY KEY, maceta INT(1) UNIQUE, planta varchar(40), humedad INT(2), notas varchar(120), imagen varchar(120))') 
     console.log('Tabla de mysql(plantas) Creada!')
   }
 
   if (sTabla == "tipoPlanta") {
-    connection.query('CREATE TABLE IF NOT EXISTS tipoPlanta (id INT AUTO_INCREMENT PRIMARY KEY, planta varchar(40) UNIQUE, humedad INT(2), imagen varchar(120))')
+    connection.query('CREATE TABLE IF NOT EXISTS tipoPlanta (id INT AUTO_INCREMENT PRIMARY KEY, planta varchar(40) UNIQUE, humedad INT(2), notas varchar(120), imagen varchar(120))')
     console.log('Tabla de mysql(tipoPlanta) Creada!')
   }
 
@@ -146,30 +152,15 @@ db.crearCFGMail = function crearCFGMail (sService, sUsuario, sPass, sFromMail, s
   })
 }
 
-db.eliminarCFGMail = function eliminarCFGMail (sUsu) {
-  var usuario = sUsu
+db.eliminarCFGMail = function eliminarCFGMail () {
 
-  connection.query("SELECT * FROM mail WHERE usuario = '" + usuario +"'",
-  function (err, rows) {
-    var resultado = rows
+  connection.query("DELETE * FROM mail",
+  function (err, res) {
     if (err) {
       console.log('error sql')
       throw err
     }else {
-      if (resultado.length > 0) {
-        connection.query("DELETE FROM mail WHERE usuario = '" + usuario +"'",
-        function (err, rows) {
-          var resultado = rows
-          if (err) {
-            console.log('error sql')
-            throw err
-          }else {
-          console.log('Se elimina el cfg de correo: ' + usuario + '...')
-          }
-        })
-      }else {
-      console.log('usuario ' + usuario + ' no encontrado...')
-      }
+    console.log('Se elimina el cfg de correo: ' + usuario + '...')
     }
   })
 }
@@ -184,23 +175,127 @@ db.selectMail = function selectMail () {
       throw err
     }else {
       if (resultado.length > 0) {
+        mail.setService(resultado[0].service)     
+        mail.setUsuario(resultado[0].usuario)
+        mail.setPass(resultado[0].pass)
+        mail.setFromMail(resultado[0].fromMail)
+        mail.setToMail(resultado[0].toMail)
 
-        var config = { 
-          serviceJSON: resultado[0].service, 
-          usuarioJSON: resultado[0].usuario, 
-          passJSON: resultado[0].pass, 
-          fromMailJSON: resultado[0].fromMail, 
-          toMailJSON: resultado[0].toMail 
-        }
         console.log('CFG MAIL CARGADA ' + resultado[0].usuario + '...')
-        return config
       }else {
         console.log('FALLO en configuracion mail...') 
       }
     }
   })
+  if (mail.usuario != "" ) { return mail }
 }
 // FIN CREAR / ELIMINAR / SELECT MAIL ----------------------------------------------------------------
+
+// CREAR / ELIMINAR / TIPOPLANTA ------------------------------------------------------------------
+db.crearTipoPlanta = function crearTipoPlanta (sPlanta, iHumedad, sNotas, sImagen) {
+  
+  database = { planta: sPlanta, humedad: iHumedad, notas: sNotas, imagen: sImagen }
+
+  connection.query('INSERT INTO tipoPlanta SET ?', database, function (err, res) {
+  if (err) {
+    throw err
+  }
+  console.log('tipoPlanta last insert id:' + res.insertId)
+  console.log('--------------------')
+  })
+}
+
+db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
+  var planta = sPlanta
+
+  connection.query("SELECT * FROM tipoPlanta WHERE planta = '" + planta +"'",
+  function (err, rows) {
+    var resultado = rows
+    if (err) {
+      console.log('error sql')
+      throw err
+    }else {
+      if (resultado.length > 0) {
+        connection.query("DELETE FROM tipoPlanta WHERE planta = '" + planta +"'",
+        function (err, rows) {
+          var resultado = rows
+          if (err) {
+            console.log('error sql')
+            throw err
+          }else {
+          console.log('Se elimina la planta: ' + planta + '...')
+          }
+        })
+      }else {
+      console.log('planta ' + planta + ' no encontrada...')
+      }
+    }
+  })
+}
+
+//Revisar
+db.selectTipoPlanta = function selectTipoPlanta (sTipo) {
+
+  if (sTipo != "") {
+      //Consulta individual
+  } else {
+    connection.query("SELECT * FROM tipoPlanta",
+    function (err, rows) {
+      var resultado = rows
+      if (err) {
+        console.log('error sql')
+        throw err
+      }else {
+        if (resultado.length > 0) {
+          let iIte, iIteFinal
+
+          iIteFinal = resultado.length
+          for (iIte = 0; iIte < iIteFinal; iIte++) {
+            tPlanta.setPlanta(resultado[iIte].planta, iIte)     
+            tPlanta.setHumedad(resultado[iIte].humedad, iIte)
+            tPlanta.setNotas(resultado[iIte].notas, iIte)
+            tPlanta.setImagen(resultado[iIte].imagen, iIte)
+          }  
+         
+          console.log('Tabla tipoPlanta CARGADA ' + iIteFinal + ' registros...')
+        }else {
+          console.log('tabla tipoPlanta vacia...') 
+        }
+      }
+    })
+  }
+  if (tPlanta.planta[0] != "" ) { return tPlanta }  
+}
+
+// FIN CREAR / ELIMINAR TIPOPLANTA -----------------------------------------------------------------
+
+// CREAR / ELIMINAR / PLANTAS ----------------------------------------------------------------------
+db.crearPlantas = function crearPlantas (sMaceta, sPlanta, iHumedad, sNotas, sImagen) {
+  
+  database = { maceta: sMaceta, planta: sPlanta, humedad: iHumedad, notas: sNotas, imagen: sImagen }
+
+  connection.query('INSERT INTO plantas SET ?', database, function (err, res) {
+  if (err) {
+    throw err
+  }
+  console.log('plantas last insert id:' + res.insertId)
+  console.log('--------------------')
+  })
+}
+
+db.updatePlantas = function updatePlantas (sMaceta, sNuevaPlanta, iNuevaHumedad, sNuevaNotas, sNuevaImagen) {
+
+  connection.query("UPDATE plantas SET planta= '"+sNuevaPlanta+"', humedad= '"+iNuevaHumedad+"', notas= '"+sNuevaNotas+"', imagen= '"+sNuevaImagen+"' WHERE maceta LIKE '"+ sMaceta +"'",
+  function (err, res) {
+    if (err) {
+      console.log('error sql')
+      throw err
+    }else {
+      console.log('Actualizada la maceta nº ' + sMaceta + '...')
+    }
+  })
+}
+// FIN CREAR / ELIMINAR / PLANTAS ------------------------------------------------------------------
 
 
 
