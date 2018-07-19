@@ -1,20 +1,18 @@
-var mysql = require('mysql')
-var cfg = require('./cfg')
-var crypto = require('./crypto')
+const mysql = require('mysql')
+const cfg = require('./cfg')
+const crypto = require('./crypto')
+const emailModel = require('../modelos/emailModel')
+const mail = new emailModel()
+const tipoPlantaModel = require('../modelos/tipoPlantaModel')
+const tPlanta = new tipoPlantaModel()
 
-var emailModel = require('../modelos/emailModel')
-var mail = new emailModel()
-
-var tipoPlantaModel = require('../modelos/tipoPlantaModel')
-var tPlanta = new tipoPlantaModel()
-
-var usuario = cfg.key.sqlUser
-var pass = cfg.key.sqlPassword
-var servidor = cfg.key.sqlServer
-var dab = cfg.key.sqlDatabase
+let usuario = cfg.key.sqlUser
+let pass = cfg.key.sqlPassword
+let servidor = cfg.key.sqlServer
+let dab = cfg.key.sqlDatabase
 
 // CONFIGURACION -------------------------------------------------------------------------------------
-var connection = mysql.createConnection({
+let connection = mysql.createConnection({
   host: servidor,
   user: usuario,
   password: pass,
@@ -74,7 +72,7 @@ db.eliminarTabla = function eliminarTabla (sTabla) {
 
 // CREAR / ELIMINAR / VALIDAR USUARIO ----------------------------------------------------------------
 db.crearUsuario = function crearUsuario (sUsu, sPass) {
-  var passcrypt = crypto(sPass)
+  let passcrypt = crypto(sPass)
   database = { usuario: sUsu, password: passcrypt }
 
   connection.query('INSERT INTO usuarios SET ?', database, function (err, res) {
@@ -87,11 +85,11 @@ db.crearUsuario = function crearUsuario (sUsu, sPass) {
 }
 
 db.eliminarUsu = function eliminarUsu (sUsu) {
-  var usuario = sUsu
+  let usuario = sUsu
 
   connection.query("SELECT * FROM usuarios WHERE usuario = '" + usuario +"'",
   function (err, rows) {
-    var resultado = rows
+    let resultado = rows
     if (err) {
       console.log('error sql')
       throw err
@@ -99,7 +97,7 @@ db.eliminarUsu = function eliminarUsu (sUsu) {
       if (resultado.length > 0) {
         connection.query("DELETE FROM usuarios WHERE usuario = '" + usuario +"'",
         function (err, rows) {
-          var resultado = rows
+          let resultado = rows
           if (err) {
             console.log('error sql')
             throw err
@@ -115,12 +113,12 @@ db.eliminarUsu = function eliminarUsu (sUsu) {
 }
 
 db.validarUsu = function validarUsu (sUsu, sPass, callback) {
-  var passcrypt = crypto(sPass)
-  var usuario = sUsu
+  let passcrypt = crypto(sPass)
+  let usuario = sUsu
 
   connection.query("SELECT * FROM usuarios WHERE usuario = '" + usuario +"' AND password = '" + passcrypt + "'",
   function (err, rows) {
-    var resultado = rows
+    let resultado = rows
     if (err) {
       console.log('error sql')
       throw err
@@ -169,7 +167,7 @@ db.selectMail = function selectMail () {
 
   connection.query("SELECT * FROM mail",
   function (err, rows) {
-    var resultado = rows
+    let resultado = rows
     if (err) {
       console.log('error sql')
       throw err
@@ -181,6 +179,7 @@ db.selectMail = function selectMail () {
         mail.setFromMail(resultado[0].fromMail)
         mail.setToMail(resultado[0].toMail)
 
+        console(mail)
         console.log('CFG MAIL CARGADA ' + resultado[0].usuario + '...')
       }else {
         console.log('FALLO en configuracion mail...') 
@@ -206,11 +205,11 @@ db.crearTipoPlanta = function crearTipoPlanta (sPlanta, iHumedad, sNotas, sImage
 }
 
 db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
-  var planta = sPlanta
+  let planta = sPlanta
 
   connection.query("SELECT * FROM tipoPlanta WHERE planta = '" + planta +"'",
   function (err, rows) {
-    var resultado = rows
+    let resultado = rows
     if (err) {
       console.log('error sql')
       throw err
@@ -218,7 +217,7 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
       if (resultado.length > 0) {
         connection.query("DELETE FROM tipoPlanta WHERE planta = '" + planta +"'",
         function (err, rows) {
-          var resultado = rows
+          let resultado = rows
           if (err) {
             console.log('error sql')
             throw err
@@ -241,7 +240,7 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo) {
   } else {
     connection.query("SELECT * FROM tipoPlanta",
     function (err, rows) {
-      var resultado = rows
+      let resultado = rows
       if (err) {
         console.log('error sql')
         throw err
@@ -256,7 +255,7 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo) {
             tPlanta.setNotas(resultado[iIte].notas, iIte)
             tPlanta.setImagen(resultado[iIte].imagen, iIte)
           }  
-         
+           //console.log(tPlanta)
           console.log('Tabla tipoPlanta CARGADA ' + iIteFinal + ' registros...')
         }else {
           console.log('tabla tipoPlanta vacia...') 
@@ -264,6 +263,9 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo) {
       }
     })
   }
+  let pp = tPlanta.getPlanta()
+  console.log(pp + "pp")
+  console.log(tPlanta)
   if (tPlanta.planta[0] != "" ) { return tPlanta }  
 }
 
@@ -301,9 +303,9 @@ db.updatePlantas = function updatePlantas (sMaceta, sNuevaPlanta, iNuevaHumedad,
 
 //Puesta a punto inicial 
 db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {
-  var val1 = v1
-  var val2 = v2
-  var val3 = v3
+  let val1 = v1
+  let val2 = v2
+  let val3 = v3
   
   if (val1 === cfg.key.keyVal1 && val2 === cfg.key.keyVal2 && val3 === cfg.key.keyVal3) {
     callback(true)

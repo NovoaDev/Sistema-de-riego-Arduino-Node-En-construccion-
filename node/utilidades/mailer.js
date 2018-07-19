@@ -1,18 +1,21 @@
 const nodemailer = require("nodemailer")
-var cfg = require("./cfg")
+const cfg = require("./cfg")
+const datab = require('../utilidades/mysql')
  
 function sendMail (iTipo) {
 
-    var serviceCFG = cfg.key.serviceMail
-    var userCFG = cfg.key.usuMail
-    var passCFG = cfg.key.passMail
+    mail = datab.selectMail()
+    console.log(mail)
+    let serviceCFG = cfg.key.serviceMail
+    let userCFG = cfg.key.usuMail
+    let passCFG = cfg.key.passMail
 
-    var sFrom = cfg.key.fromMail
-    var sTo = cfg.key.toMail
-    var sSubject 
-    var sText
+    let sFrom = cfg.key.fromMail
+    let sTo = cfg.key.toMail
+    let sSubject 
+    let sText
 
-    var transporter = nodemailer.createTransport({
+    let transporter = nodemailer.createTransport({
         service: serviceCFG,
         auth: {
             user: userCFG,
@@ -35,7 +38,7 @@ function sendMail (iTipo) {
             break
     }
 
-    var mailOptions = {
+    let mailOptions = {
         from: sFrom, to: sTo,
         subject: sSubject,
         text: sText,

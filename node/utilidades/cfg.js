@@ -1,4 +1,4 @@
-var config = {
+let config = {
   key: {
     sqlServer: process.env.RIEMON_SERVER_SQL,
     sqlPort: process.env.RIEMON_PORT_SQL,

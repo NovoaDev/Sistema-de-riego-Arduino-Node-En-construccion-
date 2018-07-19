@@ -2,19 +2,19 @@ const http = require('http')
 const express = require('express')
 const SocketIO = require('socket.io')
 const SerialPort = require('serialport')
-var bParser = require('body-parser')
-var mailer = require('./utilidades/mailer')
-var datab = require('./utilidades/mysql')
-var val = require('./utilidades/validarValoresSensores')
-var arduinoModel = require('./modelos/arduinoModel')
+const bParser = require('body-parser')
+const mailer = require('./utilidades/mailer')
+const datab = require('./utilidades/mysql')
+const val = require('./utilidades/validarValoresSensores')
+const arduinoModel = require('./modelos/arduinoModel')
 
 const app = express()
 const server = http.createServer(app)
 const io = SocketIO.listen(server)
 const ReadLine = SerialPort.parsers.Readline
 
-var sis = new arduinoModel()
-//var mail = new mailer("99")
+const sis = new arduinoModel()
+//let mail = new mailer("99")
 
 app.use(express.static(__dirname + '/public'))
 app.use(bParser.urlencoded({extended: true}))
@@ -27,37 +27,65 @@ app.get('/log', function (req, res) {
 })
 
 app.post('/entrar', function (req, res) {
-  var usu = req.body.usuario
-  var pass = req.body.password
-  var login = false
+  let usu = req.body.usuario
+  let pass = req.body.password
+  let login = false
   
   console.log(usu)
   console.log(pass)
   datab.validarUsu(usu, pass, function (vali) {
     if (vali) {
       res.send('Bienvenido ')
-      var login = true
+      let login = true
 	  
     } else {
       res.send('Usuario o clave incorrecta ')
-      var login = false
+      let login = false
     }
   })
 })
 
 app.get('/crear', function (req, res) {
   res.send('creando tablas')
+  
+  //ELIMINAR TABLAS
+  //datab.eliminarTabla("usuarios")
+  //datab.eliminarTabla("plantas")
+  //datab.eliminarTabla("tipoPlanta")
+  //datab.eliminarTabla("mail")
+
+  //CREAR TABLAS
   //datab.crearTabla("usuarios")
   //datab.crearTabla("plantas")
   //datab.crearTabla("tipoPlanta")
   //datab.crearTabla("mail")
+
   //datab.crearUsuario("lola", "rica")
   //datab.crearUsuario("lola2", "rica")
   //datab.eliminarUsu("lola2")
   //datab.crearCFGMail("1", "1", "1", "1", "1")
   //datab.eliminarCFGMail("1")
-  var cfgCorreo = datab.selectMail()
-  console.log(cfgCorreo)
+
+  /*
+  //inicio test arry dentro de objeto tipoPlanta
+  datab.crearTipoPlanta("coco", 20, "planta de coco cuidar con la vida", "C:/coso")
+  datab.crearTipoPlanta("coco1", 21, "planta de coco cuidar con la vida1", "C:/coso")
+  datab.crearTipoPlanta("coco2", 22, "planta de coco cuidar con la vida2", "C:/coso")
+  datab.crearTipoPlanta("coco3", 23, "planta de coco cuidar con la vida3", "C:/coso")
+  datab.crearTipoPlanta("coco4", 24, "planta de coco cuidar con la vida4", "C:/coso")
+  datab.crearTipoPlanta("coco5", 25, "planta de coco cuidar con la vida5", "C:/coso")
+  datab.crearTipoPlanta("coco6", 26, "planta de coco cuidar con la vida6", "C:/coso")
+  datab.crearTipoPlanta("coco7", 27, "planta de coco cuidar con la vida7", "C:/coso")
+  datab.crearTipoPlanta("coco8", 28, "planta de coco cuidar con la vida8", "C:/coso")
+  datab.crearTipoPlanta("coco9", 29, "planta de coco cuidar con la vida9", "C:/coso")
+  datab.crearTipoPlanta("coco10", 30, "planta de coco cuidar con la vida10", "C:/coso")
+  datab.crearTipoPlanta("coco11", 31, "planta de coco cuidar con la vida11", "C:/coso")
+  //FIN test arry dentro de objeto tipoPlanta 
+  */
+
+  let lola = datab.selectTipoPlanta("")
+  //let cfgCorreo = datab.selectMail()
+  //console.log(lola)
 
 })
 
@@ -77,16 +105,15 @@ parser.on('data', function (data) {
   	io.emit('selec6', sis.humedadPlanta3)
   	io.emit('selec7', sis.humedadAmbiente)
   	io.emit('selec8', sis.tempAmbiente)
-  	//var mail = new mailer("1")
+  	//let mail = new mailer("1")
 })
 
 function selectorDeVar (sDatosArduino) {
-	console.log(sDatosArduino)
-    var sDatos = sDatosArduino
-    var sDatosPrefijo = sDatos.substring(0, 3)
-    var iLargoDatos = sDatos.length
-    var sDatosFinal = sDatos.substring(3, iLargoDatos)
-    var sRetornoFunciones
+    let sDatos = sDatosArduino
+    let sDatosPrefijo = sDatos.substring(0, 3)
+    let iLargoDatos = sDatos.length
+    let sDatosFinal = sDatos.substring(3, iLargoDatos)
+    let sRetornoFunciones
 
     if (sDatosPrefijo == "#0#") { 
     	sRetornoFunciones = val.validarNivelAgua(sDatosFinal) 

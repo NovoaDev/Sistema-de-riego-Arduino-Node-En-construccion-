@@ -2,8 +2,8 @@ let validar = {}
 
 // Validar Claridad --------------------------------------------------------------------------
 validar.validarClaridad = function validarClaridad (sDatos) {
-  var iDatosObtenidos
-  var sDatosAModelo
+  let iDatosObtenidos
+  let sDatosAModelo
 
   iDatosObtenidos = parseInt(sDatos)
 
@@ -17,8 +17,8 @@ validar.validarClaridad = function validarClaridad (sDatos) {
 
 
 validar.validarNivelAgua = function validarNivelAgua (sDatos) {
-  var iDatosObtenidos
-  var sDatosAModelo
+  let iDatosObtenidos
+  let sDatosAModelo
 
   iDatosObtenidos = parseInt(sDatos)
   if (iDatosObtenidos > 360) { sDatosAModelo = "Full" } 

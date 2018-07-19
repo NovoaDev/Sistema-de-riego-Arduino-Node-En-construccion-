@@ -6,6 +6,28 @@ var emailModel = function () {
   this.toMail = ""
 }
 
+//GETTERS
+emailModel.prototype.getService = function () {
+  return this.service
+}
+
+emailModel.prototype.getUsuario = function () {
+  return this.usuario
+}
+
+emailModel.prototype.getPass = function () {
+  return this.pass
+}
+
+emailModel.prototype.getFromMail = function () {
+  return this.fromMail
+}
+
+emailModel.prototype.setToMail = function () {
+  return this.toMail
+}
+
+//SETTERS
 emailModel.prototype.setService = function (sStats) {
   this.service = sStats
 }

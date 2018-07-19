@@ -5,6 +5,10 @@ var tipoPlantaModel = function () {
   this.imagen  = []
 }
 
+tipoPlantaModel.prototype.getPlanta = function () {
+  return this.planta
+}
+
 tipoPlantaModel.prototype.setPlanta = function (sStats, iNumero) {
   this.planta[iNumero] = sStats
 }
