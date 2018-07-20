@@ -233,16 +233,19 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
 }
 
 //Revisar
-db.selectTipoPlanta = function selectTipoPlanta (sTipo) {
+ db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
 
-  if (sTipo != "") {
+  if ((sTipo != "") && (sTipo != undefined)) {
       //Consulta individual
+      console.log("individual")
+      callback(tPlanta)
   } else {
     connection.query("SELECT * FROM tipoPlanta",
     function (err, rows) {
       let resultado = rows
       if (err) {
         console.log('error sql')
+        callback("error")
         throw err
       }else {
         if (resultado.length > 0) {
@@ -250,23 +253,21 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo) {
 
           iIteFinal = resultado.length
           for (iIte = 0; iIte < iIteFinal; iIte++) {
-            tPlanta.setPlanta(resultado[iIte].planta, iIte)     
+            tPlanta.setPlanta(resultado[iIte].planta, iIte)
             tPlanta.setHumedad(resultado[iIte].humedad, iIte)
             tPlanta.setNotas(resultado[iIte].notas, iIte)
             tPlanta.setImagen(resultado[iIte].imagen, iIte)
-          }  
-           //console.log(tPlanta)
+          }
+
+          callback(tPlanta)
           console.log('Tabla tipoPlanta CARGADA ' + iIteFinal + ' registros...')
         }else {
-          console.log('tabla tipoPlanta vacia...') 
+            callback("vacia")
+          console.log('tabla tipoPlanta vacia...')
         }
       }
     })
   }
-  let pp = tPlanta.getPlanta()
-  console.log(pp + "pp")
-  console.log(tPlanta)
-  if (tPlanta.planta[0] != "" ) { return tPlanta }  
 }
 
 // FIN CREAR / ELIMINAR TIPOPLANTA -----------------------------------------------------------------
@@ -298,8 +299,6 @@ db.updatePlantas = function updatePlantas (sMaceta, sNuevaPlanta, iNuevaHumedad,
   })
 }
 // FIN CREAR / ELIMINAR / PLANTAS ------------------------------------------------------------------
-
-
 
 //Puesta a punto inicial 
 db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {

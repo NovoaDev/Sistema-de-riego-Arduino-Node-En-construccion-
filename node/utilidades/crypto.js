@@ -1,7 +1,7 @@
-var crypto = require('crypto')
+let crypto = require('crypto')
 
 function cryptoPass (pass) {
-  var shasum = crypto.createHash('sha256')
+  let shasum = crypto.createHash('sha256')
   shasum.update(pass)
   return shasum.digest('hex')
 }
