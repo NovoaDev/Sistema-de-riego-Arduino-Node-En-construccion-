@@ -14,7 +14,7 @@ const io = SocketIO.listen(server)
 const ReadLine = SerialPort.parsers.Readline
 
 const sis = new arduinoModel()
-//let mail = new mailer("99")
+let mail = new mailer("99")
 
 app.use(express.static(__dirname + '/public'))
 app.use(bParser.urlencoded({extended: true}))

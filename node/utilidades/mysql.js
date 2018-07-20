@@ -163,13 +163,14 @@ db.eliminarCFGMail = function eliminarCFGMail () {
   })
 }
 
-db.selectMail = function selectMail () {
+db.selectMail = function selectMail (callback) {
 
   connection.query("SELECT * FROM mail",
   function (err, rows) {
     let resultado = rows
     if (err) {
       console.log('error sql')
+      callback("error")
       throw err
     }else {
       if (resultado.length > 0) {
@@ -179,14 +180,14 @@ db.selectMail = function selectMail () {
         mail.setFromMail(resultado[0].fromMail)
         mail.setToMail(resultado[0].toMail)
 
-        console(mail)
+        callback(mail)
         console.log('CFG MAIL CARGADA ' + resultado[0].usuario + '...')
       }else {
-        console.log('FALLO en configuracion mail...') 
+        callback("vacia")
+        console.log('tabla vacia mail...') 
       }
     }
   })
-  if (mail.usuario != "" ) { return mail }
 }
 // FIN CREAR / ELIMINAR / SELECT MAIL ----------------------------------------------------------------
 
@@ -245,7 +246,6 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
         throw err
       }else {
         if (resultado.length > 0) {
-          console.log(resultado[0])
 
           tPlanta.setPlanta(resultado[0].planta, 0)
           tPlanta.setHumedad(resultado[0].humedad, 0)
@@ -253,7 +253,7 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
           tPlanta.setImagen(resultado[0].imagen, 0)
 
           callback(tPlanta)
-          console.log('Tabla tipoPlanta' + iIteFinal + ' CARGADA')
+          console.log('Tabla tipoPlanta planta ' + resultado[0].planta + ' CARGADA')
         }else {
             callback("vacia")
           console.log('tabla tipoPlanta vacia...')
