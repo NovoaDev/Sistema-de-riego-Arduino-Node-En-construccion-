@@ -82,7 +82,7 @@ app.get('/crear', function (req, res) {
   datab.crearTipoPlanta("coco11", 31, "planta de coco cuidar con la vida11", "C:/coso")
   //FIN test arry dentro de objeto tipoPlanta 
   */
-  
+
   //let lola = datab.selectTipoPlanta("")
   //let cfgCorreo = datab.selectMail()
   //console.log(lola)
@@ -91,8 +91,8 @@ app.get('/crear', function (req, res) {
 
 app.get('/tipo', function (req, res) {
   
-  let sTipoPlanta =""
-  datab.selectTipoPlanta(sTipoPlanta, function (oTipoPlanta) {
+  let sTipoPlanta ="coco5"
+  datab.selectTipoPlanta("coco5", function (oTipoPlanta) {
   res.send(oTipoPlanta)
   })
 })

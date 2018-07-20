@@ -236,9 +236,30 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
  db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
 
   if ((sTipo != "") && (sTipo != undefined)) {
-      //Consulta individual
-      console.log("individual")
-      callback(tPlanta)
+    connection.query("SELECT * FROM tipoplanta WHERE planta = '" + sTipo +"'",
+    function (err, rows) {
+      let resultado = rows
+      if (err) {
+        console.log('error sql')
+        callback("error")
+        throw err
+      }else {
+        if (resultado.length > 0) {
+          console.log(resultado[0])
+
+          tPlanta.setPlanta(resultado[0].planta, 0)
+          tPlanta.setHumedad(resultado[0].humedad, 0)
+          tPlanta.setNotas(resultado[0].notas, 0)
+          tPlanta.setImagen(resultado[0].imagen, 0)
+
+          callback(tPlanta)
+          console.log('Tabla tipoPlanta' + iIteFinal + ' CARGADA')
+        }else {
+            callback("vacia")
+          console.log('tabla tipoPlanta vacia...')
+        }
+      }
+    })
   } else {
     connection.query("SELECT * FROM tipoPlanta",
     function (err, rows) {

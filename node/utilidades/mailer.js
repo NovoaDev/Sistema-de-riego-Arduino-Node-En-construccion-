@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer")
-const cfg = require("./cfg")
 const datab = require('../utilidades/mysql')
  
 function sendMail (iTipo) {
