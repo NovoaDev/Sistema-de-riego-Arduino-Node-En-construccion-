@@ -70,7 +70,7 @@ db.eliminarTabla = function eliminarTabla (sTabla) {
 }
 // FIN CREAR / ELIMINAR TABLAS -----------------------------------------------------------------------
 
-// CREAR / ELIMINAR / VALIDAR USUARIO ----------------------------------------------------------------
+// CREAR / ELIMINAR / VALIDAR / ACTUALIZAR USUARIO ----------------------------------------------------------------
 db.crearUsuario = function crearUsuario (sUsu, sPass) {
   let passcrypt = crypto(sPass)
   database = { usuario: sUsu, password: passcrypt }
@@ -134,9 +134,22 @@ db.validarUsu = function validarUsu (sUsu, sPass, callback) {
   }
   })
 }
-// FIN CREAR / ELIMINAR / VALIDAR USUARIO ------------------------------------------------------------
 
-// CREAR / ELIMINAR / SELECT MAIL --------------------------------------------------------------------
+db.updateUsuario = function updateUsuario (sUsu, sPass) {
+
+  connection.query("UPDATE usuarios SET usuario= '"+sUsu+"', pass= '"+sPass+"', pass= '"+sNuevaPass+"' WHERE id LIKE 1",
+  function (err, res) {
+    if (err) {
+      console.log('error sql')
+      throw err
+    }else {
+      console.log('Configuracion de usuario actualizada')
+    }
+  })
+}
+// FIN CREAR / ELIMINAR / VALIDAR / ACTUALIZAR USUARIO ------------------------------------------------------------
+
+// CREAR / ELIMINAR / SELECIONAR / ACTUALIZAR MAIL --------------------------------------------------------------------
 db.crearCFGMail = function crearCFGMail (sService, sUsuario, sPass, sFromMail, sToMail) {
   
   database = { service: sService, usuario: sUsuario, pass: sPass, fromMail: sFromMail, toMail: sToMail }
@@ -189,9 +202,22 @@ db.selectMail = function selectMail (callback) {
     }
   })
 }
-// FIN CREAR / ELIMINAR / SELECT MAIL ----------------------------------------------------------------
 
-// CREAR / ELIMINAR / TIPOPLANTA ------------------------------------------------------------------
+db.updateMail = function updateMail (sService, sUsuario, sNuevaPass, sNuevaFromMail, sNuevaToMail) {
+
+  connection.query("UPDATE mail SET service= '"+sService+"', usuario= '"+sUsuario+"', pass= '"+sNuevaPass+"', fromMail= '"+sNuevaFromMail+"', toMail= '"+sNuevaToMail+"' WHERE id LIKE 1",
+  function (err, res) {
+    if (err) {
+      console.log('error sql')
+      throw err
+    }else {
+      console.log('Configuracion de correo actualizada')
+    }
+  })
+}
+// FIN CREAR / ELIMINAR / SELECT / ACTUALIZAR MAIL ----------------------------------------------------------------
+
+// CREAR / ELIMINAR / TIPOPLANTA / ACTUALIZAR ------------------------------------------------------------------
 db.crearTipoPlanta = function crearTipoPlanta (sPlanta, iHumedad, sNotas, sImagen) {
   
   database = { planta: sPlanta, humedad: iHumedad, notas: sNotas, imagen: sImagen }
@@ -233,8 +259,7 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
   })
 }
 
-//Revisar
- db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
+db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
 
   if ((sTipo != "") && (sTipo != undefined)) {
     connection.query("SELECT * FROM tipoplanta WHERE planta = '" + sTipo +"'",
@@ -293,10 +318,10 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
 
 // FIN CREAR / ELIMINAR TIPOPLANTA -----------------------------------------------------------------
 
-// CREAR / ELIMINAR / PLANTAS ----------------------------------------------------------------------
-db.crearPlantas = function crearPlantas (sMaceta, sPlanta, iHumedad, sNotas, sImagen) {
+// CREAR / ELIMINAR / ACTUALIZAR PLANTAS ----------------------------------------------------------------------
+db.crearPlantas = function crearPlantas (iMaceta, sPlanta, iHumedad, sNotas, sImagen) {
   
-  database = { maceta: sMaceta, planta: sPlanta, humedad: iHumedad, notas: sNotas, imagen: sImagen }
+  database = { maceta: iMaceta, planta: sPlanta, humedad: iHumedad, notas: sNotas, imagen: sImagen }
 
   connection.query('INSERT INTO plantas SET ?', database, function (err, res) {
   if (err) {
@@ -307,19 +332,19 @@ db.crearPlantas = function crearPlantas (sMaceta, sPlanta, iHumedad, sNotas, sIm
   })
 }
 
-db.updatePlantas = function updatePlantas (sMaceta, sNuevaPlanta, iNuevaHumedad, sNuevaNotas, sNuevaImagen) {
+db.updatePlantas = function updatePlantas (iMaceta, sNuevaPlanta, iNuevaHumedad, sNuevaNotas, sNuevaImagen) {
 
-  connection.query("UPDATE plantas SET planta= '"+sNuevaPlanta+"', humedad= '"+iNuevaHumedad+"', notas= '"+sNuevaNotas+"', imagen= '"+sNuevaImagen+"' WHERE maceta LIKE '"+ sMaceta +"'",
+  connection.query("UPDATE plantas SET planta= '"+sNuevaPlanta+"', humedad= '"+iNuevaHumedad+"', notas= '"+sNuevaNotas+"', imagen= '"+sNuevaImagen+"' WHERE maceta LIKE '"+ iMaceta +"'",
   function (err, res) {
     if (err) {
       console.log('error sql')
       throw err
     }else {
-      console.log('Actualizada la maceta nº ' + sMaceta + '...')
+      console.log('Actualizada la maceta nº ' + iMaceta + '...')
     }
   })
 }
-// FIN CREAR / ELIMINAR / PLANTAS ------------------------------------------------------------------
+// FIN CREAR / ELIMINAR / ACTUALIZAR PLANTAS ------------------------------------------------------------------
 
 //Puesta a punto inicial 
 db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {

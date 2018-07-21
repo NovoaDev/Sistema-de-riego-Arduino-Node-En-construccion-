@@ -14,7 +14,7 @@ const io = SocketIO.listen(server)
 const ReadLine = SerialPort.parsers.Readline
 
 const sis = new arduinoModel()
-let mail = new mailer("99")
+//let mail = new mailer("99")
 
 app.use(express.static(__dirname + '/public'))
 app.use(bParser.urlencoded({extended: true}))
@@ -83,6 +83,18 @@ app.get('/crear', function (req, res) {
   //FIN test arry dentro de objeto tipoPlanta 
   */
 
+  
+  //crear tabla planta generico
+  //datab.crearPlantas(1, "tomate", 21, "tomate generico", "C:/coso")
+  //datab.crearPlantas(2, "calabaza", 22, "calabaza generica", "C:/coso")
+  //datab.crearPlantas(3, "pepino", 23, "pepino generico", "C:/coso")
+  //FIN crear tabla planta generico
+  
+  //Upadate plantas 
+  //datab.updatePlantas(3, "ponpon", 90, "pon pon generico", "C:/cososss")
+  
+  //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
+
   //let lola = datab.selectTipoPlanta("")
   //let cfgCorreo = datab.selectMail()
   //console.log(lola)
@@ -93,7 +105,9 @@ app.get('/tipo', function (req, res) {
   
   let sTipoPlanta ="coco5"
   datab.selectTipoPlanta("coco5", function (oTipoPlanta) {
-  res.send(oTipoPlanta)
+    if ((oTipoPlanta != "vacia") && (oTipoPlanta != "error")) {
+      res.send(oTipoPlanta)
+    }
   })
 })
 
@@ -114,6 +128,45 @@ parser.on('data', function (data) {
   	io.emit('selec7', sis.humedadAmbiente)
   	io.emit('selec8', sis.tempAmbiente)
   	//let mail = new mailer("1")
+})
+
+app.get('/cfg', function (req, res) {
+  res.send('Puesta a punto inicial')
+  
+  //CAMBIAR USUARIO
+  
+  //CREAR USUARIO GENERICO
+  datab.crearUsuario("admin", "admin")
+
+  //CREAR TIPOPLANTA GENERICO
+  datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+  //CREAR PLANTAS GENERICAS
+  datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+  datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+  datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+})
+
+
+app.get('/puestaAPuntoInicial', function (req, res) {
+  res.send('Puesta a punto inicial')
+  
+  //CREAR TABLAS
+  datab.crearTabla("usuarios")
+  datab.crearTabla("plantas")
+  datab.crearTabla("tipoPlanta")
+  datab.crearTabla("mail")
+
+  //CREAR USUARIO GENERICO
+  datab.crearUsuario("admin", "admin")
+
+  //CREAR TIPOPLANTA GENERICO
+  datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+  //CREAR PLANTAS GENERICAS
+  datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+  datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+  datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
 })
 
 function selectorDeVar (sDatosArduino) {
