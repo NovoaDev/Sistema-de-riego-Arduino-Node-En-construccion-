@@ -44,6 +44,10 @@ db.crearTabla = function crearTabla (sTabla) {
     connection.query('CREATE TABLE IF NOT EXISTS mail (id INT AUTO_INCREMENT PRIMARY KEY, service varchar(40), usuario varchar(40), pass varchar(40), fromMail varchar(40), toMail varchar(120))')  
     console.log('Tabla de mysql(mail) Creada!')
   }
+  if (sTabla == "registro") {
+    connection.query('CREATE TABLE IF NOT EXISTS registro (id INT AUTO_INCREMENT PRIMARY KEY, fecha DATE, hora TIME, nivelAgua INT, claridad INT, humedadPlanta1 INT, humedadPlanta2 INT, humedadPlanta3 INT, humedadAmbiente INT, tempAmbiente INT)')
+    console.log('Tabla de mysql(registro) Creada!')
+  }
 }
 
 db.eliminarTabla = function eliminarTabla (sTabla) {
@@ -66,6 +70,10 @@ db.eliminarTabla = function eliminarTabla (sTabla) {
   if (sTabla == "mail") {
     connection.query('DROP TABLE mail')
     console.log('Tabla de mysql(mail) Borrada!')
+  }
+  if (sTabla == "registro") {
+    connection.query('DROP TABLE registro')
+    console.log('Tabla de mysql(registro) Borrada!')
   }
 }
 // FIN CREAR / ELIMINAR TABLAS -----------------------------------------------------------------------
@@ -345,6 +353,21 @@ db.updatePlantas = function updatePlantas (iMaceta, sNuevaPlanta, iNuevaHumedad,
   })
 }
 // FIN CREAR / ELIMINAR / ACTUALIZAR PLANTAS ------------------------------------------------------------------
+
+// CREAR REGISTRO --------------------------------------------------------------------
+db.crearRegistro = function crearRegistro (dFecha, tHora, iNivelAgua, iClaridad, iHumedadPlanta1, iHumedadPlanta2, iHumedadPlanta3, iHumedadAmbiente, iTempAmbiente) {
+  
+  database = { fecha: dFecha, hora: tHora, nivelAgua: iNivelAgua, claridad: iClaridad, humedadPlanta1: iHumedadPlanta1, humedadPlanta2: iHumedadPlanta2, humedadPlanta3: iHumedadPlanta3, humedadAmbiente: iHumedadAmbiente, tempAmbiente: iTempAmbiente}
+
+  connection.query('INSERT INTO service SET ?', database, function (err, res) {
+  if (err) {
+    throw err
+  }
+  console.log('service last insert id:' + res.insertId)
+  console.log('--------------------')
+  })
+}
+// FIN CREAR REGISTRO --------------------------------------------------------------------
 
 //Puesta a punto inicial 
 db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {

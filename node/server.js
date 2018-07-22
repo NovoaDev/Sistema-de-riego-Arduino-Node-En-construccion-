@@ -53,12 +53,14 @@ app.get('/crear', function (req, res) {
   //datab.eliminarTabla("plantas")
   //datab.eliminarTabla("tipoPlanta")
   //datab.eliminarTabla("mail")
+  //datab.eliminarTabla("registro")
 
   //CREAR TABLAS
   //datab.crearTabla("usuarios")
   //datab.crearTabla("plantas")
   //datab.crearTabla("tipoPlanta")
   //datab.crearTabla("mail")
+  datab.crearTabla("registro")
 
   //datab.crearUsuario("lola", "rica")
   //datab.crearUsuario("lola2", "rica")
@@ -95,6 +97,8 @@ app.get('/crear', function (req, res) {
   
   //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
 
+
+ //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
   //let lola = datab.selectTipoPlanta("")
   //let cfgCorreo = datab.selectMail()
   //console.log(lola)
