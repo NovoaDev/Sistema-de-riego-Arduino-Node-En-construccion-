@@ -6,6 +6,7 @@ const bParser = require('body-parser')
 const mailer = require('./utilidades/mailer')
 const datab = require('./utilidades/mysql')
 const val = require('./utilidades/validarValoresSensores')
+const valHora = require('./utilidades/validarHora')
 const arduinoModel = require('./modelos/arduinoModel')
 
 const app = express()
@@ -60,7 +61,7 @@ app.get('/crear', function (req, res) {
   //datab.crearTabla("plantas")
   //datab.crearTabla("tipoPlanta")
   //datab.crearTabla("mail")
-  datab.crearTabla("registro")
+  //datab.crearTabla("registro")
 
   //datab.crearUsuario("lola", "rica")
   //datab.crearUsuario("lola2", "rica")
@@ -103,6 +104,8 @@ app.get('/crear', function (req, res) {
   //let cfgCorreo = datab.selectMail()
   //console.log(lola)
 
+  //var lolaaa = valHora("12:30", "18:35", "18:52")
+  
 })
 
 app.get('/tipo', function (req, res) {
