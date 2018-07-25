@@ -134,6 +134,8 @@ parser.on('data', function (data) {
   	io.emit('selec6', sis.humedadPlanta3)
   	io.emit('selec7', sis.humedadAmbiente)
   	io.emit('selec8', sis.tempAmbiente)
+
+ 
   	//let mail = new mailer("1")
 })
 
@@ -199,6 +201,40 @@ function selectorDeVar (sDatosArduino) {
     if (sDatosPrefijo == "#4#") { sis.setHumedadPlanta3(sDatosFinal+" %") }
     if (sDatosPrefijo == "#5#") { sis.setHumedadAmbiente(sDatosFinal+" %") }
     if (sDatosPrefijo == "#6#") { sis.setTempAmbiente(sDatosFinal) }	
+}
+
+function guardarReg (oSis) {
+
+  datab.selectHoraReg(function (oSIS, oHoras) {
+    let bGrabar
+
+    if ((oHoras != "vacia") && (oHoras != "error")) {
+
+      let sT1 = oHoras.hora1
+      let sT2 = oHoras.hora2
+      let sT3 = oHoras.hora3
+      
+      bGrabar = valHora(sT1, sT2, sT3)
+
+      if (bGrabar) {
+        let dia = new Date(day, month, year)
+        console.log(dia)
+        let hora = date.getHours()
+        let minutos = date.getMinutes()
+        let sHoraActural =  hora+":"+minutos
+
+        let iNivelAgua = sis.nivelAguaValor
+        let iClaridad = sis.claridadValor
+        let iHumedadPlanta1 = sis.humedadPlanta1
+        let iHumedadPlanta2 = sis.humedadPlanta2 
+        let iHumedadPlanta3 = sis.humedadPlanta3 
+        let iHumedadAmbiente = sis.humedadAmbiente
+        let iTempAmbiente =  sis.tempAmbiente
+
+        datab.crearRegistro(dia, sHoraActural, iNivelAgua, iClaridad, iHumedadPlanta1, iHumedadPlanta2, iHumedadPlanta3, iHumedadAmbiente, iTempAmbiente)
+      }
+    }
+  })
 }
 
 server.listen(3000, () => console.log('server on port 3000'))

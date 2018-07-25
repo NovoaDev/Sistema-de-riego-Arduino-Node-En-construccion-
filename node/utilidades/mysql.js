@@ -5,6 +5,8 @@ const emailModel = require('../modelos/emailModel')
 const mail = new emailModel()
 const tipoPlantaModel = require('../modelos/tipoPlantaModel')
 const tPlanta = new tipoPlantaModel()
+const horasRegistroModel = require('../modelos/horasRegistroModel')
+const horasReg = new horasRegistroModel()
 
 let usuario = cfg.key.sqlUser
 let pass = cfg.key.sqlPassword
@@ -48,6 +50,11 @@ db.crearTabla = function crearTabla (sTabla) {
     connection.query('CREATE TABLE IF NOT EXISTS registro (id INT AUTO_INCREMENT PRIMARY KEY, fecha DATE, hora TIME, nivelAgua INT, claridad INT, humedadPlanta1 INT, humedadPlanta2 INT, humedadPlanta3 INT, humedadAmbiente INT, tempAmbiente INT)')
     console.log('Tabla de mysql(registro) Creada!')
   }
+ 
+ if (sTabla == "horasRegistro") {
+    connection.query('CREATE TABLE IF NOT EXISTS horasRegistro (id INT AUTO_INCREMENT PRIMARY KEY, hora1 varchar(20), hora2 varchar(20), hora3 varchar(20))')
+    console.log('Tabla de mysql(horasRegistro) Creada!')
+  }
 }
 
 db.eliminarTabla = function eliminarTabla (sTabla) {
@@ -74,6 +81,10 @@ db.eliminarTabla = function eliminarTabla (sTabla) {
   if (sTabla == "registro") {
     connection.query('DROP TABLE registro')
     console.log('Tabla de mysql(registro) Borrada!')
+  }
+  if (sTabla == "horasRegistro") {
+    connection.query('DROP TABLE horasRegistro')
+    console.log('Tabla de mysql(horasRegistro) Borrada!')
   }
 }
 // FIN CREAR / ELIMINAR TABLAS -----------------------------------------------------------------------
@@ -368,6 +379,59 @@ db.crearRegistro = function crearRegistro (dFecha, tHora, iNivelAgua, iClaridad,
   })
 }
 // FIN CREAR REGISTRO --------------------------------------------------------------------
+
+// CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR HORAREG ----------------------------------------------------------------
+db.crearhoraReg = function crearhoraReg (sHora1, sHora2, sHora3) {
+  database = { hora1: sHora1, hora2: sHora2, hora3: sHora3 }
+
+  connection.query('INSERT INTO horasRegistro SET ?', database, function (err, res) {
+  if (err) {
+    throw err
+  }
+  console.log('horasRegistro last insert id:' + res.insertId)
+  console.log('--------------------')
+  })
+}
+
+db.eliminarHoraReg = function eliminarHoraReg () {
+
+  connection.query("DELETE * FROM horasRegistro",
+  function (err, res) {
+    if (err) {
+      console.log('error sql')
+      throw err
+    }else {
+    console.log('Se elimina el cfg de horasRegistro...')
+    }
+  })
+}
+
+db.selectHoraReg = function selectHoraReg (callback) {
+
+  connection.query("SELECT * FROM horasRegistro",
+  function (err, rows) {
+    let resultado = rows
+    if (err) {
+      console.log('error sql')
+      callback("error")
+      throw err
+    }else {
+      if (resultado.length > 0) {
+        horasReg.setHora1(resultado[0].hora1)
+        horasReg.setHora2(resultado[0].hora2)
+        horasReg.setHora3(resultado[0].hora3)
+
+        callback(horasReg)
+        console.log('CFG horasRegistro...')
+      }else {
+        callback("vacia")
+        console.log('tabla vacia horasRegistro...')
+      }
+    }
+  })
+}
+
+// FIN CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR HORAREG ----------------------------------------------------------------
 
 //Puesta a punto inicial 
 db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {
