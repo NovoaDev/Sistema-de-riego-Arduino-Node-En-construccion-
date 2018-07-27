@@ -51,10 +51,16 @@ db.crearTabla = function crearTabla (sTabla) {
     console.log('Tabla de mysql(registro) Creada!')
   }
  
- if (sTabla == "horasRegistro") {
+  if (sTabla == "horasRegistro") {
     connection.query('CREATE TABLE IF NOT EXISTS horasRegistro (id INT AUTO_INCREMENT PRIMARY KEY, hora1 varchar(20), hora2 varchar(20), hora3 varchar(20))')
     console.log('Tabla de mysql(horasRegistro) Creada!')
   }
+  
+  if (sTabla == "valoresParaRiego") {
+    connection.query('CREATE TABLE IF NOT EXISTS valoresParaRiego (id INT AUTO_INCREMENT PRIMARY KEY, nivelAguaMin INT, claridadMin INT, claridadMax INT, tempMin INT, tempMax INT)') 
+    console.log('Tabla de mysql(valoresParaRiego) Creada!')
+  }
+
 }
 
 db.eliminarTabla = function eliminarTabla (sTabla) {
@@ -85,6 +91,10 @@ db.eliminarTabla = function eliminarTabla (sTabla) {
   if (sTabla == "horasRegistro") {
     connection.query('DROP TABLE horasRegistro')
     console.log('Tabla de mysql(horasRegistro) Borrada!')
+  }
+  if (sTabla == "valoresParaRiego") {
+    connection.query('DROP TABLE valoresParaRiego')
+    console.log('Tabla de mysql(valoresParaRiego) Borrada!')
   }
 }
 // FIN CREAR / ELIMINAR TABLAS -----------------------------------------------------------------------
@@ -382,6 +392,7 @@ db.crearRegistro = function crearRegistro (dFecha, tHora, iNivelAgua, iClaridad,
 
 // CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR HORAREG ----------------------------------------------------------------
 db.crearhoraReg = function crearhoraReg (sHora1, sHora2, sHora3) {
+  
   database = { hora1: sHora1, hora2: sHora2, hora3: sHora3 }
 
   connection.query('INSERT INTO horasRegistro SET ?', database, function (err, res) {
@@ -431,8 +442,67 @@ db.selectHoraReg = function selectHoraReg (callback) {
   })
 }
 
-// FIN CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR HORAREG ----------------------------------------------------------------
 
+
+// FIN CREAR / SELECCIONAR / ACTUALIZAR HORAREG ----------------------------------------------------------------
+
+
+// CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR valoresParaRiego ----------------------------------------------------------------
+db.crearValoresParaRiego = function crearValoresParaRiego (iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax) {
+  database = { nivelAguaMin: iNivelAguaMin, claridadMin: iClaridadMin, claridadMax: iClaridadMax, tempMin: iTempMin, tempMax: iTempMax }
+
+  connection.query('INSERT INTO valoresParaRiego SET ?', database, function (err, res) {
+  if (err) {
+    throw err
+  }
+  console.log('valoresParaRiego last insert id:' + res.insertId)
+  console.log('--------------------')
+  })
+}
+
+db.selecValoresParaRiego = function selectValoresParaRiego (callback) {
+
+  connection.query("SELECT * FROM valoresParaRiego",
+  function (err, rows) {
+    let resultado = rows
+    if (err) {
+      console.log('error sql')
+      callback("error")
+      throw err
+    }else {
+      if (resultado.length > 0) {
+        valRiego.setService(resultado[0].nivelAguaMin)     
+        valRiego.setUsuario(resultado[0].claridadMin)
+        valRiego.setPass(resultado[0].claridadMax)
+        valRiego.setFromMail(resultado[0].tempMin)
+        valRiego.setToMail(resultado[0].tempMax)
+
+        callback(valRiego)
+        console.log('CFG VALORESPARARIEGO CARGADA...')
+      }else {
+        callback("vacia")
+        console.log('tabla vacia valoresParaRiego...') 
+      }
+    }
+  })
+}
+
+db.updateValoresParaRiego = function updateValoresParaRiego (iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax) {
+
+  connection.query("UPDATE valoresParaRiego SET nivelAguaMin= '"+iNivelAguaMin+"', claridadMin= '"+iClaridadMin+"', claridadMax= '"+iClaridadMax+"', tempMin= '"+iTempMin+"', tempMax= '"+iTempMax+"' WHERE id LIKE 1",
+  function (err, res) {
+    if (err) {
+      console.log('error sql')
+      throw err
+    }else {
+      console.log('Configuracion de valoresParaRiego actualizada')
+    }
+  })
+}
+
+// CREAR / SELECCIONAR / ACTUALIZAR valoresParaRiego ----------------------------------------------------------------
+
+ 
 //Puesta a punto inicial 
 db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {
   let val1 = v1
