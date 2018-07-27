@@ -157,17 +157,20 @@ app.get('/cfg', function (req, res) {
 })
 
 
-app.get('/puestaAPuntoInicial', function (req, res) {
+app.get('/inicial', function (req, res) {
   res.send('Puesta a punto inicial')
   
   //CREAR TABLAS
-  datab.crearTabla("usuarios")
+  //datab.crearTabla("usuarios")
   datab.crearTabla("plantas")
   datab.crearTabla("tipoPlanta")
   datab.crearTabla("mail")
+  datab.crearTabla("registro")
+  datab.crearTabla("horasRegistro")
+  datab.crearTabla("valoresParaRiego")
 
   //CREAR USUARIO GENERICO
-  datab.crearUsuario("admin", "admin")
+  //datab.crearUsuario("admin", "admin")
 
   //CREAR TIPOPLANTA GENERICO
   datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
@@ -176,7 +179,25 @@ app.get('/puestaAPuntoInicial', function (req, res) {
   datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
   datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
   datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+  //CFG MAIL Y POR DEFECTO VA VACIO.
+  // Y CREA UN REG TODOS LOS DIAS A LAS "12:05"
+  datab.crearhoraReg("0", "12:05", "0")
 })
+
+app.get('/wipe', function (req, res) {
+  res.send('eliminando tablas')
+  
+  //ELIMINAR TABLAS
+  //datab.eliminarTabla("usuarios")
+  datab.eliminarTabla("plantas")
+  datab.eliminarTabla("tipoPlanta")
+  datab.eliminarTabla("mail")
+  datab.eliminarTabla("registro")
+  datab.eliminarTabla("horasRegistro")
+  datab.eliminarTabla("valoresParaRiego")
+})
+
 
 function selectorDeVar (sDatosArduino) {
     let sDatos = sDatosArduino
