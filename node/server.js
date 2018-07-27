@@ -237,6 +237,17 @@ function guardarReg (oSis) {
   })
 }
 
+function enviarConfig (iOrden, iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax, iHumedad1, iHumedad2, iHumedad3) {
+  if (iOrden == 0) SerialPort.write ("#0#"+iNivelAguaMin)
+  if (iOrden == 1) SerialPort.write ("#1#"+iClaridadMin)
+  if (iOrden == 2) SerialPort.write ("#2#"+iClaridadMax)
+  if (iOrden == 3) SerialPort.write ("#3#"+iTempMin)
+  if (iOrden == 4) SerialPort.write ("#4#"+iTempMax)
+  if (iOrden == 5) SerialPort.write ("#5#"+iHumedad1)
+  if (iOrden == 6) SerialPort.write ("#6#"+iHumedad2)
+  if (iOrden == 7) SerialPort.write ("#7#"+iHumedad3)
+}
+
 server.listen(3000, () => console.log('server on port 3000'))
 
 
