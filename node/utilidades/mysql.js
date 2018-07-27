@@ -7,6 +7,8 @@ const tipoPlantaModel = require('../modelos/tipoPlantaModel')
 const tPlanta = new tipoPlantaModel()
 const horasRegistroModel = require('../modelos/horasRegistroModel')
 const horasReg = new horasRegistroModel()
+const valoresParaRiegoModel = require('../modelos/valoresParaRiegoModel')
+const valRiego = new valoresParaRiegoModel()
 
 let usuario = cfg.key.sqlUser
 let pass = cfg.key.sqlPassword
@@ -101,6 +103,7 @@ db.eliminarTabla = function eliminarTabla (sTabla) {
 
 // CREAR / ELIMINAR / VALIDAR / ACTUALIZAR USUARIO ----------------------------------------------------------------
 db.crearUsuario = function crearUsuario (sUsu, sPass) {
+  
   let passcrypt = crypto(sPass)
   database = { usuario: sUsu, password: passcrypt }
 
@@ -114,6 +117,7 @@ db.crearUsuario = function crearUsuario (sUsu, sPass) {
 }
 
 db.eliminarUsu = function eliminarUsu (sUsu) {
+  
   let usuario = sUsu
 
   connection.query("SELECT * FROM usuarios WHERE usuario = '" + usuario +"'",
@@ -142,6 +146,7 @@ db.eliminarUsu = function eliminarUsu (sUsu) {
 }
 
 db.validarUsu = function validarUsu (sUsu, sPass, callback) {
+  
   let passcrypt = crypto(sPass)
   let usuario = sUsu
 
@@ -261,8 +266,8 @@ db.crearTipoPlanta = function crearTipoPlanta (sPlanta, iHumedad, sNotas, sImage
 }
 
 db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
+  
   let planta = sPlanta
-
   connection.query("SELECT * FROM tipoPlanta WHERE planta = '" + planta +"'",
   function (err, rows) {
     let resultado = rows
@@ -392,7 +397,7 @@ db.crearRegistro = function crearRegistro (dFecha, tHora, iNivelAgua, iClaridad,
 
 // CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR HORAREG ----------------------------------------------------------------
 db.crearhoraReg = function crearhoraReg (sHora1, sHora2, sHora3) {
-  
+
   database = { hora1: sHora1, hora2: sHora2, hora3: sHora3 }
 
   connection.query('INSERT INTO horasRegistro SET ?', database, function (err, res) {
@@ -449,6 +454,7 @@ db.selectHoraReg = function selectHoraReg (callback) {
 
 // CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR valoresParaRiego ----------------------------------------------------------------
 db.crearValoresParaRiego = function crearValoresParaRiego (iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax) {
+  
   database = { nivelAguaMin: iNivelAguaMin, claridadMin: iClaridadMin, claridadMax: iClaridadMax, tempMin: iTempMin, tempMax: iTempMax }
 
   connection.query('INSERT INTO valoresParaRiego SET ?', database, function (err, res) {
