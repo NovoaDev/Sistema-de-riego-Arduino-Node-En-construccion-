@@ -590,7 +590,19 @@ db.updateValoresParaRiego = function updateValoresParaRiego (iNivelAguaMin, iCla
   })
 }
 
-// CREAR / SELECCIONAR / ACTUALIZAR valoresParaRiego ----------------------------------------------------------------
+// Otras functions ----------------------------------------------------------------
+
+db.actualizarPlantas = function actualizarPlantas (sPlanta1, sPlanta2, sPlanta3) {
+  let planta1 = selectTipoPlanta (splanta1)
+  let planta2 = selectTipoPlanta (splanta2)
+  let planta3 = selectTipoPlanta (splanta3)
+
+  db.updatePlantas(1, planta1.planta, planta1.humedad, planta1.notas, planta1.imagen)
+  db.updatePlantas(2, planta2.planta, planta2.humedad, planta2.notas, planta2.imagen)
+  db.updatePlantas(3, planta3.planta, planta3.humedad, planta3.notas, planta3.imagen)
+}
+module.exports = db
+
 
  
 //Puesta a punto inicial 

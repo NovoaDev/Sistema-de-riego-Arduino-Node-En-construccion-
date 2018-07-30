@@ -126,7 +126,9 @@ app.get('/tipo', function (req, res) {
 
 
 app.get('/cfg', function (req, res) {
+  let tipoPlantas = datab.selectTipoPlanta("")
   res.send('CFG')
+
 })
 
 
@@ -184,21 +186,11 @@ app.post('/entrar', function (req, res) {
 })
 
 
-app.post('/entrar', function (req, res) {
-  let usu = req.body.usuario
-  let pass = req.body.password
-  let login = false
+app.post('/verPlantas', function (req, res) {
   
-  console.log(usu)
-  console.log(pass)
-  datab.validarUsu(usu, pass, function (vali) {
-    if (vali) {
-      res.send('Bienvenido ')
-      let login = true
-    
-    } else {
-      res.send('Usuario o clave incorrecta ')
-      let login = false
+  let plantas = datab.selectPlantas(function (oPlantas) {
+    if ((oPlantas != "vacia") && (oPlantas != "error")) {
+      res.send(oPlantas) //revisara
     }
   })
 })
