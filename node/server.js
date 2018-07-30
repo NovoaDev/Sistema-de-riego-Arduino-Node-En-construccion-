@@ -23,27 +23,33 @@ app.use(bParser.urlencoded({extended: true}))
 const port = new SerialPort("COM3", { baudRate: 9600 })
 const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
 
-app.get('/log', function (req, res) {
-  res.sendfile('public/login.html')
+//---------------------------------------------------------------------------------------------------------------------------------- IO
+parser.on('open', function () {
+  	console.log('connection is opened')
 })
 
-app.post('/entrar', function (req, res) {
-  let usu = req.body.usuario
-  let pass = req.body.password
-  let login = false
-  
-  console.log(usu)
-  console.log(pass)
-  datab.validarUsu(usu, pass, function (vali) {
-    if (vali) {
-      res.send('Bienvenido ')
-      let login = true
-	  
-    } else {
-      res.send('Usuario o clave incorrecta ')
-      let login = false
-    }
-  })
+parser.on('data', function (data) {
+  	selectorDeVar(data.toString())
+
+  	io.emit('selec0', sis.nivelAguaValor)
+  	io.emit('selec1', sis.claridadValor)
+  	io.emit('selec2', sis.nivelAgua)
+  	io.emit('selec3', sis.claridad)
+  	io.emit('selec4', sis.humedadPlanta1)
+  	io.emit('selec5', sis.humedadPlanta2)
+  	io.emit('selec6', sis.humedadPlanta3)
+  	io.emit('selec7', sis.humedadAmbiente)
+  	io.emit('selec8', sis.tempAmbiente)
+
+ 
+  	//let mail = new mailer("1")
+})
+//---------------------------------------------------------------------------------------------------------------------------------- IO
+
+
+//---------------------------------------------------------------------------------------------------------------------------------- GET
+app.get('/log', function (req, res) {
+  res.sendfile('public/login.html')
 })
 
 app.get('/crear', function (req, res) {
@@ -118,50 +124,17 @@ app.get('/tipo', function (req, res) {
   })
 })
 
-parser.on('open', function () {
-  	console.log('connection is opened')
-})
-
-parser.on('data', function (data) {
-  	selectorDeVar(data.toString())
-
-  	io.emit('selec0', sis.nivelAguaValor)
-  	io.emit('selec1', sis.claridadValor)
-  	io.emit('selec2', sis.nivelAgua)
-  	io.emit('selec3', sis.claridad)
-  	io.emit('selec4', sis.humedadPlanta1)
-  	io.emit('selec5', sis.humedadPlanta2)
-  	io.emit('selec6', sis.humedadPlanta3)
-  	io.emit('selec7', sis.humedadAmbiente)
-  	io.emit('selec8', sis.tempAmbiente)
-
- 
-  	//let mail = new mailer("1")
-})
 
 app.get('/cfg', function (req, res) {
-  res.send('Puesta a punto inicial')
-  
-  //CAMBIAR USUARIO
-  
-  //CREAR USUARIO GENERICO
-  datab.crearUsuario("admin", "admin")
-
-  //CREAR TIPOPLANTA GENERICO
-  datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
-
-  //CREAR PLANTAS GENERICAS
-  datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-  datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-  datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+  res.send('CFG')
 })
 
 
-app.get('/inicial', function (req, res) {
+app.get('/puestaAPuntoInicial', function (req, res) {
   res.send('Puesta a punto inicial')
   
   //CREAR TABLAS
-  //datab.crearTabla("usuarios")
+  datab.crearTabla("usuarios")
   datab.crearTabla("plantas")
   datab.crearTabla("tipoPlanta")
   datab.crearTabla("mail")
@@ -170,34 +143,70 @@ app.get('/inicial', function (req, res) {
   datab.crearTabla("valoresParaRiego")
 
   //CREAR USUARIO GENERICO
-  //datab.crearUsuario("admin", "admin")
-
-  //CREAR TIPOPLANTA GENERICO
-  datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+  datab.crearUsuario("admin", "admin")
 
   //CREAR PLANTAS GENERICAS
   datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
   datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
   datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
 
-  //CFG MAIL Y POR DEFECTO VA VACIO.
-  // Y CREA UN REG TODOS LOS DIAS A LAS "12:05"
-  datab.crearhoraReg("0", "12:05", "0")
+  //CREAR TIPOPLANTA GENERICO
+  datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+  //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
+
+  //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
+  datab.crearValoresParaRiego(20, 70, 90, 40, 80)
 })
 
-app.get('/wipe', function (req, res) {
-  res.send('eliminando tablas')
+
+//---------------------------------------------------------------------------------------------------------------------------------- GET
+
+//---------------------------------------------------------------------------------------------------------------------------------- POST
+
+app.post('/entrar', function (req, res) {
+  let usu = req.body.usuario
+  let pass = req.body.password
+  let login = false
   
-  //ELIMINAR TABLAS
-  //datab.eliminarTabla("usuarios")
-  datab.eliminarTabla("plantas")
-  datab.eliminarTabla("tipoPlanta")
-  datab.eliminarTabla("mail")
-  datab.eliminarTabla("registro")
-  datab.eliminarTabla("horasRegistro")
-  datab.eliminarTabla("valoresParaRiego")
+  console.log(usu)
+  console.log(pass)
+  datab.validarUsu(usu, pass, function (vali) {
+    if (vali) {
+      res.send('Bienvenido ')
+      let login = true
+    
+    } else {
+      res.send('Usuario o clave incorrecta ')
+      let login = false
+    }
+  })
 })
 
+
+app.post('/entrar', function (req, res) {
+  let usu = req.body.usuario
+  let pass = req.body.password
+  let login = false
+  
+  console.log(usu)
+  console.log(pass)
+  datab.validarUsu(usu, pass, function (vali) {
+    if (vali) {
+      res.send('Bienvenido ')
+      let login = true
+    
+    } else {
+      res.send('Usuario o clave incorrecta ')
+      let login = false
+    }
+  })
+})
+
+//---------------------------------------------------------------------------------------------------------------------------------- POST
+
+
+//---------------------------------------------------------------------------------------------------------------------------------- FUNC
 
 function selectorDeVar (sDatosArduino) {
     let sDatos = sDatosArduino
@@ -268,6 +277,8 @@ function enviarConfig (iOrden, iNivelAguaMin, iClaridadMin, iClaridadMax, iTempM
   if (iOrden == 6) SerialPort.write ("#6#"+iHumedad2)
   if (iOrden == 7) SerialPort.write ("#7#"+iHumedad3)
 }
+
+//---------------------------------------------------------------------------------------------------------------------------------- FUNC
 
 server.listen(3000, () => console.log('server on port 3000'))
 

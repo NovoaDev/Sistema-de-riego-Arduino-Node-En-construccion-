@@ -2,13 +2,18 @@ const mysql = require('mysql')
 const cfg = require('./cfg')
 const crypto = require('./crypto')
 const emailModel = require('../modelos/emailModel')
-const mail = new emailModel()
 const tipoPlantaModel = require('../modelos/tipoPlantaModel')
-const tPlanta = new tipoPlantaModel()
 const horasRegistroModel = require('../modelos/horasRegistroModel')
-const horasReg = new horasRegistroModel()
 const valoresParaRiegoModel = require('../modelos/valoresParaRiegoModel')
+const plantasModel = require('../modelos/plantasModel')
+const registroModel = require('../modelos/registroModel')
+
+const mail = new emailModel()
+const tPlanta = new tipoPlantaModel()
+const horasReg = new horasRegistroModel()
 const valRiego = new valoresParaRiegoModel()
+const plantas = new plantasModel()
+const registro = new registroModel()
 
 let usuario = cfg.key.sqlUser
 let pass = cfg.key.sqlPassword
@@ -171,7 +176,7 @@ db.validarUsu = function validarUsu (sUsu, sPass, callback) {
 
 db.updateUsuario = function updateUsuario (sUsu, sPass) {
 
-  connection.query("UPDATE usuarios SET usuario= '"+sUsu+"', pass= '"+sPass+"', pass= '"+sNuevaPass+"' WHERE id LIKE 1",
+  connection.query("UPDATE usuarios SET usuario= '"+sUsu+"', pass= '"+sPass+"' WHERE id LIKE 1",
   function (err, res) {
     if (err) {
       console.log('error sql')
@@ -183,7 +188,7 @@ db.updateUsuario = function updateUsuario (sUsu, sPass) {
 }
 // FIN CREAR / ELIMINAR / VALIDAR / ACTUALIZAR USUARIO ------------------------------------------------------------
 
-// CREAR / ELIMINAR / SELECIONAR / ACTUALIZAR MAIL --------------------------------------------------------------------
+// CREAR / ELIMINAR / SELECT / ACTUALIZAR MAIL --------------------------------------------------------------------
 db.crearCFGMail = function crearCFGMail (sService, sUsuario, sPass, sFromMail, sToMail) {
   
   database = { service: sService, usuario: sUsuario, pass: sPass, fromMail: sFromMail, toMail: sToMail }
@@ -251,7 +256,7 @@ db.updateMail = function updateMail (sService, sUsuario, sNuevaPass, sNuevaFromM
 }
 // FIN CREAR / ELIMINAR / SELECT / ACTUALIZAR MAIL ----------------------------------------------------------------
 
-// CREAR / ELIMINAR / TIPOPLANTA / ACTUALIZAR ------------------------------------------------------------------
+// CREAR / ELIMINAR / SELECT / TIPOPLANTA  ------------------------------------------------------------------
 db.crearTipoPlanta = function crearTipoPlanta (sPlanta, iHumedad, sNotas, sImagen) {
   
   database = { planta: sPlanta, humedad: iHumedad, notas: sNotas, imagen: sImagen }
@@ -350,9 +355,9 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
   }
 }
 
-// FIN CREAR / ELIMINAR TIPOPLANTA -----------------------------------------------------------------
+// FIN CREAR / ELIMINAR / SELECT / TIPOPLANTA -----------------------------------------------------------------
 
-// CREAR / ELIMINAR / ACTUALIZAR PLANTAS ----------------------------------------------------------------------
+// CREAR / ACTUALIZAR / SELECT PLANTAS ----------------------------------------------------------------------
 db.crearPlantas = function crearPlantas (iMaceta, sPlanta, iHumedad, sNotas, sImagen) {
   
   database = { maceta: iMaceta, planta: sPlanta, humedad: iHumedad, notas: sNotas, imagen: sImagen }
@@ -378,22 +383,90 @@ db.updatePlantas = function updatePlantas (iMaceta, sNuevaPlanta, iNuevaHumedad,
     }
   })
 }
-// FIN CREAR / ELIMINAR / ACTUALIZAR PLANTAS ------------------------------------------------------------------
 
-// CREAR REGISTRO --------------------------------------------------------------------
+db.selectPlantas = function selectPlantas (callback) {
+
+  connection.query("SELECT * FROM plantas",
+  function (err, rows) {
+    let resultado = rows
+    if (err) {
+      console.log('error sql')
+      callback("error")
+      throw err
+    }else {
+      if (resultado.length > 0) {
+        let iIte, iIteFinal
+
+        iIteFinal = resultado.length
+        for (iIte = 0; iIte < iIteFinal; iIte++) {
+          plantas.setMaceta(resultado[iIte].maceta, iIte)
+          plantas.setPlantas(resultado[iIte].planta, iIte)
+          plantas.setHumedad(resultado[iIte].humedad, iIte)
+          plantas.setNotas(resultado[iIte].notas, iIte)
+          plantas.setImagen(resultado[iIte].imagen, iIte)
+        }
+
+        callback(plantas)
+        console.log('Tabla plantas CARGADA ' + iIteFinal + ' registros...')
+      }else {
+          callback("vacia")
+        console.log('tabla plantas vacia...')
+      }
+    }
+  })
+}
+// FIN CREAR / ACTUALIZAR /SELECT PLANTAS ------------------------------------------------------------------
+
+// CREAR / SELECT REGISTRO --------------------------------------------------------------------
 db.crearRegistro = function crearRegistro (dFecha, tHora, iNivelAgua, iClaridad, iHumedadPlanta1, iHumedadPlanta2, iHumedadPlanta3, iHumedadAmbiente, iTempAmbiente) {
   
   database = { fecha: dFecha, hora: tHora, nivelAgua: iNivelAgua, claridad: iClaridad, humedadPlanta1: iHumedadPlanta1, humedadPlanta2: iHumedadPlanta2, humedadPlanta3: iHumedadPlanta3, humedadAmbiente: iHumedadAmbiente, tempAmbiente: iTempAmbiente}
 
-  connection.query('INSERT INTO service SET ?', database, function (err, res) {
+  connection.query('INSERT INTO registro SET ?', database, function (err, res) {
   if (err) {
     throw err
   }
-  console.log('service last insert id:' + res.insertId)
+  console.log('registro last insert id:' + res.insertId)
   console.log('--------------------')
   })
 }
-// FIN CREAR REGISTRO --------------------------------------------------------------------
+
+db.selectReg = function selectReg (callback) {
+
+  connection.query("SELECT * FROM registro",
+  function (err, rows) {
+    let resultado = rows
+    if (err) {
+      console.log('error sql')
+      callback("error")
+      throw err
+    }else {
+      if (resultado.length > 0) {
+        let iIte, iIteFinal
+
+        iIteFinal = resultado.length
+        for (iIte = 0; iIte < iIteFinal; iIte++) {
+          registro.setFecha(resultado[iIte].fecha, iIte)
+          registro.setHora(resultado[iIte].hora, iIte)
+          registro.setNivelAgua(resultado[iIte].nivelAgua, iIte)
+          registro.setClaridad(resultado[iIte].claridad, iIte)
+          registro.setHumedadPlanta1(resultado[iIte].humedadPlanta1, iIte)
+          registro.setHumedadPlanta2(resultado[iIte].humedadPlanta2, iIte)
+          registro.setHumedadPlanta3(resultado[iIte].humedadplanta3, iIte)
+          registro.setHumedadAmbiente(resultado[iIte].humedadAmbiente, iIte)
+          registro.setTempAmbiente(resultado[iIte].tempAmbiente, iIte)
+        }
+
+        callback(registro)
+        console.log('Tabla registro CARGADA ' + iIteFinal + ' registros...')
+      }else {
+          callback("vacia")
+        console.log('tabla registro vacia...')
+      }
+    }
+  })
+}
+// FIN CREAR / SELECT REGISTRO --------------------------------------------------------------------
 
 // CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR HORAREG ----------------------------------------------------------------
 db.crearhoraReg = function crearhoraReg (sHora1, sHora2, sHora3) {
@@ -447,12 +520,23 @@ db.selectHoraReg = function selectHoraReg (callback) {
   })
 }
 
+db.updateHoraReg = function updateHoraReg (sHora1, sHora2, sHora3) {
+
+  connection.query("UPDATE horasRegistro SET hora1= '"+sHora1+"', hora2= '"+sHora2+"', hora3= '"+sHora3+"' WHERE id LIKE 1",
+  function (err, res) {
+    if (err) {
+      console.log('error sql')
+      throw err
+    }else {
+      console.log('Configuracion de horasRegistro actualizada')
+    }
+  })
+}
+
+// FIN CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR HORAREG ----------------------------------------------------------------
 
 
-// FIN CREAR / SELECCIONAR / ACTUALIZAR HORAREG ----------------------------------------------------------------
-
-
-// CREAR / ELIMINAR / SELECCIONAR / ACTUALIZAR valoresParaRiego ----------------------------------------------------------------
+// CREAR / SELECCIONAR / ACTUALIZAR VALORESPARARIEGO ----------------------------------------------------------------
 db.crearValoresParaRiego = function crearValoresParaRiego (iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax) {
   
   database = { nivelAguaMin: iNivelAguaMin, claridadMin: iClaridadMin, claridadMax: iClaridadMax, tempMin: iTempMin, tempMax: iTempMax }
