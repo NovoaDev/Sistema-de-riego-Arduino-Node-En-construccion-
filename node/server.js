@@ -46,7 +46,6 @@ parser.on('data', function (data) {
 })
 //---------------------------------------------------------------------------------------------------------------------------------- IO
 
-
 //---------------------------------------------------------------------------------------------------------------------------------- GET
 app.get('/log', function (req, res) {
   res.sendfile('public/login.html')
@@ -124,43 +123,46 @@ app.get('/tipo', function (req, res) {
   })
 })
 
-
 app.get('/cfg', function (req, res) {
   let tipoPlantas = datab.selectTipoPlanta("")
   res.send('CFG')
 
 })
 
-
 app.get('/puestaAPuntoInicial', function (req, res) {
-  res.send('Puesta a punto inicial')
-  
-  //CREAR TABLAS
-  datab.crearTabla("usuarios")
-  datab.crearTabla("plantas")
-  datab.crearTabla("tipoPlanta")
-  datab.crearTabla("mail")
-  datab.crearTabla("registro")
-  datab.crearTabla("horasRegistro")
-  datab.crearTabla("valoresParaRiego")
 
-  //CREAR USUARIO GENERICO
-  datab.crearUsuario("admin", "admin")
+  datab.selectPlantas(function (oPlantas) {
+    if ((oPlantas != "vacia") && (oPlantas != "error")) {
+      res.send('Puesta a punto inicial')
+      //CREAR TABLAS
+      datab.crearTabla("usuarios")
+      datab.crearTabla("plantas")
+      datab.crearTabla("tipoPlanta")
+      datab.crearTabla("mail")
+      datab.crearTabla("registro")
+      datab.crearTabla("horasRegistro")
+      datab.crearTabla("valoresParaRiego")
 
-  //CREAR PLANTAS GENERICAS
-  datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-  datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-  datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+      //CREAR USUARIO GENERICO
+      datab.crearUsuario("admin", "admin")
 
-  //CREAR TIPOPLANTA GENERICO
-  datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+      //CREAR PLANTAS GENERICAS
+      datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+      datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+      datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
 
-  //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
+      //CREAR TIPOPLANTA GENERICO
+      datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
 
-  //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
-  datab.crearValoresParaRiego(20, 70, 90, 40, 80)
+      //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
+
+      //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
+      datab.crearValoresParaRiego(20, 70, 90, 40, 80)  
+    } else {
+      res.send('Ya existe registros para una puesta a punto realice wipe primero')
+    }
+  })
 })
-
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
 
@@ -185,7 +187,6 @@ app.post('/entrar', function (req, res) {
   })
 })
 
-
 app.post('/verPlantas', function (req, res) {
   
   let plantas = datab.selectPlantas(function (oPlantas) {
@@ -196,7 +197,6 @@ app.post('/verPlantas', function (req, res) {
 })
 
 //---------------------------------------------------------------------------------------------------------------------------------- POST
-
 
 //---------------------------------------------------------------------------------------------------------------------------------- FUNC
 
