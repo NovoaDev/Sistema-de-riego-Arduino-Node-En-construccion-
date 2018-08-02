@@ -131,37 +131,7 @@ app.get('/cfg', function (req, res) {
 
 app.get('/puestaAPuntoInicial', function (req, res) {
 
-  datab.selectPlantas(function (oPlantas) {
-    if ((oPlantas != "vacia") && (oPlantas != "error")) {
-      res.send('Puesta a punto inicial')
-      //CREAR TABLAS
-      datab.crearTabla("usuarios")
-      datab.crearTabla("plantas")
-      datab.crearTabla("tipoPlanta")
-      datab.crearTabla("mail")
-      datab.crearTabla("registro")
-      datab.crearTabla("horasRegistro")
-      datab.crearTabla("valoresParaRiego")
 
-      //CREAR USUARIO GENERICO
-      datab.crearUsuario("admin", "admin")
-
-      //CREAR PLANTAS GENERICAS
-      datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-      datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-      datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-
-      //CREAR TIPOPLANTA GENERICO
-      datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
-
-      //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
-
-      //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
-      datab.crearValoresParaRiego(20, 70, 90, 40, 80)  
-    } else {
-      res.send('Ya existe registros para una puesta a punto realice wipe primero')
-    }
-  })
 })
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
@@ -173,8 +143,6 @@ app.post('/entrar', function (req, res) {
   let pass = req.body.password
   let login = false
   
-  console.log(usu)
-  console.log(pass)
   datab.validarUsu(usu, pass, function (vali) {
     if (vali) {
       res.send('Bienvenido ')
@@ -183,6 +151,51 @@ app.post('/entrar', function (req, res) {
     } else {
       res.send('Usuario o clave incorrecta ')
       let login = false
+    }
+  })
+})
+
+app.post('/puestaAPunto', function (req, res) {
+
+  let sVal1 = req.body.validar1
+  let sVal2 = req.body.validar2
+  let sVal3 = req.body.validar3
+  
+  datab.validarUsu(sVal1, sVal2, sVal3, function (vali) {
+    if (vali) {
+      datab.selectPlantas(function (oPlantas) {
+        if ((oPlantas != "vacia") && (oPlantas != "error")) {
+          res.send('Puesta a punto inicial')
+          //CREAR TABLAS
+          datab.crearTabla("usuarios")
+          datab.crearTabla("plantas")
+          datab.crearTabla("tipoPlanta")
+          datab.crearTabla("mail")
+          datab.crearTabla("registro")
+          datab.crearTabla("horasRegistro")
+          datab.crearTabla("valoresParaRiego")
+
+          //CREAR USUARIO GENERICO
+          datab.crearUsuario("admin", "admin")
+
+          //CREAR PLANTAS GENERICAS
+          datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+          datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+          datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+          //CREAR TIPOPLANTA GENERICO
+          datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+          //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
+
+          //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
+          datab.crearValoresParaRiego(20, 70, 90, 40, 80)  
+        } else {
+          res.send('Ya existe registros para una puesta a punto realice wipe primero')
+        }
+      })
+    } else {
+      res.send('Clave de validacion incorrecta')
     }
   })
 })
