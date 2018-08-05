@@ -134,16 +134,16 @@ void obtenerVariablesRiego(){
   int iLargoDatos = sDatosTemp.length();
   String sDatosFinal = sDatosTemp.substring(3, iLargoDatos);
 
-  if (sDatosPrefijo == "#0#") NIVEL_AGUA_MIN = (parseInt(sDatosFinal));
-  if (sDatosPrefijo == "#1#") CLARIDAD_MIN = (parseInt(sDatosFinal));
-  if (sDatosPrefijo == "#2#") CLARIDAD_MAX = (parseInt(sDatosFinal));
-  if (sDatosPrefijo == "#3#") TEMPERATURA_MIN = (parseInt(sDatosFinal));
-  if (sDatosPrefijo == "#4#") TEMPERATURA_MAX = (parseInt(sDatosFinal));
-  if (sDatosPrefijo == "#5#") HUMEDAD_MIN_PLANTA_1 = (parseInt(sDatosFinal));
-  if (sDatosPrefijo == "#6#") HUMEDAD_MIN_PLANTA_2 = (parseInt(sDatosFinal));
-  if (sDatosPrefijo == "#7#") HUMEDAD_MIN_PLANTA_3 = (parseInt(sDatosFinal));
+  if (sDatosPrefijo == "#0#") { NIVEL_AGUA_MIN = sDatosFinal.toInt(); }
+  if (sDatosPrefijo == "#1#") { CLARIDAD_MIN = sDatosFinal.toInt(); }
+  if (sDatosPrefijo == "#2#") { CLARIDAD_MAX = sDatosFinal.toInt(); }
+  if (sDatosPrefijo == "#3#") { TEMPERATURA_MIN = sDatosFinal.toInt(); }
+  if (sDatosPrefijo == "#4#") { TEMPERATURA_MAX = sDatosFinal.toInt(); }
+  if (sDatosPrefijo == "#5#") { HUMEDAD_MIN_PLANTA_1 = sDatosFinal.toInt(); }
+  if (sDatosPrefijo == "#6#") { HUMEDAD_MIN_PLANTA_2 = sDatosFinal.toInt(); }
+  if (sDatosPrefijo == "#7#") { HUMEDAD_MIN_PLANTA_3 =  sDatosFinal.toInt(); }
 
-  Serial.println("#98#Se actualizan las variables para riego");
+  Serial.println("#98#Se actualizan las variables para riego : "+ cDatosTemp);
 }
 
 
