@@ -232,6 +232,12 @@ function selectorDeVar (sDatosArduino) {
     if (sDatosPrefijo == "#4#") { sis.setHumedadPlanta3(sDatosFinal+" %") }
     if (sDatosPrefijo == "#5#") { sis.setHumedadAmbiente(sDatosFinal+" %") }
     if (sDatosPrefijo == "#6#") { sis.setTempAmbiente(sDatosFinal) }	
+
+
+
+    if (sDatosPrefijo == "#8#") { console.log(sDatosArduino) }  
+    //if (sDatosPrefijo == "#9#") { sis.setTempAmbiente(sDatosFinal) }  
+    
 }
 
 function guardarReg (oSis) {

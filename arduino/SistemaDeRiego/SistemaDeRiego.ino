@@ -143,13 +143,13 @@ void obtenerVariablesRiego(){
   if (sDatosPrefijo == "#6#") { HUMEDAD_MIN_PLANTA_2 = sDatosFinal.toInt(); }
   if (sDatosPrefijo == "#7#") { HUMEDAD_MIN_PLANTA_3 =  sDatosFinal.toInt(); }
 
-  Serial.println("#98#Se actualizan las variables para riego : "+ cDatosTemp);
+  Serial.println("#8#Se actualizan las variables para riego : "+ cDatosTemp);
 }
 
 
 void regarPlanta(int IPLANTA){
  
 
-  Serial.println("#99#Regando planta nº "+(String((IPLANTA))));
+  Serial.println("#9#Regando planta nº "+(String((IPLANTA))));
 }
 
