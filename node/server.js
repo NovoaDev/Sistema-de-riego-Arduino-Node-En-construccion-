@@ -47,9 +47,6 @@ parser.on('data', function (data) {
 //---------------------------------------------------------------------------------------------------------------------------------- IO
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
-app.get('/log', function (req, res) {
-  res.sendfile('public/login.html')
-})
 
 app.get('/crear', function (req, res) {
   res.send('creando tablas')
@@ -130,8 +127,7 @@ app.get('/cfg', function (req, res) {
 })
 
 app.get('/puestaAPuntoInicial', function (req, res) {
-
-
+  res.sendfile('public/puestaapunto.html') 
 })
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
@@ -145,7 +141,7 @@ app.post('/entrar', function (req, res) {
   
   datab.validarUsu(usu, pass, function (vali) {
     if (vali) {
-      res.send('Bienvenido ')
+      res.sendfile('public/main.html')
       let login = true
     
     } else {

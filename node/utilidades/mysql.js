@@ -167,7 +167,7 @@ db.validarUsu = function validarUsu (sUsu, sPass, callback) {
         console.log('Logeado el usuario: ' + resultado[0].usuario + '...')
     callback(true)
     }else {
-      console.log('FALLO de log usuario: ' + usu + '...')
+      console.log('FALLO de log usuario: ' + sUsu + '...')
     callback(false) 
   }
   }

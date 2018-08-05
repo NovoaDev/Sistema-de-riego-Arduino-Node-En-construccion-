@@ -26,14 +26,14 @@ byte VALOR_HUMEDAD = 0;       //SENSOR HUMEDAD/TEMP
 byte VALOR_TEMPERATURA = 0;   //SENSOR HUMEDAD/TEMP
 
 //Valores para riego
-int NIVEL_AGUA_MIN = 30;
-int CLARIDAD_MIN = 300;
-int CLARIDAD_MAX = 500;
-int TEMPERATURA_MIN = 20;
-int TEMPERATURA_MAX = 30;
-int HUMEDAD_MIN_PLANTA_1 = 30;
-int HUMEDAD_MIN_PLANTA_2 = 30;
-int HUMEDAD_MIN_PLANTA_3 = 30;
+int NIVEL_AGUA_MIN = 0;
+int CLARIDAD_MIN = 0;
+int CLARIDAD_MAX = 0;
+int TEMPERATURA_MIN = 0;
+int TEMPERATURA_MAX = 0;
+int HUMEDAD_MIN_PLANTA_1 = 0;
+int HUMEDAD_MIN_PLANTA_2 = 0;
+int HUMEDAD_MIN_PLANTA_3 = 0;
 
 // Crear Obj
 SimpleDHT11 DHT11;
@@ -45,6 +45,7 @@ void setup(){
 }
 
 void loop(){
+  obtenerVariablesRiego();
   obtenerOtros();
   obtenerValoresPlantas();
   analisisDeRiego();
@@ -125,8 +126,30 @@ void analisisDeRiego(){
   }
 }
 
+void obtenerVariablesRiego(){
+
+  char cDatosTemp = Serial.read();
+  String sDatosTemp = String(cDatosTemp);
+  String sDatosPrefijo = sDatosTemp.substring(0, 3);
+  int iLargoDatos = sDatosTemp.length();
+  String sDatosFinal = sDatosTemp.substring(3, iLargoDatos);
+
+  if (sDatosPrefijo == "#0#") NIVEL_AGUA_MIN = (parseInt(sDatosFinal));
+  if (sDatosPrefijo == "#1#") CLARIDAD_MIN = (parseInt(sDatosFinal));
+  if (sDatosPrefijo == "#2#") CLARIDAD_MAX = (parseInt(sDatosFinal));
+  if (sDatosPrefijo == "#3#") TEMPERATURA_MIN = (parseInt(sDatosFinal));
+  if (sDatosPrefijo == "#4#") TEMPERATURA_MAX = (parseInt(sDatosFinal));
+  if (sDatosPrefijo == "#5#") HUMEDAD_MIN_PLANTA_1 = (parseInt(sDatosFinal));
+  if (sDatosPrefijo == "#6#") HUMEDAD_MIN_PLANTA_2 = (parseInt(sDatosFinal));
+  if (sDatosPrefijo == "#7#") HUMEDAD_MIN_PLANTA_3 = (parseInt(sDatosFinal));
+
+  Serial.println("#98#Se actualizan las variables para riego");
+}
+
+
 void regarPlanta(int IPLANTA){
  
 
   Serial.println("#99#Regando planta nº "+(String((IPLANTA))));
 }
+
