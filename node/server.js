@@ -107,17 +107,27 @@ app.get('/crear', function (req, res) {
   //console.log(lola)
 
   //var lolaaa = valHora("12:30", "18:35", "18:52")
+  enviarConfig ("0", "66")
+  enviarConfig ("1", "11")
+  enviarConfig ("2", "22")
+  enviarConfig ("3", "33")
+  enviarConfig ("4", "44")
+  enviarConfig ("5", "55")
+  enviarConfig ("6", "66")
+  enviarConfig ("7", "77")
   
 })
 
 app.get('/tipo', function (req, res) {
-  
+  /*
   let sTipoPlanta ="coco5"
   datab.selectTipoPlanta("coco5", function (oTipoPlanta) {
     if ((oTipoPlanta != "vacia") && (oTipoPlanta != "error")) {
       res.send(oTipoPlanta)
     }
-  })
+  })*/
+  enviarConfig ("9", "")
+
 })
 
 app.get('/cfg', function (req, res) {
@@ -129,6 +139,11 @@ app.get('/cfg', function (req, res) {
 app.get('/puestaAPuntoInicial', function (req, res) {
   res.sendfile('public/puestaapunto.html') 
 })
+
+app.get('/actualizarVariables', function (req, res) {
+  res.sendfile('public/actualizarVariables.html') 
+})
+
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
 
@@ -205,39 +220,102 @@ app.post('/verPlantas', function (req, res) {
   })
 })
 
+app.post('/actualizarVariablesP', function (req, res) {
+  let sVar0 = req.body.var0
+  let sVar1 = req.body.var1
+  let sVar2 = req.body.var2
+  let sVar3 = req.body.var3
+  let sVar4 = req.body.var4
+  let sVar5 = req.body.var5
+  let sVar6 = req.body.var6
+  let sVar7 = req.body.var7
+
+  if ((sVar0 != undefined) && (sVar0 != '')) { 
+    enviarConfig("0", sVar0)
+    setTimeout(function(){selectorDeVar("#20#"+sVar0)} ,1000)
+  }
+  if ((sVar1 != undefined) && (sVar1 != '')) { 
+    enviarConfig("1", sVar1)
+    setTimeout(function(){selectorDeVar("#21#"+sVar1)} ,1000)
+  }
+  if ((sVar2 != undefined) && (sVar2 != '')) { 
+    enviarConfig("2", sVar2)
+    setTimeout(function(){selectorDeVar("#22#"+sVar2)} ,1000)
+  }
+  if ((sVar3 != undefined) && (sVar3 != '')) { 
+    enviarConfig("3", sVar3)
+    setTimeout(function(){selectorDeVar("#23#"+sVar3)} ,1000)
+  }
+  if ((sVar4 != undefined) && (sVar4 != '')) { 
+    enviarConfig("4", sVar4)
+    setTimeout(function(){selectorDeVar("#24#"+sVar4)} ,1000)
+  }
+  if ((sVar5 != undefined) && (sVar5 != '')) { 
+    enviarConfig("5", sVar5)
+    setTimeout(function(){selectorDeVar("#25#"+sVar5)} ,1000)
+  }
+  if ((sVar6 != undefined) && (sVar6 != '')) { 
+    enviarConfig("6", sVar6)
+    setTimeout(function(){selectorDeVar("#26#"+sVar6)} ,1000)
+  }
+  if ((sVar7 != undefined) && (sVar7 != '')) { 
+    enviarConfig("7", sVar7)
+    setTimeout(function(){selectorDeVar("#27#"+sVar7)} ,1000)
+  }
+
+})
 //---------------------------------------------------------------------------------------------------------------------------------- POST
 
 //---------------------------------------------------------------------------------------------------------------------------------- FUNC
 
 function selectorDeVar (sDatosArduino) {
-    let sDatos = sDatosArduino
-    let sDatosPrefijo = sDatos.substring(0, 3)
-    let iLargoDatos = sDatos.length
-    let sDatosFinal = sDatos.substring(3, iLargoDatos)
-    let sRetornoFunciones
+  let sDatos = sDatosArduino
+  let sDatosPrefijo = sDatos.substring(0, 4)
+  let iLargoDatos = sDatos.length
+  let sDatosFinal = sDatos.substring(4, iLargoDatos)
+  let sRetornoFunciones
 
-    if (sDatosPrefijo == "#0#") { 
-    	sRetornoFunciones = val.validarNivelAgua(sDatosFinal) 
-    	sis.setNiveAguaValor(sDatosFinal)
-    	sis.setNiveAgua(sRetornoFunciones)
-    }
-    if (sDatosPrefijo == "#1#") { 
-		  sRetornoFunciones = val.validarClaridad(sDatosFinal) 
-		  sis.setClaridadValor(sDatosFinal)
-    	sis.setClaridad(sRetornoFunciones) 
-    }
-    
-    if (sDatosPrefijo == "#2#") { sis.setHumedadPlanta1(sDatosFinal+" %") }
-    if (sDatosPrefijo == "#3#") { sis.setHumedadPlanta2(sDatosFinal+" %") }
-    if (sDatosPrefijo == "#4#") { sis.setHumedadPlanta3(sDatosFinal+" %") }
-    if (sDatosPrefijo == "#5#") { sis.setHumedadAmbiente(sDatosFinal+" %") }
-    if (sDatosPrefijo == "#6#") { sis.setTempAmbiente(sDatosFinal) }	
+  //0-10 Datos sensores arduino.
+  if (sDatosPrefijo == "#00#") { 
+  	sRetornoFunciones = val.validarNivelAgua(sDatosFinal) 
+  	sis.setNiveAguaValor(sDatosFinal)
+  	sis.setNiveAgua(sRetornoFunciones)
+  }
+  if (sDatosPrefijo == "#01#") { 
+	  sRetornoFunciones = val.validarClaridad(sDatosFinal) 
+	  sis.setClaridadValor(sDatosFinal)
+  	sis.setClaridad(sRetornoFunciones) 
+  }
+  
+  if (sDatosPrefijo == "#02#") { sis.setHumedadPlanta1(sDatosFinal+" %") }
+  if (sDatosPrefijo == "#03#") { sis.setHumedadPlanta2(sDatosFinal+" %") }
+  if (sDatosPrefijo == "#04#") { sis.setHumedadPlanta3(sDatosFinal+" %") }
+  if (sDatosPrefijo == "#05#") { sis.setHumedadAmbiente(sDatosFinal+" %") }
+  if (sDatosPrefijo == "#06#") { sis.setTempAmbiente(sDatosFinal) }	
 
+  //20 Datos de las variables recien actualizados arduino. 
+  if (sDatosPrefijo == "#20#") { console.log("NIVEL_AGUA_MIN Actualizado : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#21#") { console.log("CLARIDAD_MIN Actualizado : "+ sDatosFinal) }    
+  if (sDatosPrefijo == "#22#") { console.log("CLARIDAD_MAX Actualizado : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#23#") { console.log("TEMPERATURA_MIN Actualizado : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#24#") { console.log("TEMPERATURA_MAX Actualizado : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#25#") { console.log("HUMEDAD_MIN_PLANTA_1 Actualizado : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#26#") { console.log("HUMEDAD_MIN_PLANTA_2 Actualizado : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#27#") { console.log("HUMEDAD_MIN_PLANTA_3 Actualizado : "+ sDatosFinal) }
 
+  //80 Validar datos variables actuales en el arduino.
+  if (sDatosPrefijo == "#80#") { console.log("NIVEL_AGUA_MIN Actual : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#81#") { console.log("CLARIDAD_MIN Actual : "+ sDatosFinal) }    
+  if (sDatosPrefijo == "#82#") { console.log("CLARIDAD_MAX Actual : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#83#") { console.log("TEMPERATURA_MIN Actual : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#84#") { console.log("TEMPERATURA_MAX Actual : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#85#") { console.log("HUMEDAD_MIN_PLANTA_1 Actual : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#86#") { console.log("HUMEDAD_MIN_PLANTA_2 Actual : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#87#") { console.log("HUMEDAD_MIN_PLANTA_3 Actual : "+ sDatosFinal) }
 
-    if (sDatosPrefijo == "#8#") { console.log(sDatosArduino) }  
-    //if (sDatosPrefijo == "#9#") { sis.setTempAmbiente(sDatosFinal) }  
-    
+  //90 uso multiple para verificar conexiones, alcances, etc.
+  if (sDatosPrefijo == "#90#") { console.log("DatosFinal a Arduino : "+ sDatosFinal) }
+
 }
 
 function guardarReg (oSis) {
@@ -274,15 +352,30 @@ function guardarReg (oSis) {
   })
 }
 
-function enviarConfig (iOrden, iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax, iHumedad1, iHumedad2, iHumedad3) {
-  if (iOrden == 0) SerialPort.write ("#0#"+iNivelAguaMin)
-  if (iOrden == 1) SerialPort.write ("#1#"+iClaridadMin)
-  if (iOrden == 2) SerialPort.write ("#2#"+iClaridadMax)
-  if (iOrden == 3) SerialPort.write ("#3#"+iTempMin)
-  if (iOrden == 4) SerialPort.write ("#4#"+iTempMax)
-  if (iOrden == 5) SerialPort.write ("#5#"+iHumedad1)
-  if (iOrden == 6) SerialPort.write ("#6#"+iHumedad2)
-  if (iOrden == 7) SerialPort.write ("#7#"+iHumedad3)
+function enviarConfig (iOrden, sDatosA) {
+
+  /* SENSOR         - Prefijo
+     NIVEL_AGUA_MIN = 0
+     CLARIDAD_MIN = 1
+     CLARIDAD_MAX = 2
+     TEMPERATURA_MIN = 3
+     TEMPERATURA_MAX = 4
+     HUMEDAD_MIN_PLANTA_1 = 5
+     HUMEDAD_MIN_PLANTA_2 = 6
+     HUMEDAD_MIN_PLANTA_3 = 7
+  */
+  
+  if (iOrden == "0") port.write("#0#"+sDatosA+"\n")
+  if (iOrden == "1") port.write("#1#"+sDatosA+"\n")
+  if (iOrden == "2") port.write("#2#"+sDatosA+"\n")
+  if (iOrden == "3") port.write("#3#"+sDatosA+"\n")
+  if (iOrden == "4") port.write("#4#"+sDatosA+"\n")
+  if (iOrden == "5") port.write("#5#"+sDatosA+"\n")
+  if (iOrden == "6") port.write("#6#"+sDatosA+"\n")
+  if (iOrden == "7") port.write("#7#"+sDatosA+"\n")
+
+  //Pedir valores variables arduino
+  if (iOrden == "9") port.write("#9#\n")
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------- FUNC

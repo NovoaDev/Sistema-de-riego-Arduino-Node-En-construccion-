@@ -42,10 +42,62 @@ void setup(){
   Serial.begin(9600);
   
   pinMode(FOTOCELDA,INPUT); 
+  
 }
 
 void loop(){
-  obtenerVariablesRiego();
+  // Read serial input:
+  if (Serial.available()) {
+  
+    String inString =  Serial.readStringUntil('\n'); 
+    String sDatosPrefijo = inString.substring(0, 3);
+    int iLargoDatos = inString.length();
+    String sDatosFinal = inString.substring(3, iLargoDatos);
+  
+    if (sDatosPrefijo == "#0#") { 
+      NIVEL_AGUA_MIN = sDatosFinal.toInt();
+      Serial.println("#20#"+String(NIVEL_AGUA_MIN));
+    }
+    if (sDatosPrefijo == "#1#") { 
+      CLARIDAD_MIN = sDatosFinal.toInt(); 
+      Serial.println("#21#"+String(CLARIDAD_MIN));
+    }
+    if (sDatosPrefijo == "#2#") { 
+      CLARIDAD_MAX = sDatosFinal.toInt(); 
+      Serial.println("#22#"+String(CLARIDAD_MAX));
+    }
+    if (sDatosPrefijo == "#3#") { 
+      TEMPERATURA_MIN = sDatosFinal.toInt(); 
+      Serial.println("#23#"+String(TEMPERATURA_MIN));
+    }
+    if (sDatosPrefijo == "#4#") { 
+      TEMPERATURA_MAX = sDatosFinal.toInt(); 
+      Serial.println("#24#"+String(TEMPERATURA_MAX));
+    }
+    if (sDatosPrefijo == "#5#") { 
+      HUMEDAD_MIN_PLANTA_1 = sDatosFinal.toInt(); 
+      Serial.println("#25#"+String(HUMEDAD_MIN_PLANTA_1));
+    }
+    if (sDatosPrefijo == "#6#") { 
+      HUMEDAD_MIN_PLANTA_2 = sDatosFinal.toInt(); 
+      Serial.println("#26#"+String(HUMEDAD_MIN_PLANTA_2));
+    }
+    if (sDatosPrefijo == "#7#") { 
+      HUMEDAD_MIN_PLANTA_3 = sDatosFinal.toInt();
+      Serial.println("#27#"+String(HUMEDAD_MIN_PLANTA_3));
+    }
+    if (sDatosPrefijo == "#9#") { 
+      Serial.println("#80#"+String(NIVEL_AGUA_MIN));
+      Serial.println("#81#"+String(CLARIDAD_MIN));
+      Serial.println("#82#"+String(CLARIDAD_MAX));
+      Serial.println("#83#"+String(TEMPERATURA_MIN));
+      Serial.println("#84#"+String(TEMPERATURA_MAX));
+      Serial.println("#85#"+String(HUMEDAD_MIN_PLANTA_1));
+      Serial.println("#86#"+String(HUMEDAD_MIN_PLANTA_2));
+      Serial.println("#87#"+String(HUMEDAD_MIN_PLANTA_3));
+    }
+  }
+   
   obtenerOtros();
   obtenerValoresPlantas();
   analisisDeRiego();
@@ -62,7 +114,7 @@ void obtenerOtros(){
 void obtener_Nivel_Del_Agua (){
   NIVEL_AGUA = analogRead(MEDIDOR_NIVEL_AGUA);
 
-  Serial.println("#0#"+(String((NIVEL_AGUA))));
+  Serial.println("#00#"+(String((NIVEL_AGUA))));
 }
 
 void obtener_Humedad_Temperatura () {
@@ -71,14 +123,14 @@ void obtener_Humedad_Temperatura () {
       Serial.println("Error");
     return;
   }
-  Serial.println("#5#"+(String((int)VALOR_HUMEDAD)));
+  Serial.println("#05#"+(String((int)VALOR_HUMEDAD)));
   delay(100);
-  Serial.println("#6#"+(String((int)VALOR_TEMPERATURA)));
+  Serial.println("#06#"+(String((int)VALOR_TEMPERATURA)));
 }
 
 void obtener_Claridad (){
   VALOR_CLARIDAD = analogRead(FOTOCELDA);
-  Serial.println("#1#"+(String(VALOR_CLARIDAD)));
+  Serial.println("#01#"+(String(VALOR_CLARIDAD)));
 }
 
 void obtenerValoresPlantas(){
@@ -94,17 +146,17 @@ void obtenerHumedadSuelo(int IPLANTA) {
     HUMEDADA_FINAL_1 = 0;         
     HUMEDADA_TEMP = map(analogRead(SENSOR_SUELO_1), 0, 1023, 100, 0);
     HUMEDADA_FINAL_1 = constrain (HUMEDADA_TEMP, 0, 100);
-    Serial.println("#2#"+(String((HUMEDADA_FINAL_1))));
+    Serial.println("#02#"+(String((HUMEDADA_FINAL_1))));
   } else if (IPLANTA == 2) {
     HUMEDADA_FINAL_2 = 0; 
     HUMEDADA_TEMP = map(analogRead(SENSOR_SUELO_2), 0, 1023, 100, 0);
     HUMEDADA_FINAL_2 = constrain (HUMEDADA_TEMP, 0, 100);
-    Serial.println("#3#"+(String((HUMEDADA_FINAL_2))));
+    Serial.println("#03#"+(String((HUMEDADA_FINAL_2))));
   } else if (IPLANTA == 3) {
     HUMEDADA_FINAL_3 = 0; 
     HUMEDADA_TEMP = map(analogRead(SENSOR_SUELO_3), 0, 1023, 100, 0);
     HUMEDADA_FINAL_3 = constrain (HUMEDADA_TEMP, 0, 100);   
-    Serial.println("#4#"+(String((HUMEDADA_FINAL_3)))); 
+    Serial.println("#04#"+(String((HUMEDADA_FINAL_3)))); 
   }
 }
 
@@ -126,30 +178,10 @@ void analisisDeRiego(){
   }
 }
 
-void obtenerVariablesRiego(){
-
-  char cDatosTemp = Serial.read();
-  String sDatosTemp = String(cDatosTemp);
-  String sDatosPrefijo = sDatosTemp.substring(0, 3);
-  int iLargoDatos = sDatosTemp.length();
-  String sDatosFinal = sDatosTemp.substring(3, iLargoDatos);
-
-  if (sDatosPrefijo == "#0#") { NIVEL_AGUA_MIN = sDatosFinal.toInt(); }
-  if (sDatosPrefijo == "#1#") { CLARIDAD_MIN = sDatosFinal.toInt(); }
-  if (sDatosPrefijo == "#2#") { CLARIDAD_MAX = sDatosFinal.toInt(); }
-  if (sDatosPrefijo == "#3#") { TEMPERATURA_MIN = sDatosFinal.toInt(); }
-  if (sDatosPrefijo == "#4#") { TEMPERATURA_MAX = sDatosFinal.toInt(); }
-  if (sDatosPrefijo == "#5#") { HUMEDAD_MIN_PLANTA_1 = sDatosFinal.toInt(); }
-  if (sDatosPrefijo == "#6#") { HUMEDAD_MIN_PLANTA_2 = sDatosFinal.toInt(); }
-  if (sDatosPrefijo == "#7#") { HUMEDAD_MIN_PLANTA_3 =  sDatosFinal.toInt(); }
-
-  Serial.println("#8#Se actualizan las variables para riego : "+ cDatosTemp);
-}
-
 
 void regarPlanta(int IPLANTA){
  
 
-  Serial.println("#9#Regando planta nº "+(String((IPLANTA))));
+  Serial.println("#09#Regando planta nº "+(String((IPLANTA))));
 }
 
