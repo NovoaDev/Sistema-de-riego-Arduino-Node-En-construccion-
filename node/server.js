@@ -107,14 +107,14 @@ app.get('/crear', function (req, res) {
   //console.log(lola)
 
   //var lolaaa = valHora("12:30", "18:35", "18:52")
-  enviarConfig ("0", "66")
-  enviarConfig ("1", "11")
-  enviarConfig ("2", "22")
-  enviarConfig ("3", "33")
-  enviarConfig ("4", "44")
-  enviarConfig ("5", "55")
-  enviarConfig ("6", "66")
-  enviarConfig ("7", "77")
+  //enviarConfig (0, "66")
+  //enviarConfig (1, "11")
+  //enviarConfig (2, "22")
+  //enviarConfig (3, "33")
+  //enviarConfig (4, "44")
+  //enviarConfig (5, "55")
+  //enviarConfig (6, "66")
+  //enviarConfig (7, "77")
   
 })
 
@@ -126,7 +126,7 @@ app.get('/tipo', function (req, res) {
       res.send(oTipoPlanta)
     }
   })*/
-  enviarConfig ("9", "")
+  enviarConfig (9, "")
 
 })
 
@@ -230,38 +230,15 @@ app.post('/actualizarVariablesP', function (req, res) {
   let sVar6 = req.body.var6
   let sVar7 = req.body.var7
 
-  if ((sVar0 != undefined) && (sVar0 != '')) { 
-    enviarConfig("0", sVar0)
-    setTimeout(function(){selectorDeVar("#20#"+sVar0)} ,1000)
-  }
-  if ((sVar1 != undefined) && (sVar1 != '')) { 
-    enviarConfig("1", sVar1)
-    setTimeout(function(){selectorDeVar("#21#"+sVar1)} ,1000)
-  }
-  if ((sVar2 != undefined) && (sVar2 != '')) { 
-    enviarConfig("2", sVar2)
-    setTimeout(function(){selectorDeVar("#22#"+sVar2)} ,1000)
-  }
-  if ((sVar3 != undefined) && (sVar3 != '')) { 
-    enviarConfig("3", sVar3)
-    setTimeout(function(){selectorDeVar("#23#"+sVar3)} ,1000)
-  }
-  if ((sVar4 != undefined) && (sVar4 != '')) { 
-    enviarConfig("4", sVar4)
-    setTimeout(function(){selectorDeVar("#24#"+sVar4)} ,1000)
-  }
-  if ((sVar5 != undefined) && (sVar5 != '')) { 
-    enviarConfig("5", sVar5)
-    setTimeout(function(){selectorDeVar("#25#"+sVar5)} ,1000)
-  }
-  if ((sVar6 != undefined) && (sVar6 != '')) { 
-    enviarConfig("6", sVar6)
-    setTimeout(function(){selectorDeVar("#26#"+sVar6)} ,1000)
-  }
-  if ((sVar7 != undefined) && (sVar7 != '')) { 
-    enviarConfig("7", sVar7)
-    setTimeout(function(){selectorDeVar("#27#"+sVar7)} ,1000)
-  }
+  if ((sVar0 != undefined) && (sVar0 != '')) { setTimeout(function(){enviarConfig(0, sVar0) } ,1000) }
+  if ((sVar1 != undefined) && (sVar1 != '')) { setTimeout(function(){enviarConfig(1, sVar1) } ,1000) }
+  if ((sVar2 != undefined) && (sVar2 != '')) { setTimeout(function(){enviarConfig(2, sVar2) } ,1000) }
+  if ((sVar3 != undefined) && (sVar3 != '')) { setTimeout(function(){enviarConfig(3, sVar3) } ,1000) }
+  if ((sVar4 != undefined) && (sVar4 != '')) { setTimeout(function(){enviarConfig(4, sVar4) } ,1000) }
+  if ((sVar5 != undefined) && (sVar5 != '')) { setTimeout(function(){enviarConfig(5, sVar5) } ,1000) }
+  if ((sVar6 != undefined) && (sVar6 != '')) { setTimeout(function(){enviarConfig(6, sVar6) } ,1000) }
+  if ((sVar7 != undefined) && (sVar7 != '')) { setTimeout(function(){enviarConfig(7, sVar7) } ,1000) }
+  console.log(sVar7)
 
 })
 //---------------------------------------------------------------------------------------------------------------------------------- POST
@@ -365,17 +342,29 @@ function enviarConfig (iOrden, sDatosA) {
      HUMEDAD_MIN_PLANTA_3 = 7
   */
   
-  if (iOrden == "0") port.write("#0#"+sDatosA+"\n")
-  if (iOrden == "1") port.write("#1#"+sDatosA+"\n")
-  if (iOrden == "2") port.write("#2#"+sDatosA+"\n")
-  if (iOrden == "3") port.write("#3#"+sDatosA+"\n")
-  if (iOrden == "4") port.write("#4#"+sDatosA+"\n")
-  if (iOrden == "5") port.write("#5#"+sDatosA+"\n")
-  if (iOrden == "6") port.write("#6#"+sDatosA+"\n")
-  if (iOrden == "7") port.write("#7#"+sDatosA+"\n")
+  if (iOrden == 0) port.write("#0#"+sDatosA+"\n")
+  if (iOrden == 1) port.write("#1#"+sDatosA+"\n")
+  if (iOrden == 2) port.write("#2#"+sDatosA+"\n")
+  if (iOrden == 3) port.write("#3#"+sDatosA+"\n")
+  if (iOrden == 4) port.write("#4#"+sDatosA+"\n")
+  if (iOrden == 5) port.write("#5#"+sDatosA+"\n")
+  if (iOrden == 6) port.write("#6#"+sDatosA+"\n")
+  if (iOrden == 7) port.write("#7#"+sDatosA+"\n")
 
   //Pedir valores variables arduino
-  if (iOrden == "9") port.write("#9#\n")
+  if (iOrden == 9) port.write("#9#\n")
+}
+
+function peticionPostActualizarVariables (iOrden) {
+  
+  if (iOrden == 0) console.log("PETICION POST ACTUALIZAR NIVEL_AGUA_MIN.")
+  if (iOrden == 1) console.log("PETICION POST ACTUALIZAR CLARIDAD_MIN.")
+  if (iOrden == 2) console.log("PETICION POST ACTUALIZAR CLARIDAD_MAX.")
+  if (iOrden == 3) console.log("PETICION POST ACTUALIZAR TEMPERATURA_MIN.")
+  if (iOrden == 4) console.log("PETICION POST ACTUALIZAR TEMPERATURA_MAX.")
+  if (iOrden == 5) console.log("PETICION POST ACTUALIZAR HUMEDAD_MIN_PLANTA_1.")
+  if (iOrden == 6) console.log("PETICION POST ACTUALIZAR HUMEDAD_MIN_PLANTA_2.")
+  if (iOrden == 7) console.log("PETICION POST ACTUALIZAR HUMEDAD_MIN_PLANTA_3.")
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------- FUNC
