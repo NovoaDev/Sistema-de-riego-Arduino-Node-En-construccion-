@@ -10,6 +10,11 @@
 
 //Digitales
 #define MEDIDOR_hUMEDAD_TEMP 2
+#define RELE_BOMBA_1 3
+#define RELE_BOMBA_2 4
+#define RELE_BOMBA_3 5
+#define RELE_INTERRUPTOR_LUZ 6
+
 
 //Variables
 int NIVEL_AGUA = 0;           //SENSOR NIVELAGUA
@@ -40,9 +45,20 @@ SimpleDHT11 DHT11;
 
 void setup(){
   Serial.begin(9600);
-  
+
+  pinMode(RELE_BOMBA_1, OUTPUT);
+  pinMode(RELE_BOMBA_2, OUTPUT);
+  pinMode(RELE_BOMBA_3, OUTPUT);
+  pinMode(RELE_INTERRUPTOR_LUZ, OUTPUT);
+   
   pinMode(FOTOCELDA,INPUT); 
   
+  // Estado inicial: Todos los reles a 0
+
+  digitalWrite(RELE_BOMBA_1, HIGH);
+  digitalWrite(RELE_BOMBA_2, HIGH);
+  digitalWrite(RELE_BOMBA_3, HIGH);
+  digitalWrite(RELE_INTERRUPTOR_LUZ, HIGH);
 }
 
 void loop(){
@@ -86,6 +102,16 @@ void loop(){
       HUMEDAD_MIN_PLANTA_3 = sDatosFinal.toInt();
       Serial.println("#27#"+String(HUMEDAD_MIN_PLANTA_3));
     }
+
+    //Ordenes directas de node a arduino
+    if (sDatosPrefijo == "#8#") { 
+      if(sDatosFinal.toInt() == 1){ regarPlanta(1); }
+      if(sDatosFinal.toInt() == 2){ regarPlanta(2); }
+      if(sDatosFinal.toInt() == 3){ regarPlanta(3); }
+      if(sDatosFinal.toInt() == 4){ enciendeApagaLuz(0); }
+      if(sDatosFinal.toInt() == 5){ enciendeApagaLuz(1); }
+    }    
+    //Consulta de datos variables para riego arduino
     if (sDatosPrefijo == "#9#") { 
       Serial.println("#80#"+String(NIVEL_AGUA_MIN));
       Serial.println("#81#"+String(CLARIDAD_MIN));
@@ -180,8 +206,38 @@ void analisisDeRiego(){
 
 
 void regarPlanta(int IPLANTA){
- 
+
+  if(IPLANTA == 1) {
+    digitalWrite(RELE_BOMBA_1, LOW);
+    delay(2000);
+    digitalWrite(RELE_BOMBA_1, HIGH);
+  }
+  
+  if(IPLANTA == 2) {
+    digitalWrite(RELE_BOMBA_2, LOW);
+    delay(2000);
+    digitalWrite(RELE_BOMBA_2, HIGH);
+  }
+
+  if(IPLANTA == 3) {
+    digitalWrite(RELE_BOMBA_3, LOW);
+    delay(2000);
+    digitalWrite(RELE_BOMBA_3, HIGH);
+  }
 
   Serial.println("#09#Regando planta nº "+(String((IPLANTA))));
 }
 
+void enciendeApagaLuz(int iOrden){
+
+  if(iOrden == 0) {
+    digitalWrite(RELE_INTERRUPTOR_LUZ, HIGH);
+    Serial.println("#09#Luz apagada");
+  }
+  
+  if(iOrden == 1) {
+    digitalWrite(RELE_INTERRUPTOR_LUZ, LOW);
+    Serial.println("#09#Luz encendida");
+  }
+
+}

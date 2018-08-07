@@ -115,7 +115,13 @@ app.get('/crear', function (req, res) {
   //enviarConfig (5, "55")
   //enviarConfig (6, "66")
   //enviarConfig (7, "77")
-  
+
+enviarConfig(8, "1") 
+enviarConfig(8, "2") 
+enviarConfig(8, "3") 
+enviarConfig(8, "5")
+enviarConfig(8, "4")
+
 })
 
 app.get('/tipo', function (req, res) {
@@ -238,7 +244,7 @@ app.post('/actualizarVariablesP', function (req, res) {
   if ((sVar5 != undefined) && (sVar5 != '')) { setTimeout(function(){enviarConfig(5, sVar5) } ,1000) }
   if ((sVar6 != undefined) && (sVar6 != '')) { setTimeout(function(){enviarConfig(6, sVar6) } ,1000) }
   if ((sVar7 != undefined) && (sVar7 != '')) { setTimeout(function(){enviarConfig(7, sVar7) } ,1000) }
-  console.log(sVar7)
+  console.log(sVar7+ "test sVar7")
 
 })
 //---------------------------------------------------------------------------------------------------------------------------------- POST
@@ -350,6 +356,9 @@ function enviarConfig (iOrden, sDatosA) {
   if (iOrden == 5) port.write("#5#"+sDatosA+"\n")
   if (iOrden == 6) port.write("#6#"+sDatosA+"\n")
   if (iOrden == 7) port.write("#7#"+sDatosA+"\n")
+
+  //Ordenes Directas a Arduino
+  if (iOrden == 8) port.write("#8#"+sDatosA+"\n")
 
   //Pedir valores variables arduino
   if (iOrden == 9) port.write("#9#\n")
