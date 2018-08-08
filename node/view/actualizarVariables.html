@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta charset="utf-8">
+      <title>Riem0n! - Valores para riego!</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+      <link href="/css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row cloPadin">
+	    	<div class="col-12 col-sm-12 col-md-6 col-lg-12 inline">
+		      <img class="logo-xs"src="/img/riemon.jpg" class="rounded-circle">
+	      </div>
+			</div>
+			
+			<div>
+				<form method="post"  action="/actualizarVariablesP"> 
+					<p> Nivel de agua </p>
+					<input type="text" id="var0" name="var0"></input>
+					<p> Claridad Minima </p>
+					<input type="text" id="var1" name="var1"></input>
+					<p> Claridad Maxima </p>
+					<input type="text" id="var2" name="var2"></input>
+					<p> Temperatura Minima </p>
+					<input type="text" id="var3" name="var3"></input>
+					<p> Temperatura Minima </p>
+					<input type="text" id="var4" name="var4"></input>
+					<p> Humedad Planta #1 </p>
+					<input type="text" id="var5" name="var5"></input>
+					<p> Humedad Planta #2 </p>
+					<input type="text" id="var6" name="var6"></input>
+					<p> Humedad Planta #3 </p>
+					<input type="text" id="var7" name="var7"></input>
+
+					<button type="submit" id="btn" name="button" value="#"> Actualizar </button>
+				</form>
+			</div>
+			<p>Ordenes directas al Arduino </p>
+			<div>
+				<form method="post"  action="/regar1"> 
+					<button type="submit" id="btn" name="button" value=#> Encender Bomba1 </button>
+				</form>
+			</div>
+			<div>
+				<form method="post"  action="/regar2"> 
+					<button type="submit" id="btn" name="button" value=#> Encender Bomba2 </button>
+				</form>
+			</div>
+
+			<div>
+				<form method="post"  action="/regar3"> 
+					<button type="submit" id="btn" name="button" value=#> Encender Bomba3 </button>
+				</form>
+			</div>
+
+			<div>
+				<form method="post"  action="/luzOnOff"> 
+					<button type="submit" id="btn" name="button" value=#> Encender / Apagar Luz </button>
+				</form>
+			</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	</body>
+</html>

@@ -54,7 +54,6 @@ void setup(){
   pinMode(FOTOCELDA,INPUT); 
   
   // Estado inicial: Todos los reles a 0
-
   digitalWrite(RELE_BOMBA_1, HIGH);
   digitalWrite(RELE_BOMBA_2, HIGH);
   digitalWrite(RELE_BOMBA_3, HIGH);

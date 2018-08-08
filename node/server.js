@@ -17,12 +17,13 @@ const ReadLine = SerialPort.parsers.Readline
 const sis = new arduinoModel()
 //let mail = new mailer("99")
 
-app.use(express.static(__dirname + '/public'))
-app.use(bParser.urlencoded({extended: true}))
-
 const port = new SerialPort("COM3", { baudRate: 9600 })
 const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
 
+app.use(express.static(__dirname + '/view/public'))
+app.use(bParser.urlencoded({extended: true}))
+
+let bLuzEncendida = false
 //---------------------------------------------------------------------------------------------------------------------------------- IO
 parser.on('open', function () {
   	console.log('connection is opened')
@@ -40,13 +41,14 @@ parser.on('data', function (data) {
   	io.emit('selec6', sis.humedadPlanta3)
   	io.emit('selec7', sis.humedadAmbiente)
   	io.emit('selec8', sis.tempAmbiente)
-
- 
-  	//let mail = new mailer("1")
 })
 //---------------------------------------------------------------------------------------------------------------------------------- IO
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
+
+app.get('/', function (req, res) {
+  res.sendFile(__dirname + '/view/index.html') 
+})
 
 app.get('/crear', function (req, res) {
   res.send('creando tablas')
@@ -121,35 +123,9 @@ enviarConfig(8, "2")
 enviarConfig(8, "3") 
 enviarConfig(8, "5")
 enviarConfig(8, "4")
+enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
 
 })
-
-app.get('/tipo', function (req, res) {
-  /*
-  let sTipoPlanta ="coco5"
-  datab.selectTipoPlanta("coco5", function (oTipoPlanta) {
-    if ((oTipoPlanta != "vacia") && (oTipoPlanta != "error")) {
-      res.send(oTipoPlanta)
-    }
-  })*/
-  enviarConfig (9, "")
-
-})
-
-app.get('/cfg', function (req, res) {
-  let tipoPlantas = datab.selectTipoPlanta("")
-  res.send('CFG')
-
-})
-
-app.get('/puestaAPuntoInicial', function (req, res) {
-  res.sendfile('public/puestaapunto.html') 
-})
-
-app.get('/actualizarVariables', function (req, res) {
-  res.sendfile('public/actualizarVariables.html') 
-})
-
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
 
@@ -158,13 +134,26 @@ app.get('/actualizarVariables', function (req, res) {
 app.post('/entrar', function (req, res) {
   let usu = req.body.usuario
   let pass = req.body.password
+  let selectorPagina = req.body.selectorPagina
   let login = false
   
   datab.validarUsu(usu, pass, function (vali) {
     if (vali) {
-      res.sendfile('public/main.html')
+      switch (selectorPagina) {
+        case "0" :
+          res.sendFile(__dirname + '/view/main.html')
+        break
+        case "1" :
+          res.sendFile(__dirname + '/view/actualizarVariables.html')
+        break
+        case "2" :
+          res.sendFile(__dirname + '/view/main.html')
+        break
+        case "3" :
+          res.sendFile(__dirname + '/view/puestaapunto.html')
+        break
+      } 
       let login = true
-    
     } else {
       res.send('Usuario o clave incorrecta ')
       let login = false
@@ -217,15 +206,6 @@ app.post('/puestaAPunto', function (req, res) {
   })
 })
 
-app.post('/verPlantas', function (req, res) {
-  
-  let plantas = datab.selectPlantas(function (oPlantas) {
-    if ((oPlantas != "vacia") && (oPlantas != "error")) {
-      res.send(oPlantas) //revisara
-    }
-  })
-})
-
 app.post('/actualizarVariablesP', function (req, res) {
   let sVar0 = req.body.var0
   let sVar1 = req.body.var1
@@ -247,6 +227,39 @@ app.post('/actualizarVariablesP', function (req, res) {
   console.log(sVar7+ "test sVar7")
 
 })
+
+//Ordenes directas al arduino 
+app.post('/regar1', function (req, res) {
+  enviarConfig(8, "1")
+})
+
+app.post('/regar2', function (req, res) {
+  enviarConfig(8, "2")   
+})
+
+app.post('/regar3', function (req, res) {
+  enviarConfig(8, "3") 
+})
+
+app.post('/luzOnOff', function (req, res) {
+  if (bLuzEncendida) { 
+    enviarConfig(8, "4")
+    bLuzEncendida = false   
+  } else {
+    enviarConfig(8, "5")
+    bLuzEncendida = true
+  }
+})
+
+app.post('/verPlantas', function (req, res) {
+  
+  let plantas = datab.selectPlantas(function (oPlantas) {
+    if ((oPlantas != "vacia") && (oPlantas != "error")) {
+      res.send(oPlantas) //revisara
+    }
+  })
+})
+
 //---------------------------------------------------------------------------------------------------------------------------------- POST
 
 //---------------------------------------------------------------------------------------------------------------------------------- FUNC
@@ -362,18 +375,6 @@ function enviarConfig (iOrden, sDatosA) {
 
   //Pedir valores variables arduino
   if (iOrden == 9) port.write("#9#\n")
-}
-
-function peticionPostActualizarVariables (iOrden) {
-  
-  if (iOrden == 0) console.log("PETICION POST ACTUALIZAR NIVEL_AGUA_MIN.")
-  if (iOrden == 1) console.log("PETICION POST ACTUALIZAR CLARIDAD_MIN.")
-  if (iOrden == 2) console.log("PETICION POST ACTUALIZAR CLARIDAD_MAX.")
-  if (iOrden == 3) console.log("PETICION POST ACTUALIZAR TEMPERATURA_MIN.")
-  if (iOrden == 4) console.log("PETICION POST ACTUALIZAR TEMPERATURA_MAX.")
-  if (iOrden == 5) console.log("PETICION POST ACTUALIZAR HUMEDAD_MIN_PLANTA_1.")
-  if (iOrden == 6) console.log("PETICION POST ACTUALIZAR HUMEDAD_MIN_PLANTA_2.")
-  if (iOrden == 7) console.log("PETICION POST ACTUALIZAR HUMEDAD_MIN_PLANTA_3.")
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------- FUNC
