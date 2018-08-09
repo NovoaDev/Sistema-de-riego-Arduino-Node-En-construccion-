@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title Riem0n! - Login!
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
+    link(href='/css/style.css', rel='stylesheet', type='text/css')
+  body
+    .container-fluid
+      .row.cloPadin
+        .col-12.col-sm-12.col-md-6.col-lg-12.inline
+          img.logo-xs(src='/img/riemon.jpg')
+      div
+        form(method='post', action='/entrar')
+          p  Login : 
+          input#usu(type='text', name='usuario')
+          p  Password : 
+          input#pass(type='password', name='password')
+          select(name='selectorPagina')
+            option(value='0', selected='selected') Directo
+            option(value='1') Configuracion Riego
+            option(value='2') Configuracion Servidor
+            option(value='3') Configuracion Base de datos
+          button#btn(type='submit', name='button', value='Login')  LOGIN 
+    script(src='/js/script.js', charset='utf-8')
+    // jQuery first, then Popper.js, then Bootstrap JS
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+    script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')

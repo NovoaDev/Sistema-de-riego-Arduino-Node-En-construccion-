@@ -20,8 +20,10 @@ const sis = new arduinoModel()
 const port = new SerialPort("COM3", { baudRate: 9600 })
 const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
 
+//Middleware`s
 app.use(express.static(__dirname + '/view/public'))
 app.use(bParser.urlencoded({extended: true}))
+app.set("view engine", "jade")
 
 let bLuzEncendida = false
 //---------------------------------------------------------------------------------------------------------------------------------- IO
@@ -47,7 +49,7 @@ parser.on('data', function (data) {
 //---------------------------------------------------------------------------------------------------------------------------------- GET
 
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/view/index.html') 
+  res.render(__dirname + '/view/index') 
 })
 
 app.get('/crear', function (req, res) {
@@ -141,16 +143,16 @@ app.post('/entrar', function (req, res) {
     if (vali) {
       switch (selectorPagina) {
         case "0" :
-          res.sendFile(__dirname + '/view/main.html')
+          res.render(__dirname + '/view/main')
         break
         case "1" :
-          res.sendFile(__dirname + '/view/actualizarVariables.html')
+          res.render(__dirname + '/view/actualizarVariables')
         break
         case "2" :
-          res.sendFile(__dirname + '/view/main.html')
+          res.render(__dirname + '/view/main')
         break
         case "3" :
-          res.sendFile(__dirname + '/view/puestaapunto.html')
+          res.render(__dirname + '/view/puestaapunto')
         break
       } 
       let login = true

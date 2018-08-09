@@ -1,0 +1,50 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title Riem0n!
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
+    link(href='/css/style.css', rel='stylesheet', type='text/css')
+  body
+    .container-fluid
+      .row.cloPadin
+        .col-12.col-sm-12.col-md-6.col-lg-12.inline
+          img.logo-xs(src='/img/riemon.jpg')
+      .row.cloPadin
+        .col-3.col-sm-12.col-md-6.col-lg-12.inline
+          img.logo-xs(src='/img/medidorAgua.png')
+        .col-3.col-sm-12.col-md-6.col-lg-12.inline
+          p#valor0.inline
+          p#senso0.inline
+        .col-3.col-sm-12.col-md-6.col-lg-12.inline
+          img.logo-xs(src='/img/medidorSol.jpg')
+        .col-3.col-sm-12.col-md-6.col-lg-12.inline
+          p#valor1.inline
+          p#senso1.inline
+      .row.cloPadin
+        .col-3.col-sm-12.col-md-6.col-lg-12.inline
+          img.logo-xs(src='/img/humedadAmbiente.png')
+        .col-3.col-sm-12.col-md-6.col-lg-12.inline
+          p#senso5.inline
+        .col-3.col-sm-12.col-md-6.col-lg-12.inline
+          img.logo-xs(src='/img/temAmbiente.png')
+        .col-3.col-sm-12.col-md-6.col-lg-12.inline
+          p#senso6.inline
+      .row.cloPadin
+        .hidden-xs.col-2.col-sm-12.col-md-6.col-lg-12.inline
+          img.logo-xs.rounded-circle(src='/img/plantaIco.png')
+        .col-2.col-sm-12.col-md-6.col-lg-12.inline
+          p#senso2.inline
+        .hidden-xs.col-2.col-sm-12.col-md-6.col-lg-12.inline
+          img.logo-xs.rounded-circle(src='/img/plantaIco.png')
+        .col-2.col-sm-12.col-md-6.col-lg-12.inline
+          p#senso3.inline
+        .hidden-xs.col-2.col-sm-12.col-md-6.col-lg-12.inline
+          img.logo-xs.rounded-circle(src='/img/plantaIco.png')
+        .col-2.col-sm-12.col-md-6.col-lg-12.inline
+          p#senso4.inline
+    script(src='socket.io/socket.io.js', charset='utf-8')
+    script(src='/js/script.js', charset='utf-8')
+    // jQuery first, then Popper.js, then Bootstrap JS
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+    script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
