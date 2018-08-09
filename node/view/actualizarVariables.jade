@@ -1,46 +1,54 @@
-doctype html
-html
-  head
-    meta(charset='utf-8')
-    title Riem0n! - Valores para riego!
-    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
-    link(href='/css/style.css', rel='stylesheet', type='text/css')
-  body
-    .container-fluid
-      .row.cloPadin
-        .col-12.col-sm-12.col-md-6.col-lg-12.inline
-          img.logo-xs(src='/img/riemon.jpg')
-      div
-        form(method='post', action='/actualizarVariablesP')
-          p  Nivel de agua 
-          input#var0(type='text', name='var0')
-          p  Claridad Minima 
-          input#var1(type='text', name='var1')
-          p  Claridad Maxima 
-          input#var2(type='text', name='var2')
-          p  Temperatura Minima 
-          input#var3(type='text', name='var3')
-          p  Temperatura Minima 
-          input#var4(type='text', name='var4')
-          p  Humedad Planta #1 
-          input#var5(type='text', name='var5')
-          p  Humedad Planta #2 
-          input#var6(type='text', name='var6')
-          p  Humedad Planta #3 
-          input#var7(type='text', name='var7')
-          button#btn(type='submit', name='button', value='#')  Actualizar 
-      p Ordenes directas al Arduino 
-      div
-        form(method='post', action='/regar1')
-          button#btn(type='submit', name='button', value='#')  Encender Bomba1 
-      div
-        form(method='post', action='/regar2')
-          button#btn(type='submit', name='button', value='#')  Encender Bomba2 
-      div
-        form(method='post', action='/regar3')
-          button#btn(type='submit', name='button', value='#')  Encender Bomba3 
-      div
-        form(method='post', action='/luzOnOff')
-          button#btn(type='submit', name='button', value='#')  Encender / Apagar Luz 
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
-    script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
+extends ./layout.jade
+block contenido
+  .row.cloPadin
+    .col-12.col-sm-12.col-md-6.col-lg-12.inline
+      img.logo-xs(src='/img/riemon.jpg')
+  div
+    form(method='post', action='/actualizarVariablesP')
+      p  Nivel de agua 
+      input#var0(type='text', name='var0')
+      p  Claridad Minima 
+      input#var1(type='text', name='var1')
+      p  Claridad Maxima 
+      input#var2(type='text', name='var2')
+      p  Temperatura Minima 
+      input#var3(type='text', name='var3')
+      p  Temperatura Minima 
+      input#var4(type='text', name='var4')
+      p  Humedad Planta #1 
+      input#var5(type='text', name='var5')
+      p  Humedad Planta #2 
+      input#var6(type='text', name='var6')
+      p  Humedad Planta #3 
+      input#var7(type='text', name='var7')
+      button#btn(type='submit', name='button', value='#')  Actualizar
+  div
+  
+    form(method='post', action='/plantas')
+      select(name='planta1')
+        - for (var i =0; i <= plantas.length - 1; i++)
+            option(value='#{plantas[i]}') #{plantas[i]}
+      
+      select(name='planta2')
+        - for (var i =0; i <= plantas.length - 1; i++)
+            option(value='#{plantas[i]}') #{plantas[i]}
+
+      select(name='planta3')
+        - for (var i =0; i <= plantas.length - 1; i++)
+            option(value='#{plantas[i]}') #{plantas[i]}      
+      button#btn(type='submit', name='button', value='#')  GRABAR
+  div
+    p Ordenes directas al Arduino 
+           
+    div
+      form(method='post', action='/regar1')
+        button#btn(type='submit', name='button', value='#')  Encender Bomba1 
+    div
+      form(method='post', action='/regar2')
+        button#btn(type='submit', name='button', value='#')  Encender Bomba2 
+    div
+      form(method='post', action='/regar3')
+        button#btn(type='submit', name='button', value='#')  Encender Bomba3 
+    div
+      form(method='post', action='/luzOnOff')
+        button#btn(type='submit', name='button', value='#')  Encender / Apagar Luz 

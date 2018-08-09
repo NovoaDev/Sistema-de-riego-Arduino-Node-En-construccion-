@@ -49,7 +49,7 @@ parser.on('data', function (data) {
 //---------------------------------------------------------------------------------------------------------------------------------- GET
 
 app.get('/', function (req, res) {
-  res.render(__dirname + '/view/index') 
+  res.render(__dirname + '/view/index',{titulo: "Riem0n! - Login!"}) 
 })
 
 app.get('/crear', function (req, res) {
@@ -75,22 +75,22 @@ app.get('/crear', function (req, res) {
   //datab.crearCFGMail("1", "1", "1", "1", "1")
   //datab.eliminarCFGMail("1")
 
-  /*
+  
   //inicio test arry dentro de objeto tipoPlanta
-  datab.crearTipoPlanta("coco", 20, "planta de coco cuidar con la vida", "C:/coso")
-  datab.crearTipoPlanta("coco1", 21, "planta de coco cuidar con la vida1", "C:/coso")
-  datab.crearTipoPlanta("coco2", 22, "planta de coco cuidar con la vida2", "C:/coso")
-  datab.crearTipoPlanta("coco3", 23, "planta de coco cuidar con la vida3", "C:/coso")
-  datab.crearTipoPlanta("coco4", 24, "planta de coco cuidar con la vida4", "C:/coso")
-  datab.crearTipoPlanta("coco5", 25, "planta de coco cuidar con la vida5", "C:/coso")
-  datab.crearTipoPlanta("coco6", 26, "planta de coco cuidar con la vida6", "C:/coso")
-  datab.crearTipoPlanta("coco7", 27, "planta de coco cuidar con la vida7", "C:/coso")
-  datab.crearTipoPlanta("coco8", 28, "planta de coco cuidar con la vida8", "C:/coso")
-  datab.crearTipoPlanta("coco9", 29, "planta de coco cuidar con la vida9", "C:/coso")
-  datab.crearTipoPlanta("coco10", 30, "planta de coco cuidar con la vida10", "C:/coso")
-  datab.crearTipoPlanta("coco11", 31, "planta de coco cuidar con la vida11", "C:/coso")
+  //datab.crearTipoPlanta("coco", 20, "planta de coco cuidar con la vida", "C:/coso")
+  //datab.crearTipoPlanta("coco1", 21, "planta de coco cuidar con la vida1", "C:/coso")
+  //datab.crearTipoPlanta("coco2", 22, "planta de coco cuidar con la vida2", "C:/coso")
+  //datab.crearTipoPlanta("coco3", 23, "planta de coco cuidar con la vida3", "C:/coso")
+  //datab.crearTipoPlanta("coco4", 24, "planta de coco cuidar con la vida4", "C:/coso")
+  //datab.crearTipoPlanta("coco5", 25, "planta de coco cuidar con la vida5", "C:/coso")
+  //datab.crearTipoPlanta("coco6", 26, "planta de coco cuidar con la vida6", "C:/coso")
+  //datab.crearTipoPlanta("coco7", 27, "planta de coco cuidar con la vida7", "C:/coso")
+  //datab.crearTipoPlanta("coco8", 28, "planta de coco cuidar con la vida8", "C:/coso")
+  //datab.crearTipoPlanta("coco9", 29, "planta de coco cuidar con la vida9", "C:/coso")
+  //datab.crearTipoPlanta("coco10", 30, "planta de coco cuidar con la vida10", "C:/coso")
+  //datab.crearTipoPlanta("coco11", 31, "planta de coco cuidar con la vida11", "C:/coso")
   //FIN test arry dentro de objeto tipoPlanta 
-  */
+  
 
   
   //crear tabla planta generico
@@ -120,12 +120,12 @@ app.get('/crear', function (req, res) {
   //enviarConfig (6, "66")
   //enviarConfig (7, "77")
 
-enviarConfig(8, "1") 
-enviarConfig(8, "2") 
-enviarConfig(8, "3") 
-enviarConfig(8, "5")
-enviarConfig(8, "4")
-enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
+//enviarConfig(8, "1") 
+//enviarConfig(8, "2") 
+//enviarConfig(8, "3") 
+//enviarConfig(8, "5")
+//enviarConfig(8, "4")
+//enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
 
 })
 
@@ -143,16 +143,27 @@ app.post('/entrar', function (req, res) {
     if (vali) {
       switch (selectorPagina) {
         case "0" :
-          res.render(__dirname + '/view/main')
+          res.render(__dirname + '/view/main',{titulo: "Riem0n!"})
         break
         case "1" :
-          res.render(__dirname + '/view/actualizarVariables')
+          datab.selectTipoPlanta("", function (oPlantas) {
+            if ((oPlantas != "vacia") && (oPlantas != "error")) {
+              let plantas = []
+              oPlantas.planta.forEach(function(result) {
+                plantas.push(result)
+              })
+              res.render(__dirname + '/view/actualizarVariables',{titulo: "Riem0n! - Valores para riego!", plantas: plantas})
+            } else {
+              res.send("Tabla tipoPlanta Vacia")
+            }
+          })
+
         break
         case "2" :
-          res.render(__dirname + '/view/main')
+          res.render(__dirname + '/view/main',{titulo: "Riem0n!"})
         break
         case "3" :
-          res.render(__dirname + '/view/puestaapunto')
+          res.render(__dirname + '/view/puestaapunto',{titulo: "Riem0n!"})
         break
       } 
       let login = true
@@ -226,9 +237,26 @@ app.post('/actualizarVariablesP', function (req, res) {
   if ((sVar5 != undefined) && (sVar5 != '')) { setTimeout(function(){enviarConfig(5, sVar5) } ,1000) }
   if ((sVar6 != undefined) && (sVar6 != '')) { setTimeout(function(){enviarConfig(6, sVar6) } ,1000) }
   if ((sVar7 != undefined) && (sVar7 != '')) { setTimeout(function(){enviarConfig(7, sVar7) } ,1000) }
-  console.log(sVar7+ "test sVar7")
+
 
 })
+
+app.post('/plantas', function (req, res) {
+  let sPlanta1 = req.body.planta1
+  let sPlanta2 = req.body.planta2
+  let sPlanta3 = req.body.planta3
+
+  datab.selectTipoPlanta(sPlanta1, function (oPlanta) {
+      datab.updatePlantas(1, oPlanta.planta, oPlanta.humedad, oPlanta.notas, oPlanta.imagen)
+  })
+  datab.selectTipoPlanta(sPlanta2, function (oPlanta) {
+      datab.updatePlantas(2, oPlanta.planta, oPlanta.humedad, oPlanta.notas, oPlanta.imagen)
+  })
+  datab.selectTipoPlanta(sPlanta3, function (oPlanta) {
+      datab.updatePlantas(3, oPlanta.planta, oPlanta.humedad, oPlanta.notas, oPlanta.imagen)
+  })
+})
+
 
 //Ordenes directas al arduino 
 app.post('/regar1', function (req, res) {
@@ -255,9 +283,9 @@ app.post('/luzOnOff', function (req, res) {
 
 app.post('/verPlantas', function (req, res) {
   
-  let plantas = datab.selectPlantas(function (oPlantas) {
+  datab.selectTipoPlanta("", function (oPlantas) {
     if ((oPlantas != "vacia") && (oPlantas != "error")) {
-      res.send(oPlantas) //revisara
+      res.send(oPlantas) //
     }
   })
 })
