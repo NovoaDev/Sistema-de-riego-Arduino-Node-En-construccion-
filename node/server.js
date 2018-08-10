@@ -1,20 +1,29 @@
 const http = require('http')
 const express = require('express')
+const session = require('express-session')
 const SocketIO = require('socket.io')
 const SerialPort = require('serialport')
 const bParser = require('body-parser')
+
 const mailer = require('./utilidades/mailer')
 const datab = require('./utilidades/mysql')
 const val = require('./utilidades/validarValoresSensores')
 const valHora = require('./utilidades/validarHora')
+const rdm = require('./utilidades/randomNumber')
+
 const arduinoModel = require('./modelos/arduinoModel')
+const valoresParaRiegoModel = require('./modelos/valoresParaRiegoModel')
+const plantasModel = require('./modelos/plantasModel')
 
 const app = express()
 const server = http.createServer(app)
 const io = SocketIO.listen(server)
 const ReadLine = SerialPort.parsers.Readline
 
-const sis = new arduinoModel()
+let sis = new arduinoModel()
+let valRiego = new valoresParaRiegoModel()
+let plantas = new plantasModel()
+
 //let mail = new mailer("99")
 
 const port = new SerialPort("COM3", { baudRate: 9600 })
@@ -24,6 +33,11 @@ const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
 app.use(express.static(__dirname + '/view/public'))
 app.use(bParser.urlencoded({extended: true}))
 app.set("view engine", "jade")
+app.use(session({ 
+  secret: "123jds9jd98asdwqe", 
+  resave: false,
+  saveUninitialized: false
+}))
 
 let bLuzEncendida = false
 //---------------------------------------------------------------------------------------------------------------------------------- IO
@@ -53,80 +67,95 @@ app.get('/', function (req, res) {
 })
 
 app.get('/crear', function (req, res) {
-  res.send('creando tablas')
-  
-  //ELIMINAR TABLAS
-  //datab.eliminarTabla("usuarios")
-  //datab.eliminarTabla("plantas")
-  //datab.eliminarTabla("tipoPlanta")
-  //datab.eliminarTabla("mail")
-  //datab.eliminarTabla("registro")
+  res.render(__dirname + '/view/puestaapunto',{titulo: "Riem0n! - Puesta a punto"}) 
+})
 
-  //CREAR TABLAS
-  //datab.crearTabla("usuarios")
-  //datab.crearTabla("plantas")
-  //datab.crearTabla("tipoPlanta")
-  //datab.crearTabla("mail")
-  //datab.crearTabla("registro")
+app.get('/crearPlanta', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    res.render(__dirname + '/view/crearPlanta',{titulo: "Riem0n! - Crear Planta"}) 
+  }
+})
 
-  //datab.crearUsuario("lola", "rica")
-  //datab.crearUsuario("lola2", "rica")
-  //datab.eliminarUsu("lola2")
-  //datab.crearCFGMail("1", "1", "1", "1", "1")
-  //datab.eliminarCFGMail("1")
+app.get('/ini', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    res.send('creando tablas')
+    
+    //ELIMINAR TABLAS
+    //datab.eliminarTabla("usuarios")
+    //datab.eliminarTabla("plantas")
+    //datab.eliminarTabla("tipoPlanta")
+    //datab.eliminarTabla("mail")
+    //datab.eliminarTabla("registro")
 
-  
-  //inicio test arry dentro de objeto tipoPlanta
-  //datab.crearTipoPlanta("coco", 20, "planta de coco cuidar con la vida", "C:/coso")
-  //datab.crearTipoPlanta("coco1", 21, "planta de coco cuidar con la vida1", "C:/coso")
-  //datab.crearTipoPlanta("coco2", 22, "planta de coco cuidar con la vida2", "C:/coso")
-  //datab.crearTipoPlanta("coco3", 23, "planta de coco cuidar con la vida3", "C:/coso")
-  //datab.crearTipoPlanta("coco4", 24, "planta de coco cuidar con la vida4", "C:/coso")
-  //datab.crearTipoPlanta("coco5", 25, "planta de coco cuidar con la vida5", "C:/coso")
-  //datab.crearTipoPlanta("coco6", 26, "planta de coco cuidar con la vida6", "C:/coso")
-  //datab.crearTipoPlanta("coco7", 27, "planta de coco cuidar con la vida7", "C:/coso")
-  //datab.crearTipoPlanta("coco8", 28, "planta de coco cuidar con la vida8", "C:/coso")
-  //datab.crearTipoPlanta("coco9", 29, "planta de coco cuidar con la vida9", "C:/coso")
-  //datab.crearTipoPlanta("coco10", 30, "planta de coco cuidar con la vida10", "C:/coso")
-  //datab.crearTipoPlanta("coco11", 31, "planta de coco cuidar con la vida11", "C:/coso")
-  //FIN test arry dentro de objeto tipoPlanta 
-  
+    //CREAR TABLAS
+    //datab.crearTabla("usuarios")
+    //datab.crearTabla("plantas")
+    //datab.crearTabla("tipoPlanta")
+    //datab.crearTabla("mail")
+    //datab.crearTabla("registro")
 
-  
-  //crear tabla planta generico
-  //datab.crearPlantas(1, "tomate", 21, "tomate generico", "C:/coso")
-  //datab.crearPlantas(2, "calabaza", 22, "calabaza generica", "C:/coso")
-  //datab.crearPlantas(3, "pepino", 23, "pepino generico", "C:/coso")
-  //FIN crear tabla planta generico
-  
-  //Upadate plantas 
-  //datab.updatePlantas(3, "ponpon", 90, "pon pon generico", "C:/cososss")
-  
-  //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
+    //datab.crearUsuario("lola", "rica")
+    //datab.crearUsuario("lola2", "rica")
+    //datab.eliminarUsu("lola2")
+    //datab.crearCFGMail("1", "1", "1", "1", "1")
+    //datab.eliminarCFGMail("1")
+
+    
+    //inicio test arry dentro de objeto tipoPlanta
+    //datab.crearTipoPlanta("coco", 20, "planta de coco cuidar con la vida", "C:/coso")
+    //datab.crearTipoPlanta("coco1", 21, "planta de coco cuidar con la vida1", "C:/coso")
+    //datab.crearTipoPlanta("coco2", 22, "planta de coco cuidar con la vida2", "C:/coso")
+    //datab.crearTipoPlanta("coco3", 23, "planta de coco cuidar con la vida3", "C:/coso")
+    //datab.crearTipoPlanta("coco4", 24, "planta de coco cuidar con la vida4", "C:/coso")
+    //datab.crearTipoPlanta("coco5", 25, "planta de coco cuidar con la vida5", "C:/coso")
+    //datab.crearTipoPlanta("coco6", 26, "planta de coco cuidar con la vida6", "C:/coso")
+    //datab.crearTipoPlanta("coco7", 27, "planta de coco cuidar con la vida7", "C:/coso")
+    //datab.crearTipoPlanta("coco8", 28, "planta de coco cuidar con la vida8", "C:/coso")
+    //datab.crearTipoPlanta("coco9", 29, "planta de coco cuidar con la vida9", "C:/coso")
+    //datab.crearTipoPlanta("coco10", 30, "planta de coco cuidar con la vida10", "C:/coso")
+    //datab.crearTipoPlanta("coco11", 31, "planta de coco cuidar con la vida11", "C:/coso")
+    //FIN test arry dentro de objeto tipoPlanta 
+    
+
+    
+    //crear tabla planta generico
+    //datab.crearPlantas(1, "tomate", 21, "tomate generico", "C:/coso")
+    //datab.crearPlantas(2, "calabaza", 22, "calabaza generica", "C:/coso")
+    //datab.crearPlantas(3, "pepino", 23, "pepino generico", "C:/coso")
+    //FIN crear tabla planta generico
+    
+    //Upadate plantas 
+    //datab.updatePlantas(3, "ponpon", 90, "pon pon generico", "C:/cososss")
+    
+    //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
 
 
- //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
-  //let lola = datab.selectTipoPlanta("")
-  //let cfgCorreo = datab.selectMail()
-  //console.log(lola)
+   //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
+    //let lola = datab.selectTipoPlanta("")
+    //let cfgCorreo = datab.selectMail()
+    //console.log(lola)
 
-  //var lolaaa = valHora("12:30", "18:35", "18:52")
-  //enviarConfig (0, "66")
-  //enviarConfig (1, "11")
-  //enviarConfig (2, "22")
-  //enviarConfig (3, "33")
-  //enviarConfig (4, "44")
-  //enviarConfig (5, "55")
-  //enviarConfig (6, "66")
-  //enviarConfig (7, "77")
+    //var lolaaa = valHora("12:30", "18:35", "18:52")
+    //enviarConfig (0, "66")
+    //enviarConfig (1, "11")
+    //enviarConfig (2, "22")
+    //enviarConfig (3, "33")
+    //enviarConfig (4, "44")
+    //enviarConfig (5, "55")
+    //enviarConfig (6, "66")
+    //enviarConfig (7, "77")
 
-//enviarConfig(8, "1") 
-//enviarConfig(8, "2") 
-//enviarConfig(8, "3") 
-//enviarConfig(8, "5")
-//enviarConfig(8, "4")
-//enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
-
+  //enviarConfig(8, "1") 
+  //enviarConfig(8, "2") 
+  //enviarConfig(8, "3") 
+  //enviarConfig(8, "5")
+  //enviarConfig(8, "4")
+  //enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
+  }
 })
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
@@ -137,10 +166,13 @@ app.post('/entrar', function (req, res) {
   let usu = req.body.usuario
   let pass = req.body.password
   let selectorPagina = req.body.selectorPagina
-  let login = false
   
   datab.validarUsu(usu, pass, function (vali) {
     if (vali) {
+      let nRdm1 = rdm(1111111111, 9999999999)
+      let nRdm2 = rdm(1111111111, 9999999999)
+      
+      req.session.user_id = (nRdm1+usu+nRdm2)
       switch (selectorPagina) {
         case "0" :
           res.render(__dirname + '/view/main',{titulo: "Riem0n!"})
@@ -157,7 +189,6 @@ app.post('/entrar', function (req, res) {
               res.send("Tabla tipoPlanta Vacia")
             }
           })
-
         break
         case "2" :
           res.render(__dirname + '/view/main',{titulo: "Riem0n!"})
@@ -166,129 +197,179 @@ app.post('/entrar', function (req, res) {
           res.render(__dirname + '/view/puestaapunto',{titulo: "Riem0n!"})
         break
       } 
-      let login = true
     } else {
       res.send('Usuario o clave incorrecta ')
-      let login = false
     }
   })
 })
 
-app.post('/puestaAPunto', function (req, res) {
-
-  let sVal1 = req.body.validar1
-  let sVal2 = req.body.validar2
-  let sVal3 = req.body.validar3
-  
-  datab.validarUsu(sVal1, sVal2, sVal3, function (vali) {
-    if (vali) {
-      datab.selectPlantas(function (oPlantas) {
-        if ((oPlantas != "vacia") && (oPlantas != "error")) {
-          res.send('Puesta a punto inicial')
-          //CREAR TABLAS
-          datab.crearTabla("usuarios")
-          datab.crearTabla("plantas")
-          datab.crearTabla("tipoPlanta")
-          datab.crearTabla("mail")
-          datab.crearTabla("registro")
-          datab.crearTabla("horasRegistro")
-          datab.crearTabla("valoresParaRiego")
-
-          //CREAR USUARIO GENERICO
-          datab.crearUsuario("admin", "admin")
-
-          //CREAR PLANTAS GENERICAS
-          datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-          datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-          datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-
-          //CREAR TIPOPLANTA GENERICO
-          datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
-
-          //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
-
-          //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
-          datab.crearValoresParaRiego(20, 70, 90, 40, 80)  
-        } else {
-          res.send('Ya existe registros para una puesta a punto realice wipe primero')
-        }
-      })
-    } else {
-      res.send('Clave de validacion incorrecta')
-    }
-  })
-})
-
-app.post('/actualizarVariablesP', function (req, res) {
-  let sVar0 = req.body.var0
-  let sVar1 = req.body.var1
-  let sVar2 = req.body.var2
-  let sVar3 = req.body.var3
-  let sVar4 = req.body.var4
-  let sVar5 = req.body.var5
-  let sVar6 = req.body.var6
-  let sVar7 = req.body.var7
-
-  if ((sVar0 != undefined) && (sVar0 != '')) { setTimeout(function(){enviarConfig(0, sVar0) } ,1000) }
-  if ((sVar1 != undefined) && (sVar1 != '')) { setTimeout(function(){enviarConfig(1, sVar1) } ,1000) }
-  if ((sVar2 != undefined) && (sVar2 != '')) { setTimeout(function(){enviarConfig(2, sVar2) } ,1000) }
-  if ((sVar3 != undefined) && (sVar3 != '')) { setTimeout(function(){enviarConfig(3, sVar3) } ,1000) }
-  if ((sVar4 != undefined) && (sVar4 != '')) { setTimeout(function(){enviarConfig(4, sVar4) } ,1000) }
-  if ((sVar5 != undefined) && (sVar5 != '')) { setTimeout(function(){enviarConfig(5, sVar5) } ,1000) }
-  if ((sVar6 != undefined) && (sVar6 != '')) { setTimeout(function(){enviarConfig(6, sVar6) } ,1000) }
-  if ((sVar7 != undefined) && (sVar7 != '')) { setTimeout(function(){enviarConfig(7, sVar7) } ,1000) }
-
-
-})
-
-app.post('/plantas', function (req, res) {
-  let sPlanta1 = req.body.planta1
-  let sPlanta2 = req.body.planta2
-  let sPlanta3 = req.body.planta3
-
-  datab.selectTipoPlanta(sPlanta1, function (oPlanta) {
-      datab.updatePlantas(1, oPlanta.planta, oPlanta.humedad, oPlanta.notas, oPlanta.imagen)
-  })
-  datab.selectTipoPlanta(sPlanta2, function (oPlanta) {
-      datab.updatePlantas(2, oPlanta.planta, oPlanta.humedad, oPlanta.notas, oPlanta.imagen)
-  })
-  datab.selectTipoPlanta(sPlanta3, function (oPlanta) {
-      datab.updatePlantas(3, oPlanta.planta, oPlanta.humedad, oPlanta.notas, oPlanta.imagen)
-  })
-})
-
-
-//Ordenes directas al arduino 
-app.post('/regar1', function (req, res) {
-  enviarConfig(8, "1")
-})
-
-app.post('/regar2', function (req, res) {
-  enviarConfig(8, "2")   
-})
-
-app.post('/regar3', function (req, res) {
-  enviarConfig(8, "3") 
-})
-
-app.post('/luzOnOff', function (req, res) {
-  if (bLuzEncendida) { 
-    enviarConfig(8, "4")
-    bLuzEncendida = false   
+app.post('/crearPlanta', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
   } else {
-    enviarConfig(8, "5")
-    bLuzEncendida = true
+    let sVal1 = req.body.val1
+    let sVal2 = req.body.val2
+    let sVal3 = req.body.val3
+    
+    datab.crearTipoPlanta(sVal1, parseInt(sVal2), sVal3, "N/A")
   }
 })
 
-app.post('/verPlantas', function (req, res) {
-  
-  datab.selectTipoPlanta("", function (oPlantas) {
-    if ((oPlantas != "vacia") && (oPlantas != "error")) {
-      res.send(oPlantas) //
-    }
-  })
+app.post('/actualizarVariablesP', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {  
+    let sVar0 = req.body.var0
+    let sVar1 = req.body.var1
+    let sVar2 = req.body.var2
+    let sVar3 = req.body.var3
+    let sVar4 = req.body.var4
+    let sVar5 = req.body.var5
+    let sVar6 = req.body.var6
+    let sVar7 = req.body.var7
+
+    if ((sVar0 != undefined) && (sVar0 != '')) { setTimeout(function(){enviarConfig(0, sVar0) } ,1000) }
+    if ((sVar1 != undefined) && (sVar1 != '')) { setTimeout(function(){enviarConfig(1, sVar1) } ,1000) }
+    if ((sVar2 != undefined) && (sVar2 != '')) { setTimeout(function(){enviarConfig(2, sVar2) } ,1000) }
+    if ((sVar3 != undefined) && (sVar3 != '')) { setTimeout(function(){enviarConfig(3, sVar3) } ,1000) }
+    if ((sVar4 != undefined) && (sVar4 != '')) { setTimeout(function(){enviarConfig(4, sVar4) } ,1000) }
+    if ((sVar5 != undefined) && (sVar5 != '')) { setTimeout(function(){enviarConfig(5, sVar5) } ,1000) }
+    if ((sVar6 != undefined) && (sVar6 != '')) { setTimeout(function(){enviarConfig(6, sVar6) } ,1000) }
+    if ((sVar7 != undefined) && (sVar7 != '')) { setTimeout(function(){enviarConfig(7, sVar7) } ,1000) }
+  }
 })
+
+app.post('/plantas', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    let sPlanta1 = req.body.planta1
+    let sPlanta2 = req.body.planta2
+    let sPlanta3 = req.body.planta3
+
+    datab.selectTipoPlanta(sPlanta1, function (oPlanta) {
+        datab.updatePlantas(1, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
+    })
+    datab.selectTipoPlanta(sPlanta2, function (oPlanta) {
+        datab.updatePlantas(2, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
+    })
+    datab.selectTipoPlanta(sPlanta3, function (oPlanta) {
+        datab.updatePlantas(3, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
+    })
+  }
+})
+
+//Ordenes directas al arduino 
+app.post('/regar1', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    enviarConfig(8, "1")
+  }
+})
+
+app.post('/regar2', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    enviarConfig(8, "2")
+  }   
+})
+
+app.post('/regar3', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    enviarConfig(8, "3")
+  } 
+})
+
+app.post('/luzOnOff', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    if (bLuzEncendida) { 
+      enviarConfig(8, "4")
+      bLuzEncendida = false   
+    } else {
+      enviarConfig(8, "5")
+      bLuzEncendida = true
+    }
+  }
+})
+
+app.post('/wipe', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    let sVal1 = req.body.validar1
+    let sVal2 = req.body.validar2
+    let sVal3 = req.body.validar3
+    
+    datab.validarUsu(sVal1, sVal2, sVal3, function (vali) {
+      if (vali) {
+        datab.eliminarTabla("usuarios")
+        datab.eliminarTabla("plantas")
+        datab.eliminarTabla("tipoPlanta")
+        datab.eliminarTabla("mail")
+        datab.eliminarTabla("registro")
+        datab.eliminarTabla("horasRegistro")
+        datab.eliminarTabla("valoresParaRiego")
+      } else {
+        res.send('Clave de validacion incorrecta')
+      }
+    })
+  }
+})
+
+app.post('/puestaAPunto', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    let sVal1 = req.body.validar1
+    let sVal2 = req.body.validar2
+    let sVal3 = req.body.validar3
+    
+    datab.validarUsu(sVal1, sVal2, sVal3, function (vali) {
+      if (vali) {
+        datab.selectPlantas(function (oPlantas) {
+          if ((oPlantas != "vacia") && (oPlantas != "error")) {
+            res.send('Puesta a punto inicial')
+            //CREAR TABLAS
+            datab.crearTabla("usuarios")
+            datab.crearTabla("plantas")
+            datab.crearTabla("tipoPlanta")
+            datab.crearTabla("mail")
+            datab.crearTabla("registro")
+            datab.crearTabla("horasRegistro")
+            datab.crearTabla("valoresParaRiego")
+
+            //CREAR USUARIO GENERICO
+            datab.crearUsuario("admin", "admin")
+
+            //CREAR PLANTAS GENERICAS
+            datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+            datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+            datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+            //CREAR TIPOPLANTA GENERICO
+            datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+            //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
+
+            //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
+            datab.crearValoresParaRiego(20, 70, 90, 40, 80)  
+          } else {
+            res.send('Ya existe registros para una puesta a punto realice wipe primero')
+          }
+        })
+      } else {
+        res.send('Clave de validacion incorrecta')
+      }
+    })
+  }
+})
+
 
 //---------------------------------------------------------------------------------------------------------------------------------- POST
 
@@ -330,20 +411,25 @@ function selectorDeVar (sDatosArduino) {
   if (sDatosPrefijo == "#27#") { console.log("HUMEDAD_MIN_PLANTA_3 Actualizado : "+ sDatosFinal) }
 
   //80 Validar datos variables actuales en el arduino.
-  if (sDatosPrefijo == "#80#") { console.log("NIVEL_AGUA_MIN Actual : "+ sDatosFinal) }
-  if (sDatosPrefijo == "#81#") { console.log("CLARIDAD_MIN Actual : "+ sDatosFinal) }    
-  if (sDatosPrefijo == "#82#") { console.log("CLARIDAD_MAX Actual : "+ sDatosFinal) }
-  if (sDatosPrefijo == "#83#") { console.log("TEMPERATURA_MIN Actual : "+ sDatosFinal) }
-  if (sDatosPrefijo == "#84#") { console.log("TEMPERATURA_MAX Actual : "+ sDatosFinal) }
-  if (sDatosPrefijo == "#85#") { console.log("HUMEDAD_MIN_PLANTA_1 Actual : "+ sDatosFinal) }
-  if (sDatosPrefijo == "#86#") { console.log("HUMEDAD_MIN_PLANTA_2 Actual : "+ sDatosFinal) }
-  if (sDatosPrefijo == "#87#") { console.log("HUMEDAD_MIN_PLANTA_3 Actual : "+ sDatosFinal) }
+  if (sDatosPrefijo == "#80#") { valRiego.setNivelAguaMin(sDatosFinal) }
+  if (sDatosPrefijo == "#81#") { valRiego.setClaridadMin(sDatosFinal) }    
+  if (sDatosPrefijo == "#82#") { valRiego.setClaridadMax(sDatosFinal) }
+  if (sDatosPrefijo == "#83#") { valRiego.setTempMin(sDatosFinal) }
+  if (sDatosPrefijo == "#84#") { valRiego.setTempMax(sDatosFinal) }
+  if (sDatosPrefijo == "#85#") { valRiego.setHumedad1(sDatosFinal) }
+  if (sDatosPrefijo == "#86#") { valRiego.setHumedad1(sDatosFinal) }
+  if (sDatosPrefijo == "#87#") { valRiego.setHumedad1(sDatosFinal) }
 
   //90 uso multiple para verificar conexiones, alcances, etc.
   if (sDatosPrefijo == "#90#") { console.log("DatosFinal a Arduino : "+ sDatosFinal) }
 
 }
 
+             
+        
+        
+        
+        
 function guardarReg (oSis) {
 
   datab.selectHoraReg(function (oSIS, oHoras) {

@@ -8,12 +8,13 @@ const valoresParaRiegoModel = require('../modelos/valoresParaRiegoModel')
 const plantasModel = require('../modelos/plantasModel')
 const registroModel = require('../modelos/registroModel')
 
-const mail = new emailModel()
-const tPlanta = new tipoPlantaModel()
-const horasReg = new horasRegistroModel()
-const valRiego = new valoresParaRiegoModel()
-const plantas = new plantasModel()
-const registro = new registroModel()
+let mail = new emailModel()
+let tPlanta = new tipoPlantaModel()
+let tPlantaTot = new tipoPlantaModel()
+let horasReg = new horasRegistroModel()
+let valRiego = new valoresParaRiegoModel()
+let plantas = new plantasModel()
+let registro = new registroModel()
 
 let usuario = cfg.key.sqlUser
 let pass = cfg.key.sqlPassword
@@ -299,8 +300,9 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
 }
 
 db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
-
+  console.log(sTipo + " Stiiiipoooo")
   if ((sTipo != "") && (sTipo != undefined)) {
+    console.log(sTipo + " Stiiiipoooo individual")
     connection.query("SELECT * FROM tipoplanta WHERE planta = '" + sTipo +"'",
     function (err, rows) {
       let resultado = rows
@@ -338,13 +340,13 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
 
           iIteFinal = resultado.length
           for (iIte = 0; iIte < iIteFinal; iIte++) {
-            tPlanta.setPlanta(resultado[iIte].planta, iIte)
-            tPlanta.setHumedad(resultado[iIte].humedad, iIte)
-            tPlanta.setNotas(resultado[iIte].notas, iIte)
-            tPlanta.setImagen(resultado[iIte].imagen, iIte)
+            tPlantaTot.setPlanta(resultado[iIte].planta, iIte)
+            tPlantaTot.setHumedad(resultado[iIte].humedad, iIte)
+            tPlantaTot.setNotas(resultado[iIte].notas, iIte)
+            tPlantaTot.setImagen(resultado[iIte].imagen, iIte)
           }
 
-          callback(tPlanta)
+          callback(tPlantaTot)
           console.log('Tabla tipoPlanta CARGADA ' + iIteFinal + ' registros...')
         }else {
             callback("vacia")
@@ -561,11 +563,11 @@ db.selecValoresParaRiego = function selectValoresParaRiego (callback) {
       throw err
     }else {
       if (resultado.length > 0) {
-        valRiego.setService(resultado[0].nivelAguaMin)     
-        valRiego.setUsuario(resultado[0].claridadMin)
-        valRiego.setPass(resultado[0].claridadMax)
-        valRiego.setFromMail(resultado[0].tempMin)
-        valRiego.setToMail(resultado[0].tempMax)
+        valRiego.setNivelAguaMin(resultado[0].nivelAguaMin)     
+        valRiego.setClaridadMin(resultado[0].claridadMin)
+        valRiego.setClaridadMax(resultado[0].claridadMax)
+        valRiego.setTempMin(resultado[0].tempMin)
+        valRiego.setTempMax(resultado[0].tempMax)
 
         callback(valRiego)
         console.log('CFG VALORESPARARIEGO CARGADA...')

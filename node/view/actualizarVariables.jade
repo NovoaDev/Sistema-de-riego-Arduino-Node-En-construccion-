@@ -3,6 +3,7 @@ block contenido
   .row.cloPadin
     .col-12.col-sm-12.col-md-6.col-lg-12.inline
       img.logo-xs(src='/img/riemon.jpg')
+  
   div
     form(method='post', action='/actualizarVariablesP')
       p  Nivel de agua 
@@ -15,15 +16,9 @@ block contenido
       input#var3(type='text', name='var3')
       p  Temperatura Minima 
       input#var4(type='text', name='var4')
-      p  Humedad Planta #1 
-      input#var5(type='text', name='var5')
-      p  Humedad Planta #2 
-      input#var6(type='text', name='var6')
-      p  Humedad Planta #3 
-      input#var7(type='text', name='var7')
       button#btn(type='submit', name='button', value='#')  Actualizar
-  div
   
+  div
     form(method='post', action='/plantas')
       select(name='planta1')
         - for (var i =0; i <= plantas.length - 1; i++)
@@ -37,9 +32,11 @@ block contenido
         - for (var i =0; i <= plantas.length - 1; i++)
             option(value='#{plantas[i]}') #{plantas[i]}      
       button#btn(type='submit', name='button', value='#')  GRABAR
+      
+      a(href="/crearPlanta") Crear planta
+  
   div
-    p Ordenes directas al Arduino 
-           
+    p Ordenes directas al Arduino          
     div
       form(method='post', action='/regar1')
         button#btn(type='submit', name='button', value='#')  Encender Bomba1 

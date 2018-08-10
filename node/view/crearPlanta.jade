@@ -1,0 +1,11 @@
+extends ./layout.jade
+block contenido
+  form(method='post', action='/crearPlanta')
+    p  Crear Planta - 
+    p  Planta : 
+    input#val1(type='text', name='val1')
+    p  Humedad : 
+    input#val2(type='text', name='val2')
+    p  Notas : 
+    input#val3(type='text', name='val3')
+    button#btn(type='submit', name='button', value='Crear')  CREAR 
