@@ -65,7 +65,7 @@ db.crearTabla = function crearTabla (sTabla) {
   }
   
   if (sTabla == "valoresParaRiego") {
-    connection.query('CREATE TABLE IF NOT EXISTS valoresParaRiego (id INT AUTO_INCREMENT PRIMARY KEY, nivelAguaMin INT, claridadMin INT, claridadMax INT, tempMin INT, tempMax INT)') 
+    connection.query('CREATE TABLE IF NOT EXISTS valoresParaRiego (id INT AUTO_INCREMENT PRIMARY KEY, nivelAguaMin INT, claridadMin INT, claridadMax INT, tempMin INT, tempMax INT, humedadPlanta1 INT, humedadPlanta2 INT, humedadPlanta3 INT)') 
     console.log('Tabla de mysql(valoresParaRiego) Creada!')
   }
 
@@ -300,9 +300,7 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
 }
 
 db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
-  console.log(sTipo + " Stiiiipoooo")
   if ((sTipo != "") && (sTipo != undefined)) {
-    console.log(sTipo + " Stiiiipoooo individual")
     connection.query("SELECT * FROM tipoplanta WHERE planta = '" + sTipo +"'",
     function (err, rows) {
       let resultado = rows
@@ -539,9 +537,9 @@ db.updateHoraReg = function updateHoraReg (sHora1, sHora2, sHora3) {
 
 
 // CREAR / SELECCIONAR / ACTUALIZAR VALORESPARARIEGO ----------------------------------------------------------------
-db.crearValoresParaRiego = function crearValoresParaRiego (iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax) {
+db.crearValoresParaRiego = function crearValoresParaRiego (iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax, iHumedadPlanta1, iHumedadPlanta2, iHumedadPlanta3) {
   
-  database = { nivelAguaMin: iNivelAguaMin, claridadMin: iClaridadMin, claridadMax: iClaridadMax, tempMin: iTempMin, tempMax: iTempMax }
+  database = { nivelAguaMin: iNivelAguaMin, claridadMin: iClaridadMin, claridadMax: iClaridadMax, tempMin: iTempMin, tempMax: iTempMax, humedadPlanta1: iHumedadPlanta1, humedadPlanta2: iHumedadPlanta2, humedadPlanta3: iHumedadPlanta3 }
 
   connection.query('INSERT INTO valoresParaRiego SET ?', database, function (err, res) {
   if (err) {
@@ -568,6 +566,9 @@ db.selecValoresParaRiego = function selectValoresParaRiego (callback) {
         valRiego.setClaridadMax(resultado[0].claridadMax)
         valRiego.setTempMin(resultado[0].tempMin)
         valRiego.setTempMax(resultado[0].tempMax)
+        valRiego.humedad1(resultado[0].humedadPlanta1)
+        valRiego.humedad2(resultado[0].humedadPlanta2)
+        valRiego.humedad3(resultado[0].humedadPlanta3)
 
         callback(valRiego)
         console.log('CFG VALORESPARARIEGO CARGADA...')
@@ -582,6 +583,19 @@ db.selecValoresParaRiego = function selectValoresParaRiego (callback) {
 db.updateValoresParaRiego = function updateValoresParaRiego (iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax) {
 
   connection.query("UPDATE valoresParaRiego SET nivelAguaMin= '"+iNivelAguaMin+"', claridadMin= '"+iClaridadMin+"', claridadMax= '"+iClaridadMax+"', tempMin= '"+iTempMin+"', tempMax= '"+iTempMax+"' WHERE id LIKE 1",
+  function (err, res) {
+    if (err) {
+      console.log('error sql')
+      throw err
+    }else {
+      console.log('Configuracion de valoresParaRiego actualizada')
+    }
+  })
+}
+
+db.updateValoresParaRiego2 = function updateValoresParaRiego2 (iHumedadPlanta1, iHumedadPlanta2, iHumedadPlanta3) {
+
+  connection.query("UPDATE valoresParaRiego SET humedadPlanta1= '"+iHumedadPlanta1+"', humedadPlanta2= '"+iHumedadPlanta2+"', humedadPlanta3= '"+iHumedadPlanta3+"' WHERE id LIKE 1",
   function (err, res) {
     if (err) {
       console.log('error sql')

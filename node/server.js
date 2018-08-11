@@ -78,11 +78,8 @@ app.get('/crearPlanta', function (req, res) {
   }
 })
 
-app.get('/ini', function (req, res) {
-  if (!req.session.user_id) {
-    res.redirect("/")
-  } else {
-    res.send('creando tablas')
+app.get('/test', function (req, res) {
+    res.send('test')
     
     //ELIMINAR TABLAS
     //datab.eliminarTabla("usuarios")
@@ -154,8 +151,7 @@ app.get('/ini', function (req, res) {
   //enviarConfig(8, "3") 
   //enviarConfig(8, "5")
   //enviarConfig(8, "4")
-  //enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
-  }
+  enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
 })
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
@@ -224,18 +220,12 @@ app.post('/actualizarVariablesP', function (req, res) {
     let sVar2 = req.body.var2
     let sVar3 = req.body.var3
     let sVar4 = req.body.var4
-    let sVar5 = req.body.var5
-    let sVar6 = req.body.var6
-    let sVar7 = req.body.var7
-
-    if ((sVar0 != undefined) && (sVar0 != '')) { setTimeout(function(){enviarConfig(0, sVar0) } ,1000) }
-    if ((sVar1 != undefined) && (sVar1 != '')) { setTimeout(function(){enviarConfig(1, sVar1) } ,1000) }
-    if ((sVar2 != undefined) && (sVar2 != '')) { setTimeout(function(){enviarConfig(2, sVar2) } ,1000) }
-    if ((sVar3 != undefined) && (sVar3 != '')) { setTimeout(function(){enviarConfig(3, sVar3) } ,1000) }
-    if ((sVar4 != undefined) && (sVar4 != '')) { setTimeout(function(){enviarConfig(4, sVar4) } ,1000) }
-    if ((sVar5 != undefined) && (sVar5 != '')) { setTimeout(function(){enviarConfig(5, sVar5) } ,1000) }
-    if ((sVar6 != undefined) && (sVar6 != '')) { setTimeout(function(){enviarConfig(6, sVar6) } ,1000) }
-    if ((sVar7 != undefined) && (sVar7 != '')) { setTimeout(function(){enviarConfig(7, sVar7) } ,1000) }
+  
+    if ((sVar0 != undefined) && (sVar0 != '')) { enviarConfig(0, sVar0) }
+    if ((sVar1 != undefined) && (sVar1 != '')) { enviarConfig(1, sVar1) }
+    if ((sVar2 != undefined) && (sVar2 != '')) { enviarConfig(2, sVar2) }
+    if ((sVar3 != undefined) && (sVar3 != '')) { enviarConfig(3, sVar3) }
+    if ((sVar4 != undefined) && (sVar4 != '')) { enviarConfig(4, sVar4) }
   }
 })
 
@@ -248,13 +238,16 @@ app.post('/plantas', function (req, res) {
     let sPlanta3 = req.body.planta3
 
     datab.selectTipoPlanta(sPlanta1, function (oPlanta) {
-        datab.updatePlantas(1, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
+      datab.updatePlantas(1, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
+      enviarConfig(5, parseInt(oPlanta.humedad))  
     })
     datab.selectTipoPlanta(sPlanta2, function (oPlanta) {
-        datab.updatePlantas(2, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
+      datab.updatePlantas(2, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
+      enviarConfig(6, parseInt(oPlanta.humedad))
     })
     datab.selectTipoPlanta(sPlanta3, function (oPlanta) {
-        datab.updatePlantas(3, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
+      datab.updatePlantas(3, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
+      enviarConfig(7, parseInt(oPlanta.humedad))
     })
   }
 })
@@ -411,24 +404,44 @@ function selectorDeVar (sDatosArduino) {
   if (sDatosPrefijo == "#27#") { console.log("HUMEDAD_MIN_PLANTA_3 Actualizado : "+ sDatosFinal) }
 
   //80 Validar datos variables actuales en el arduino.
-  if (sDatosPrefijo == "#80#") { valRiego.setNivelAguaMin(sDatosFinal) }
-  if (sDatosPrefijo == "#81#") { valRiego.setClaridadMin(sDatosFinal) }    
-  if (sDatosPrefijo == "#82#") { valRiego.setClaridadMax(sDatosFinal) }
-  if (sDatosPrefijo == "#83#") { valRiego.setTempMin(sDatosFinal) }
-  if (sDatosPrefijo == "#84#") { valRiego.setTempMax(sDatosFinal) }
-  if (sDatosPrefijo == "#85#") { valRiego.setHumedad1(sDatosFinal) }
-  if (sDatosPrefijo == "#86#") { valRiego.setHumedad1(sDatosFinal) }
-  if (sDatosPrefijo == "#87#") { valRiego.setHumedad1(sDatosFinal) }
+  //Revisar
+  if (sDatosPrefijo == "#80#") { 
+    //valRiego.setNivelAguaMin(sDatosFinal) 
+    console.log(sDatosFinal +"  NIVEL_AGUA_MIN") 
+  }
+  if (sDatosPrefijo == "#81#") { 
+    //valRiego.setClaridadMin(sDatosFinal) 
+    console.log(sDatosFinal +"  CLARIDAD_MIN")
+  }    
+  if (sDatosPrefijo == "#82#") { 
+    //valRiego.setClaridadMax(sDatosFinal) 
+    console.log(sDatosFinal +"  CLARIDAD_MAX")
+  }
+  if (sDatosPrefijo == "#83#") { 
+    //valRiego.setTempMin(sDatosFinal) 
+    console.log(sDatosFinal +"  TEMPERATURA_MIN")
+  }
+  if (sDatosPrefijo == "#84#") { 
+    //valRiego.setTempMax(sDatosFinal) 
+    console.log(sDatosFinal +"  TEMPERATURA_MAX")
+  }
+  if (sDatosPrefijo == "#85#") { 
+    //valRiego.setHumedad1(sDatosFinal)
+    console.log(sDatosFinal +"  HUMEDAD_MIN_PLANTA_1")
+  }
+  if (sDatosPrefijo == "#86#") { 
+    //valRiego.setHumedad1(sDatosFinal)
+    console.log(sDatosFinal +"  HUMEDAD_MIN_PLANTA_2") 
+  }
+  if (sDatosPrefijo == "#87#") { 
+    //valRiego.setHumedad1(sDatosFinal) 
+    console.log(sDatosFinal +"  HUMEDAD_MIN_PLANTA_3")
+  } 
 
   //90 uso multiple para verificar conexiones, alcances, etc.
   if (sDatosPrefijo == "#90#") { console.log("DatosFinal a Arduino : "+ sDatosFinal) }
 
 }
-
-             
-        
-        
-        
         
 function guardarReg (oSis) {
 
