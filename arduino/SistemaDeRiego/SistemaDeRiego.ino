@@ -15,7 +15,6 @@
 #define RELE_BOMBA_3 5
 #define RELE_INTERRUPTOR_LUZ 6
 
-
 //Variables
 int NIVEL_AGUA = 0;           //SENSOR NIVELAGUA
 char PRINTBUFFER[128];        //SENSOR NIVELAGUA
@@ -58,6 +57,9 @@ void setup(){
   digitalWrite(RELE_BOMBA_2, HIGH);
   digitalWrite(RELE_BOMBA_3, HIGH);
   digitalWrite(RELE_INTERRUPTOR_LUZ, HIGH);
+
+  // Peticion de envio desde la db de configuracion 
+  Serial.println("#99#True");
 }
 
 void loop(){

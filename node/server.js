@@ -467,6 +467,24 @@ function selectorDeVar (sDatosArduino) {
   //90 uso multiple para verificar conexiones, alcances, etc.
   if (sDatosPrefijo == "#90#") { console.log("DatosFinal a Arduino : "+ sDatosFinal) }
 
+  //Actualizacion de configuracion inicial arduino 
+  if (sDatosPrefijo == "#99#") { 
+    console.log("Envio de configuracion Inicial a arduino")
+    datab.selecValoresParaRiego(function (iV) {
+      if ((iV != "vacia") && (iV != "error")) {
+        enviarConfig (0, iV.nivelAguaMin) 
+        enviarConfig (1, iV.claridadMin)
+        enviarConfig (2, iV.claridadMax)
+        enviarConfig (3, iV.tempMin)
+        enviarConfig (4, iV.tempMax)
+        enviarConfig (5, iV.humedad1)
+        enviarConfig (6, iV.humedad2)
+        enviarConfig (7, iV.humedad3)
+      } else {
+        res.send("Tabla Vacia")
+      }
+    }) 
+  }  
 }
         
 function guardarReg (oSis) {
