@@ -39,17 +39,14 @@ db.crearTabla = function crearTabla (sTabla) {
     connection.query('CREATE TABLE IF NOT EXISTS usuarios (id INT AUTO_INCREMENT PRIMARY KEY, usuario varchar(20) UNIQUE, password varchar(80))')
     console.log('Tabla de mysql(usuarios) Creada!')
   }
-  
   if (sTabla == "plantas") {
     connection.query('CREATE TABLE IF NOT EXISTS plantas (id INT AUTO_INCREMENT PRIMARY KEY, maceta INT(1) UNIQUE, planta varchar(40), humedad INT(2), notas varchar(120), imagen varchar(120))') 
     console.log('Tabla de mysql(plantas) Creada!')
   }
-
   if (sTabla == "tipoPlanta") {
     connection.query('CREATE TABLE IF NOT EXISTS tipoPlanta (id INT AUTO_INCREMENT PRIMARY KEY, planta varchar(40) UNIQUE, humedad INT(2), notas varchar(120), imagen varchar(120))')
     console.log('Tabla de mysql(tipoPlanta) Creada!')
   }
-
   if (sTabla == "mail") {
     connection.query('CREATE TABLE IF NOT EXISTS mail (id INT AUTO_INCREMENT PRIMARY KEY, service varchar(40), usuario varchar(40), pass varchar(40), fromMail varchar(40), toMail varchar(120))')  
     console.log('Tabla de mysql(mail) Creada!')
@@ -58,17 +55,14 @@ db.crearTabla = function crearTabla (sTabla) {
     connection.query('CREATE TABLE IF NOT EXISTS registro (id INT AUTO_INCREMENT PRIMARY KEY, fecha DATE, hora TIME, nivelAgua INT, claridad INT, humedadPlanta1 INT, humedadPlanta2 INT, humedadPlanta3 INT, humedadAmbiente INT, tempAmbiente INT)')
     console.log('Tabla de mysql(registro) Creada!')
   }
- 
   if (sTabla == "horasRegistro") {
     connection.query('CREATE TABLE IF NOT EXISTS horasRegistro (id INT AUTO_INCREMENT PRIMARY KEY, hora1 varchar(20), hora2 varchar(20), hora3 varchar(20))')
     console.log('Tabla de mysql(horasRegistro) Creada!')
   }
-  
   if (sTabla == "valoresParaRiego") {
     connection.query('CREATE TABLE IF NOT EXISTS valoresParaRiego (id INT AUTO_INCREMENT PRIMARY KEY, nivelAguaMin INT, claridadMin INT, claridadMax INT, tempMin INT, tempMax INT, humedadPlanta1 INT, humedadPlanta2 INT, humedadPlanta3 INT)') 
     console.log('Tabla de mysql(valoresParaRiego) Creada!')
   }
-
 }
 
 db.eliminarTabla = function eliminarTabla (sTabla) {
@@ -77,17 +71,14 @@ db.eliminarTabla = function eliminarTabla (sTabla) {
     connection.query('DROP TABLE usuarios')
     console.log('Tabla de mysql(usuarios) Borrada!')
   }
-
   if (sTabla == "plantas") {
     connection.query('DROP TABLE plantas')
     console.log('Tabla de mysql(plantas) Borrada!')
   }
-
   if (sTabla == "tipoPlanta") {
     connection.query('DROP TABLE tipoPlanta')
     console.log('Tabla de mysql(tipoPlanta) Borrada!')
   }
-
   if (sTabla == "mail") {
     connection.query('DROP TABLE mail')
     console.log('Tabla de mysql(mail) Borrada!')
@@ -114,11 +105,12 @@ db.crearUsuario = function crearUsuario (sUsu, sPass) {
   database = { usuario: sUsu, password: passcrypt }
 
   connection.query('INSERT INTO usuarios SET ?', database, function (err, res) {
-  if (err) {
-    throw err
-  }
-  console.log('usuarios last insert id:' + res.insertId)
-  console.log('--------------------')
+    if (err) {
+      throw err
+    } else {
+      console.log('usuarios last insert id:' + res.insertId)
+      console.log('--------------------')  
+    }
   })
 }
 
@@ -166,12 +158,12 @@ db.validarUsu = function validarUsu (sUsu, sPass, callback) {
     }else {
       if (resultado.length > 0) {
         console.log('Logeado el usuario: ' + resultado[0].usuario + '...')
-    callback(true)
-    }else {
-      console.log('FALLO de log usuario: ' + sUsu + '...')
-    callback(false) 
-  }
-  }
+        callback(true)
+      }else {
+        console.log('FALLO de log usuario: ' + sUsu + '...')
+        callback(false) 
+      }
+    }
   })
 }
 
@@ -195,11 +187,12 @@ db.crearCFGMail = function crearCFGMail (sService, sUsuario, sPass, sFromMail, s
   database = { service: sService, usuario: sUsuario, pass: sPass, fromMail: sFromMail, toMail: sToMail }
 
   connection.query('INSERT INTO mail SET ?', database, function (err, res) {
-  if (err) {
-    throw err
-  }
-  console.log('mail last insert id:' + res.insertId)
-  console.log('--------------------')
+    if (err) {
+      throw err
+    } else {
+      console.log('mail last insert id:' + res.insertId)
+      console.log('--------------------')  
+    }
   })
 }
 
@@ -210,7 +203,7 @@ db.eliminarCFGMail = function eliminarCFGMail () {
     if (err) {
       console.log('error sql')
       throw err
-    }else {
+    } else {
     console.log('Se elimina el cfg de correo: ' + usuario + '...')
     }
   })
@@ -225,7 +218,7 @@ db.selectMail = function selectMail (callback) {
       console.log('error sql')
       callback("error")
       throw err
-    }else {
+    } else {
       if (resultado.length > 0) {
         mail.setService(resultado[0].service)     
         mail.setUsuario(resultado[0].usuario)
@@ -235,7 +228,7 @@ db.selectMail = function selectMail (callback) {
 
         callback(mail)
         console.log('CFG MAIL CARGADA ' + resultado[0].usuario + '...')
-      }else {
+      } else {
         callback("vacia")
         console.log('tabla vacia mail...') 
       }
@@ -250,7 +243,7 @@ db.updateMail = function updateMail (sService, sUsuario, sNuevaPass, sNuevaFromM
     if (err) {
       console.log('error sql')
       throw err
-    }else {
+    } else {
       console.log('Configuracion de correo actualizada')
     }
   })
@@ -263,11 +256,12 @@ db.crearTipoPlanta = function crearTipoPlanta (sPlanta, iHumedad, sNotas, sImage
   database = { planta: sPlanta, humedad: iHumedad, notas: sNotas, imagen: sImagen }
 
   connection.query('INSERT INTO tipoPlanta SET ?', database, function (err, res) {
-  if (err) {
-    throw err
-  }
-  console.log('tipoPlanta last insert id:' + res.insertId)
-  console.log('--------------------')
+    if (err) {
+      throw err
+    } else {
+      console.log('tipoPlanta last insert id:' + res.insertId)
+      console.log('--------------------')  
+    }
   })
 }
 
@@ -280,7 +274,7 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
     if (err) {
       console.log('error sql')
       throw err
-    }else {
+    } else {
       if (resultado.length > 0) {
         connection.query("DELETE FROM tipoPlanta WHERE planta = '" + planta +"'",
         function (err, rows) {
@@ -288,11 +282,11 @@ db.eliminarTipoPlanta = function eliminarTipoPlanta (sPlanta) {
           if (err) {
             console.log('error sql')
             throw err
-          }else {
+          } else {
           console.log('Se elimina la planta: ' + planta + '...')
           }
         })
-      }else {
+      } else {
       console.log('planta ' + planta + ' no encontrada...')
       }
     }
@@ -308,7 +302,7 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
         console.log('error sql')
         callback("error")
         throw err
-      }else {
+      } else {
         if (resultado.length > 0) {
 
           tPlanta.setPlanta(resultado[0].planta, 0)
@@ -318,8 +312,8 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
 
           callback(tPlanta)
           console.log('Tabla tipoPlanta planta ' + resultado[0].planta + ' CARGADA')
-        }else {
-            callback("vacia")
+        } else {
+          callback("vacia")
           console.log('tabla tipoPlanta vacia...')
         }
       }
@@ -332,7 +326,7 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
         console.log('error sql')
         callback("error")
         throw err
-      }else {
+      } else {
         if (resultado.length > 0) {
           let iIte, iIteFinal
 
@@ -346,8 +340,8 @@ db.selectTipoPlanta = function selectTipoPlanta (sTipo, callback) {
 
           callback(tPlantaTot)
           console.log('Tabla tipoPlanta CARGADA ' + iIteFinal + ' registros...')
-        }else {
-            callback("vacia")
+        } else {
+          callback("vacia")
           console.log('tabla tipoPlanta vacia...')
         }
       }
@@ -378,7 +372,7 @@ db.updatePlantas = function updatePlantas (iMaceta, sNuevaPlanta, iNuevaHumedad,
     if (err) {
       console.log('error sql')
       throw err
-    }else {
+    } else {
       console.log('Actualizada la maceta nº ' + iMaceta + '...')
     }
   })
@@ -393,23 +387,22 @@ db.selectPlantas = function selectPlantas (callback) {
       console.log('error sql')
       callback("error")
       throw err
-    }else {
+    } else {
       if (resultado.length > 0) {
         let iIte, iIteFinal
 
         iIteFinal = resultado.length
         for (iIte = 0; iIte < iIteFinal; iIte++) {
           plantas.setMaceta(resultado[iIte].maceta, iIte)
-          plantas.setPlantas(resultado[iIte].planta, iIte)
+          plantas.setPlanta(resultado[iIte].planta, iIte)
           plantas.setHumedad(resultado[iIte].humedad, iIte)
           plantas.setNotas(resultado[iIte].notas, iIte)
           plantas.setImagen(resultado[iIte].imagen, iIte)
         }
-
         callback(plantas)
         console.log('Tabla plantas CARGADA ' + iIteFinal + ' registros...')
-      }else {
-          callback("vacia")
+      } else {
+        callback("vacia")
         console.log('tabla plantas vacia...')
       }
     }
@@ -423,11 +416,12 @@ db.crearRegistro = function crearRegistro (dFecha, tHora, iNivelAgua, iClaridad,
   database = { fecha: dFecha, hora: tHora, nivelAgua: iNivelAgua, claridad: iClaridad, humedadPlanta1: iHumedadPlanta1, humedadPlanta2: iHumedadPlanta2, humedadPlanta3: iHumedadPlanta3, humedadAmbiente: iHumedadAmbiente, tempAmbiente: iTempAmbiente}
 
   connection.query('INSERT INTO registro SET ?', database, function (err, res) {
-  if (err) {
-    throw err
-  }
-  console.log('registro last insert id:' + res.insertId)
-  console.log('--------------------')
+    if (err) {
+      throw err
+    } else {
+      console.log('registro last insert id:' + res.insertId)
+      console.log('--------------------')  
+    }
   })
 }
 
@@ -440,7 +434,7 @@ db.selectReg = function selectReg (callback) {
       console.log('error sql')
       callback("error")
       throw err
-    }else {
+    } else {
       if (resultado.length > 0) {
         let iIte, iIteFinal
 
@@ -459,8 +453,8 @@ db.selectReg = function selectReg (callback) {
 
         callback(registro)
         console.log('Tabla registro CARGADA ' + iIteFinal + ' registros...')
-      }else {
-          callback("vacia")
+      } else {
+        callback("vacia")
         console.log('tabla registro vacia...')
       }
     }
@@ -474,11 +468,12 @@ db.crearhoraReg = function crearhoraReg (sHora1, sHora2, sHora3) {
   database = { hora1: sHora1, hora2: sHora2, hora3: sHora3 }
 
   connection.query('INSERT INTO horasRegistro SET ?', database, function (err, res) {
-  if (err) {
-    throw err
-  }
-  console.log('horasRegistro last insert id:' + res.insertId)
-  console.log('--------------------')
+    if (err) {
+      throw err
+    } else {
+      console.log('horasRegistro last insert id:' + res.insertId)
+      console.log('--------------------')
+    }
   })
 }
 
@@ -489,7 +484,7 @@ db.eliminarHoraReg = function eliminarHoraReg () {
     if (err) {
       console.log('error sql')
       throw err
-    }else {
+    } else {
     console.log('Se elimina el cfg de horasRegistro...')
     }
   })
@@ -504,7 +499,7 @@ db.selectHoraReg = function selectHoraReg (callback) {
       console.log('error sql')
       callback("error")
       throw err
-    }else {
+    } else {
       if (resultado.length > 0) {
         horasReg.setHora1(resultado[0].hora1)
         horasReg.setHora2(resultado[0].hora2)
@@ -512,7 +507,7 @@ db.selectHoraReg = function selectHoraReg (callback) {
 
         callback(horasReg)
         console.log('CFG horasRegistro...')
-      }else {
+      } else {
         callback("vacia")
         console.log('tabla vacia horasRegistro...')
       }
@@ -527,7 +522,7 @@ db.updateHoraReg = function updateHoraReg (sHora1, sHora2, sHora3) {
     if (err) {
       console.log('error sql')
       throw err
-    }else {
+    } else {
       console.log('Configuracion de horasRegistro actualizada')
     }
   })
@@ -542,11 +537,12 @@ db.crearValoresParaRiego = function crearValoresParaRiego (iNivelAguaMin, iClari
   database = { nivelAguaMin: iNivelAguaMin, claridadMin: iClaridadMin, claridadMax: iClaridadMax, tempMin: iTempMin, tempMax: iTempMax, humedadPlanta1: iHumedadPlanta1, humedadPlanta2: iHumedadPlanta2, humedadPlanta3: iHumedadPlanta3 }
 
   connection.query('INSERT INTO valoresParaRiego SET ?', database, function (err, res) {
-  if (err) {
-    throw err
-  }
-  console.log('valoresParaRiego last insert id:' + res.insertId)
-  console.log('--------------------')
+    if (err) {
+      throw err
+    } else {
+      console.log('valoresParaRiego last insert id:' + res.insertId)
+      console.log('--------------------')
+    }
   })
 }
 
@@ -559,7 +555,7 @@ db.selecValoresParaRiego = function selectValoresParaRiego (callback) {
       console.log('error sql')
       callback("error")
       throw err
-    }else {
+    } else {
       if (resultado.length > 0) {
         valRiego.setNivelAguaMin(resultado[0].nivelAguaMin)     
         valRiego.setClaridadMin(resultado[0].claridadMin)
@@ -572,7 +568,7 @@ db.selecValoresParaRiego = function selectValoresParaRiego (callback) {
         
         callback(valRiego)
         console.log('CFG VALORESPARARIEGO CARGADA...')
-      }else {
+      } else {
         callback("vacia")
         console.log('tabla vacia valoresParaRiego...') 
       }
@@ -587,7 +583,7 @@ db.updateValoresParaRiego = function updateValoresParaRiego (sNombre, iDatos) {
     if (err) {
       console.log('error sql')
       throw err
-    }else {
+    } else {
       console.log('Configuracion de valoresParaRiego actualizada')
     }
   })
@@ -613,9 +609,9 @@ db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {
   
   if (val1 === cfg.key.keyVal1 && val2 === cfg.key.keyVal2 && val3 === cfg.key.keyVal3) {
     callback(true)
-    } else {
+  } else {
     callback(false)
-    }
+  }
 }
 
 module.exports = db

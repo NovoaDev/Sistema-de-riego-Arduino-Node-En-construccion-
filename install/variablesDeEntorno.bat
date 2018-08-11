@@ -5,7 +5,7 @@ REM EL .BAT SE TIENE QUE EJECUTAR COMO ADMINISTRADOR.
 setx RIEMON_SERVER_SQL /m "127.0.0.1"
 setx RIEMON_PORT_SQL /m "3306"
 setx RIEMON_USER_SQL /m "root"
-setx RIEMON_PASS_SQL /m "LoLat4z"
+setx RIEMON_PASS_SQL /m "admin"
 setx RIEMON_DB_SQL /m "riemon"
 setx RIEMON_DB_VAL1 /m "papa"
 setx RIEMON_DB_VAL2 /m "frita"

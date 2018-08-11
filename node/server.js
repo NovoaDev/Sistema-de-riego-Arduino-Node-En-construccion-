@@ -198,7 +198,17 @@ app.post('/entrar', function (req, res) {
       req.session.user_id = (nRdm1+usu+nRdm2)
       switch (selectorPagina) {
         case "0" :
-          res.render(__dirname + '/view/main',{titulo: "Riem0n!"})
+            datab.selectPlantas(function (oPlantas) {
+            if ((oPlantas != "vacia") && (oPlantas != "error")) {
+              let plantas = []
+              oPlantas.planta.forEach(function(result) {
+                plantas.push(result)
+              })
+              res.render(__dirname + '/view/main',{titulo: "Riem0n!", plantas: plantas})
+            } else {
+              res.send("Tabla plantas Vacia")
+            }
+          })
         break
         case "1" :
           datab.selectTipoPlanta("", function (oPlantas) {
@@ -389,7 +399,6 @@ app.post('/puestaAPunto', function (req, res) {
     })
   }
 })
-
 
 //---------------------------------------------------------------------------------------------------------------------------------- POST
 
