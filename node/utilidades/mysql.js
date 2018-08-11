@@ -566,10 +566,10 @@ db.selecValoresParaRiego = function selectValoresParaRiego (callback) {
         valRiego.setClaridadMax(resultado[0].claridadMax)
         valRiego.setTempMin(resultado[0].tempMin)
         valRiego.setTempMax(resultado[0].tempMax)
-        valRiego.humedad1(resultado[0].humedadPlanta1)
-        valRiego.humedad2(resultado[0].humedadPlanta2)
-        valRiego.humedad3(resultado[0].humedadPlanta3)
-
+        valRiego.setHumedad1(resultado[0].humedadPlanta1)
+        valRiego.setHumedad2(resultado[0].humedadPlanta2)
+        valRiego.setHumedad3(resultado[0].humedadPlanta3)
+        
         callback(valRiego)
         console.log('CFG VALORESPARARIEGO CARGADA...')
       }else {
@@ -580,22 +580,9 @@ db.selecValoresParaRiego = function selectValoresParaRiego (callback) {
   })
 }
 
-db.updateValoresParaRiego = function updateValoresParaRiego (iNivelAguaMin, iClaridadMin, iClaridadMax, iTempMin, iTempMax) {
+db.updateValoresParaRiego = function updateValoresParaRiego (sNombre, iDatos) {
 
-  connection.query("UPDATE valoresParaRiego SET nivelAguaMin= '"+iNivelAguaMin+"', claridadMin= '"+iClaridadMin+"', claridadMax= '"+iClaridadMax+"', tempMin= '"+iTempMin+"', tempMax= '"+iTempMax+"' WHERE id LIKE 1",
-  function (err, res) {
-    if (err) {
-      console.log('error sql')
-      throw err
-    }else {
-      console.log('Configuracion de valoresParaRiego actualizada')
-    }
-  })
-}
-
-db.updateValoresParaRiego2 = function updateValoresParaRiego2 (iHumedadPlanta1, iHumedadPlanta2, iHumedadPlanta3) {
-
-  connection.query("UPDATE valoresParaRiego SET humedadPlanta1= '"+iHumedadPlanta1+"', humedadPlanta2= '"+iHumedadPlanta2+"', humedadPlanta3= '"+iHumedadPlanta3+"' WHERE id LIKE 1",
+  connection.query("UPDATE valoresParaRiego SET "+ sNombre +"= '"+iDatos+"' WHERE id LIKE 1",
   function (err, res) {
     if (err) {
       console.log('error sql')
@@ -617,9 +604,6 @@ db.actualizarPlantas = function actualizarPlantas (sPlanta1, sPlanta2, sPlanta3)
   db.updatePlantas(2, planta2.planta, planta2.humedad, planta2.notas, planta2.imagen)
   db.updatePlantas(3, planta3.planta, planta3.humedad, planta3.notas, planta3.imagen)
 }
-module.exports = db
-
-
  
 //Puesta a punto inicial 
 db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {
@@ -633,4 +617,5 @@ db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {
     callback(false)
     }
 }
+
 module.exports = db

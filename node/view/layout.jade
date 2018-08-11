@@ -1,16 +1,16 @@
 doctype html
 html
-  head
-    meta(charset='utf-8')
-    title!= titulo
-    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
-    link(href='/css/style.css', rel='stylesheet', type='text/css')
-  body
-    .container-fluid
-      block contenido
+	head
+		meta(charset='utf-8')
+		title!= titulo
+		meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no')
+		link(href='/css/style.css', rel='stylesheet', type='text/css')
+	body
+		.container-fluid
+			block contenido
 
-    script(src='socket.io/socket.io.js', charset='utf-8')
-    script(src='/js/script.js', charset='utf-8')
-    // jQuery first, then Popper.js, then Bootstrap JS
-    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
-    script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
+		script(src='socket.io/socket.io.js', charset='utf-8')
+		script(src='/js/script.js', charset='utf-8')
+		// jQuery first, then Popper.js, then Bootstrap JS
+		script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js')
+		script(src='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')

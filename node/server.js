@@ -21,7 +21,6 @@ const io = SocketIO.listen(server)
 const ReadLine = SerialPort.parsers.Readline
 
 let sis = new arduinoModel()
-let valRiego = new valoresParaRiegoModel()
 let plantas = new plantasModel()
 
 //let mail = new mailer("99")
@@ -78,6 +77,21 @@ app.get('/crearPlanta', function (req, res) {
   }
 })
 
+app.get('/variablesRiego', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    datab.selecValoresParaRiego(function (iV) {
+      if ((iV != "vacia") && (iV != "error")) {
+      
+        res.render(__dirname + '/view/variablesRiego',{titulo: "Riem0n! - Valores actuales", V0: iV.nivelAguaMin, V1: iV.claridadMin, V2: iV.claridadMax, V3: iV.tempMin, V4: iV.tempMax, V5: iV.humedad1, V6: iV.humedad2, V7: iV.humedad3 })
+      } else {
+        res.send("Tabla Vacia")
+      }
+    })  
+  }
+})
+
 app.get('/test', function (req, res) {
     res.send('test')
     
@@ -87,6 +101,8 @@ app.get('/test', function (req, res) {
     //datab.eliminarTabla("tipoPlanta")
     //datab.eliminarTabla("mail")
     //datab.eliminarTabla("registro")
+    //datab.eliminarTabla("horasRegistro")
+    //datab.eliminarTabla("valoresParaRiego")
 
     //CREAR TABLAS
     //datab.crearTabla("usuarios")
@@ -94,14 +110,19 @@ app.get('/test', function (req, res) {
     //datab.crearTabla("tipoPlanta")
     //datab.crearTabla("mail")
     //datab.crearTabla("registro")
+    //datab.crearTabla("horasRegistro")
+    //datab.crearTabla("valoresParaRiego")
 
+    //Usuario
     //datab.crearUsuario("lola", "rica")
     //datab.crearUsuario("lola2", "rica")
     //datab.eliminarUsu("lola2")
+    
+    //MAIL
     //datab.crearCFGMail("1", "1", "1", "1", "1")
     //datab.eliminarCFGMail("1")
-
-    
+    //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
+  
     //inicio test arry dentro de objeto tipoPlanta
     //datab.crearTipoPlanta("coco", 20, "planta de coco cuidar con la vida", "C:/coso")
     //datab.crearTipoPlanta("coco1", 21, "planta de coco cuidar con la vida1", "C:/coso")
@@ -115,9 +136,7 @@ app.get('/test', function (req, res) {
     //datab.crearTipoPlanta("coco9", 29, "planta de coco cuidar con la vida9", "C:/coso")
     //datab.crearTipoPlanta("coco10", 30, "planta de coco cuidar con la vida10", "C:/coso")
     //datab.crearTipoPlanta("coco11", 31, "planta de coco cuidar con la vida11", "C:/coso")
-    //FIN test arry dentro de objeto tipoPlanta 
-    
-
+    //FIN test arry dentro de objeto tipoPlanta     
     
     //crear tabla planta generico
     //datab.crearPlantas(1, "tomate", 21, "tomate generico", "C:/coso")
@@ -127,16 +146,10 @@ app.get('/test', function (req, res) {
     
     //Upadate plantas 
     //datab.updatePlantas(3, "ponpon", 90, "pon pon generico", "C:/cososss")
-    
-    //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
-
-
-   //datab.updateMail("ponpon", "papa@gmail.com", "pass", "C:/ff", "C:/tt")
-    //let lola = datab.selectTipoPlanta("")
-    //let cfgCorreo = datab.selectMail()
-    //console.log(lola)
 
     //var lolaaa = valHora("12:30", "18:35", "18:52")
+   
+    //ENVIAR CONFIGURACION A ARDUINO
     //enviarConfig (0, "66")
     //enviarConfig (1, "11")
     //enviarConfig (2, "22")
@@ -145,13 +158,27 @@ app.get('/test', function (req, res) {
     //enviarConfig (5, "55")
     //enviarConfig (6, "66")
     //enviarConfig (7, "77")
+    //enviarConfig(8, "1") 
+    //enviarConfig(8, "2") 
+    //enviarConfig(8, "3") 
+    //enviarConfig(8, "5")
+    //enviarConfig(8, "4")
+    //enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
 
-  //enviarConfig(8, "1") 
-  //enviarConfig(8, "2") 
-  //enviarConfig(8, "3") 
-  //enviarConfig(8, "5")
-  //enviarConfig(8, "4")
-  enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
+    //TEST DE TABLA DE VALORES DE RIEGO EN SQL QUE DEBERIA ESTAR A LA PAR CON LO QUE TIENE EL ARDUINO EN LAS VAR LOCALES
+    //datab.crearValoresParaRiego (10, 20, 30, 40, 50, 60, 70, 80)
+    
+    //PUESTA A 0
+    /*
+    datab.updateValoresParaRiego("nivelAguaMin", 0) 
+    datab.updateValoresParaRiego("claridadMin", 0) 
+    datab.updateValoresParaRiego("claridadMax", 0)
+    datab.updateValoresParaRiego("tempMin", 0) 
+    datab.updateValoresParaRiego("tempMax", 0) 
+    datab.updateValoresParaRiego("humedadPlanta1", 0)
+    datab.updateValoresParaRiego("humedadPlanta2", 0)
+    datab.updateValoresParaRiego("humedadPlanta3", 0)
+    */
 })
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
@@ -351,7 +378,7 @@ app.post('/puestaAPunto', function (req, res) {
             //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
 
             //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
-            datab.crearValoresParaRiego(20, 70, 90, 40, 80)  
+            datab.crearValoresParaRiego (10, 20, 30, 40, 50, 60, 70, 80)  
           } else {
             res.send('Ya existe registros para una puesta a punto realice wipe primero')
           }
@@ -404,37 +431,36 @@ function selectorDeVar (sDatosArduino) {
   if (sDatosPrefijo == "#27#") { console.log("HUMEDAD_MIN_PLANTA_3 Actualizado : "+ sDatosFinal) }
 
   //80 Validar datos variables actuales en el arduino.
-  //Revisar
   if (sDatosPrefijo == "#80#") { 
-    //valRiego.setNivelAguaMin(sDatosFinal) 
+    datab.updateValoresParaRiego("nivelAguaMin", sDatosFinal) 
     console.log(sDatosFinal +"  NIVEL_AGUA_MIN") 
   }
   if (sDatosPrefijo == "#81#") { 
-    //valRiego.setClaridadMin(sDatosFinal) 
+    datab.updateValoresParaRiego("claridadMin", sDatosFinal) 
     console.log(sDatosFinal +"  CLARIDAD_MIN")
   }    
   if (sDatosPrefijo == "#82#") { 
-    //valRiego.setClaridadMax(sDatosFinal) 
+    datab.updateValoresParaRiego("claridadMax", sDatosFinal)
     console.log(sDatosFinal +"  CLARIDAD_MAX")
   }
   if (sDatosPrefijo == "#83#") { 
-    //valRiego.setTempMin(sDatosFinal) 
+    datab.updateValoresParaRiego("tempMin", sDatosFinal) 
     console.log(sDatosFinal +"  TEMPERATURA_MIN")
   }
   if (sDatosPrefijo == "#84#") { 
-    //valRiego.setTempMax(sDatosFinal) 
+    datab.updateValoresParaRiego("tempMax", sDatosFinal) 
     console.log(sDatosFinal +"  TEMPERATURA_MAX")
   }
   if (sDatosPrefijo == "#85#") { 
-    //valRiego.setHumedad1(sDatosFinal)
+    datab.updateValoresParaRiego("humedadPlanta1", sDatosFinal)
     console.log(sDatosFinal +"  HUMEDAD_MIN_PLANTA_1")
   }
   if (sDatosPrefijo == "#86#") { 
-    //valRiego.setHumedad1(sDatosFinal)
+    datab.updateValoresParaRiego("humedadPlanta2", sDatosFinal)
     console.log(sDatosFinal +"  HUMEDAD_MIN_PLANTA_2") 
   }
   if (sDatosPrefijo == "#87#") { 
-    //valRiego.setHumedad1(sDatosFinal) 
+    datab.updateValoresParaRiego("humedadPlanta3", sDatosFinal) 
     console.log(sDatosFinal +"  HUMEDAD_MIN_PLANTA_3")
   } 
 

@@ -1,11 +1,15 @@
 extends ./layout.jade
 block contenido
-  form(method='post', action='/crearPlanta')
-    p  Crear Planta - 
-    p  Planta : 
-    input#val1(type='text', name='val1')
-    p  Humedad : 
-    input#val2(type='text', name='val2')
-    p  Notas : 
-    input#val3(type='text', name='val3')
-    button#btn(type='submit', name='button', value='Crear')  CREAR 
+	.container-fluid
+		.row.cloPadin
+			.col-12.col-sm-12.col-md-6.col-lg-12.inline
+				img.logo-xs(src='/img/riemon.jpg')
+		div
+			form(method='post', action='/crearPlanta')
+				p  Planta : 
+				input#val1(type='text', name='val1')
+				p  Humedad : 
+				input#val2(type='text', name='val2')
+				p  Notas : 
+				input#val3(type='text', name='val3')
+				button#btn(type='submit', name='button', value='Crear')  CREAR 

@@ -1,19 +1,19 @@
 extends ./layout.jade
 block contenido
-  .container-fluid
-    .row.cloPadin
-      .col-12.col-sm-12.col-md-6.col-lg-12.inline
-        img.logo-xs(src='/img/riemon.jpg')
-    div
-      form(method='post', action='/entrar')
-        p  Login : 
-        input#usu(type='text', name='usuario')
-        p  Password : 
-        input#pass(type='password', name='password')
-        select(name='selectorPagina')
-          option(value='0', selected='selected') Directo
-          option(value='1') Configuracion Riego
-          option(value='2') Configuracion Servidor
-          option(value='3') Configuracion Base de datos
-        button#btn(type='submit', name='button', value='Login')  LOGIN 
-  
+	.container-fluid
+		.row.cloPadin
+			.col-12.col-sm-12.col-md-6.col-lg-12.inline
+				img.logo-xs(src='/img/riemon.jpg')
+		div
+			form(method='post', action='/entrar')
+				p  Login : 
+				input#usu(type='text', name='usuario')
+				p  Password : 
+				input#pass(type='password', name='password')
+				select(name='selectorPagina')
+					option(value='0', selected='selected') Directo
+					option(value='1') Configuracion Riego
+					option(value='2') Configuracion Servidor
+					option(value='3') Configuracion Base de datos
+				button#btn(type='submit', name='button', value='Login')  LOGIN 
+	
