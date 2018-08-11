@@ -602,7 +602,7 @@ db.actualizarPlantas = function actualizarPlantas (sPlanta1, sPlanta2, sPlanta3)
 }
  
 //Puesta a punto inicial 
-db.crearEstructuraDb = function crearEstructuraDb (v1, v2, v3, callback) {
+db.validarDB = function validarDB (v1, v2, v3, callback) {
   let val1 = v1
   let val2 = v2
   let val3 = v3

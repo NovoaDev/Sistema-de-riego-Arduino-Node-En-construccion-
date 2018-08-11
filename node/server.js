@@ -65,8 +65,8 @@ app.get('/', function (req, res) {
   res.render(__dirname + '/view/index',{titulo: "Riem0n! - Login!"}) 
 })
 
-app.get('/crear', function (req, res) {
-  res.render(__dirname + '/view/puestaapunto',{titulo: "Riem0n! - Puesta a punto"}) 
+app.get('/cfgDB', function (req, res) {
+  res.render(__dirname + '/view/cfgDB',{titulo: "Riem0n! - Opciones DB"}) 
 })
 
 app.get('/crearPlanta', function (req, res) {
@@ -224,10 +224,10 @@ app.post('/entrar', function (req, res) {
           })
         break
         case "2" :
-          res.render(__dirname + '/view/main',{titulo: "Riem0n!"})
+          res.render(__dirname + '/view/actualizarConfig',{titulo: "Riem0n! - Configuracion"})
         break
         case "3" :
-          res.render(__dirname + '/view/puestaapunto',{titulo: "Riem0n!"})
+          res.render(__dirname + '/view/actualizarDb',{titulo: "Riem0n! - Configuracion"})
         break
       } 
     } else {
@@ -289,7 +289,7 @@ app.post('/plantas', function (req, res) {
   }
 })
 
-//Ordenes directas al arduino 
+//ORDENES DIRECTAS AL ARDUINO
 app.post('/regar1', function (req, res) {
   if (!req.session.user_id) {
     res.redirect("/")
@@ -328,39 +328,15 @@ app.post('/luzOnOff', function (req, res) {
   }
 })
 
-app.post('/wipe', function (req, res) {
-  if (!req.session.user_id) {
-    res.redirect("/")
-  } else {
-    let sVal1 = req.body.validar1
-    let sVal2 = req.body.validar2
-    let sVal3 = req.body.validar3
-    
-    datab.validarUsu(sVal1, sVal2, sVal3, function (vali) {
-      if (vali) {
-        datab.eliminarTabla("usuarios")
-        datab.eliminarTabla("plantas")
-        datab.eliminarTabla("tipoPlanta")
-        datab.eliminarTabla("mail")
-        datab.eliminarTabla("registro")
-        datab.eliminarTabla("horasRegistro")
-        datab.eliminarTabla("valoresParaRiego")
-      } else {
-        res.send('Clave de validacion incorrecta')
-      }
-    })
-  }
-})
-
-app.post('/puestaAPunto', function (req, res) {
-  if (!req.session.user_id) {
-    res.redirect("/")
-  } else {
-    let sVal1 = req.body.validar1
-    let sVal2 = req.body.validar2
-    let sVal3 = req.body.validar3
-    
-    datab.validarUsu(sVal1, sVal2, sVal3, function (vali) {
+//CONFIGURACION DB
+app.post('/cfgDB', function (req, res) {
+  let sVal1 = req.body.val1
+  let sVal2 = req.body.val2
+  let sVal3 = req.body.val3
+  let iSelector = req.body.selector
+  
+  if (iSelector == "0") {
+    datab.validarDB(sVal1, sVal2, sVal3, function (vali) {
       if (vali) {
         datab.selectPlantas(function (oPlantas) {
           if ((oPlantas != "vacia") && (oPlantas != "error")) {
@@ -393,6 +369,62 @@ app.post('/puestaAPunto', function (req, res) {
             res.send('Ya existe registros para una puesta a punto realice wipe primero')
           }
         })
+      } else {
+        res.send('Clave de validacion incorrecta')
+      }
+    })
+  }
+  
+  if (iSelector == "1") {
+    datab.validarDB(sVal1, sVal2, sVal3, function (vali) {
+      if (vali) {
+        res.send('Se restaura configuracion de fabrica')
+
+        //ELIMINAR TABLAS
+        datab.eliminarTabla("usuarios")
+        datab.eliminarTabla("plantas")
+        datab.eliminarTabla("tipoPlanta")
+        datab.eliminarTabla("mail")
+        datab.eliminarTabla("registro")
+        datab.eliminarTabla("horasRegistro")
+        datab.eliminarTabla("valoresParaRiego")
+
+        //CREAR TABLAS
+        datab.crearTabla("usuarios")
+        datab.crearTabla("plantas")
+        datab.crearTabla("tipoPlanta")
+        datab.crearTabla("mail")
+        datab.crearTabla("registro")
+        datab.crearTabla("horasRegistro")
+        datab.crearTabla("valoresParaRiego")
+
+        //CREAR USUARIO GENERICO
+        datab.crearUsuario("admin", "admin")
+
+        //CREAR PLANTAS GENERICAS
+        datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+        datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+        datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+        //CREAR TIPOPLANTA GENERICO
+        datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+
+        //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
+
+        //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
+        datab.crearValoresParaRiego (10, 20, 30, 40, 50, 60, 70, 80)
+      } else {
+        res.send('Clave de validacion incorrecta')
+      }
+    })
+  }
+
+  if (iSelector == "2") {
+    datab.validarDB(sVal1, sVal2, sVal3, function (vali) {
+      if (vali) {
+        res.send('Se hace wipe a la tabla registro')
+        datab.eliminarTabla("registro")
+        datab.crearTabla("registro")       
       } else {
         res.send('Clave de validacion incorrecta')
       }

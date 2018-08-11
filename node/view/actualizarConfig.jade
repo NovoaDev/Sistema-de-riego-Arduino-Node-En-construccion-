@@ -1,0 +1,44 @@
+extends ./layout.jade
+block contenido
+	.row.cloPadin
+		.col-12.col-sm-12.col-md-6.col-lg-12.inline
+			img.logo-xs(src='/img/riemon.jpg')
+	
+	div
+		p  Usuario en login
+		form(method='post', action='/actualizarUsuario')
+			p  Usuario 
+			input#var0(type='text', name='var0' required)
+			p  Password
+			input#var1(type='password', name='var1' required)
+			button#btn(type='submit', name='button', value='#')  Actualizar
+	div
+		p  Email testigo
+		form(method='post', action='/actualizarEmail')
+			p  Servicio 
+			input#var0(type='text', name='var0' required)
+			p  Correo Destino
+			input#var1(type='text', name='var1' required)
+			p  Correo Origen
+			input#var2(type='text', name='var2' required)
+			p  Usuario
+			input#var3(type='text', name='var3' required)
+			p  Password
+			input#var4(type='password', name='var4' required)
+			button#btn(type='submit', name='button', value='#')  Actualizar
+		div
+			form(method='post', action='/testEmail')
+				button#btn(type='submit', name='button', value='#')  Test Email 
+
+	div
+		p  Historico (horas del dia en las que se guarda registro. Dejar en blanco los campos sobrantes)
+		form(method='post', action='/actualizarRegistro') 
+			input#var0(type='text', name='var0' )
+			input#var1(type='text', name='var1' )
+			input#var2(type='text', name='var2' )
+			
+			button#btn(type='submit', name='button', value='#')  Actualizar
+	
+
+      
+	
