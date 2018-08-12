@@ -23,8 +23,6 @@ const ReadLine = SerialPort.parsers.Readline
 let sis = new arduinoModel()
 let plantas = new plantasModel()
 
-//let mail = new mailer("99")
-
 const port = new SerialPort("COM3", { baudRate: 9600 })
 const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
 
@@ -103,6 +101,7 @@ app.get('/test', function (req, res) {
     //datab.eliminarTabla("registro")
     //datab.eliminarTabla("horasRegistro")
     //datab.eliminarTabla("valoresParaRiego")
+    //datab.eliminarTabla("instalacion")
 
     //CREAR TABLAS
     //datab.crearTabla("usuarios")
@@ -112,6 +111,7 @@ app.get('/test', function (req, res) {
     //datab.crearTabla("registro")
     //datab.crearTabla("horasRegistro")
     //datab.crearTabla("valoresParaRiego")
+    //datab.crearTabla("instalacion")
 
     //Usuario
     //datab.crearUsuario("lola", "rica")
@@ -179,6 +179,11 @@ app.get('/test', function (req, res) {
     datab.updateValoresParaRiego("humedadPlanta2", 0)
     datab.updateValoresParaRiego("humedadPlanta3", 0)
     */
+
+    //TES TABLA INSTALACION
+    //datab.crearInstalacion("N", "N")
+    datab.updateInstalacion("S", "N")
+
 })
 
 //---------------------------------------------------------------------------------------------------------------------------------- GET
@@ -349,6 +354,7 @@ app.post('/cfgDB', function (req, res) {
             datab.crearTabla("registro")
             datab.crearTabla("horasRegistro")
             datab.crearTabla("valoresParaRiego")
+            datab.crearTabla("instalacion")
 
             //CREAR USUARIO GENERICO
             datab.crearUsuario("admin", "admin")
@@ -364,7 +370,8 @@ app.post('/cfgDB', function (req, res) {
             //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
 
             //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
-            datab.crearValoresParaRiego (10, 20, 30, 40, 50, 60, 70, 80)  
+            datab.crearValoresParaRiego(10, 20, 30, 40, 50, 60, 70, 80)
+            datab.crearInstalacion("N", "N")  
           } else {
             res.send('Ya existe registros para una puesta a punto realice wipe primero')
           }
@@ -388,6 +395,7 @@ app.post('/cfgDB', function (req, res) {
         datab.eliminarTabla("registro")
         datab.eliminarTabla("horasRegistro")
         datab.eliminarTabla("valoresParaRiego")
+        datab.eliminarTabla("instalacion")
 
         //CREAR TABLAS
         datab.crearTabla("usuarios")
@@ -397,6 +405,7 @@ app.post('/cfgDB', function (req, res) {
         datab.crearTabla("registro")
         datab.crearTabla("horasRegistro")
         datab.crearTabla("valoresParaRiego")
+        datab.crearTabla("instalacion")
 
         //CREAR USUARIO GENERICO
         datab.crearUsuario("admin", "admin")
@@ -412,7 +421,10 @@ app.post('/cfgDB', function (req, res) {
         //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
 
         //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
-        datab.crearValoresParaRiego (10, 20, 30, 40, 50, 60, 70, 80)
+        datab.crearValoresParaRiego(10, 20, 30, 40, 50, 60, 70, 80)
+
+        //CREAR CONFIGURACION POR DEFECTO PARA QUE NO USE NI EL MODULO DE REGISTRO NI EL DE MAIL
+        datab.crearInstalacion("N", "N")
       } else {
         res.send('Clave de validacion incorrecta')
       }
@@ -507,6 +519,14 @@ function selectorDeVar (sDatosArduino) {
 
   //90 uso multiple para verificar conexiones, alcances, etc.
   if (sDatosPrefijo == "#90#") { console.log("DatosFinal a Arduino : "+ sDatosFinal) }
+
+  if (sDatosPrefijo == "#98#") { 
+    datab.selectInstalacion(function (oIns) {
+      if (oIns.usaMail == 'S') {
+        //let mail = new mailer("99")
+      }
+    })
+  }
 
   //Actualizacion de configuracion inicial arduino 
   if (sDatosPrefijo == "#99#") { 

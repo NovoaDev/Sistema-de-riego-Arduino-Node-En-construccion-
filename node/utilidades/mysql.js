@@ -1,12 +1,14 @@
 const mysql = require('mysql')
 const cfg = require('./cfg')
 const crypto = require('./crypto')
+
 const emailModel = require('../modelos/emailModel')
 const tipoPlantaModel = require('../modelos/tipoPlantaModel')
 const horasRegistroModel = require('../modelos/horasRegistroModel')
 const valoresParaRiegoModel = require('../modelos/valoresParaRiegoModel')
 const plantasModel = require('../modelos/plantasModel')
 const registroModel = require('../modelos/registroModel')
+const instalacionModel = require('../modelos/instalacionModel')
 
 let mail = new emailModel()
 let tPlanta = new tipoPlantaModel()
@@ -15,6 +17,7 @@ let horasReg = new horasRegistroModel()
 let valRiego = new valoresParaRiegoModel()
 let plantas = new plantasModel()
 let registro = new registroModel()
+let ins = new instalacionModel()
 
 let usuario = cfg.key.sqlUser
 let pass = cfg.key.sqlPassword
@@ -63,6 +66,10 @@ db.crearTabla = function crearTabla (sTabla) {
     connection.query('CREATE TABLE IF NOT EXISTS valoresParaRiego (id INT AUTO_INCREMENT PRIMARY KEY, nivelAguaMin INT, claridadMin INT, claridadMax INT, tempMin INT, tempMax INT, humedadPlanta1 INT, humedadPlanta2 INT, humedadPlanta3 INT)') 
     console.log('Tabla de mysql(valoresParaRiego) Creada!')
   }
+  if (sTabla == "instalacion") {
+    connection.query('CREATE TABLE IF NOT EXISTS instalacion (id INT AUTO_INCREMENT PRIMARY KEY, usaMail varchar(1),usaRegistro varchar(1))') 
+    console.log('Tabla de mysql(instalacion) Creada!')
+  }
 }
 
 db.eliminarTabla = function eliminarTabla (sTabla) {
@@ -94,6 +101,10 @@ db.eliminarTabla = function eliminarTabla (sTabla) {
   if (sTabla == "valoresParaRiego") {
     connection.query('DROP TABLE valoresParaRiego')
     console.log('Tabla de mysql(valoresParaRiego) Borrada!')
+  }
+  if (sTabla == "instalacion") {
+    connection.query('DROP TABLE instalacion')
+    console.log('Tabla de mysql(instalacion) Borrada!')
   }
 }
 // FIN CREAR / ELIMINAR TABLAS -----------------------------------------------------------------------
@@ -588,6 +599,59 @@ db.updateValoresParaRiego = function updateValoresParaRiego (sNombre, iDatos) {
     }
   })
 }
+
+// CREAR / SELECT / ACTUALIZAR INSTALACION --------------------------------------------------------------------
+db.crearInstalacion = function crearInstalacion (sUsaMail, sUsaReg) {
+  
+  database = { usaMail: sUsaMail, usaRegistro: sUsaReg }
+
+  connection.query('INSERT INTO instalacion SET ?', database, function (err, res) {
+    if (err) {
+      throw err
+    } else {
+      console.log('instalacion last insert id:' + res.insertId)
+      console.log('--------------------')  
+    }
+  })
+}
+
+db.selectInstalacion = function selectInstalacion (callback) {
+
+  connection.query("SELECT * FROM instalacion",
+  function (err, rows) {
+    let resultado = rows
+    if (err) {
+      console.log('error sql')
+      callback("error")
+      throw err
+    } else {
+      if (resultado.length > 0) {
+        ins.setUsaMail(resultado[0].usaMail)     
+        ins.setUsaRegistro(resultado[0].usaRegistro)
+
+        callback(ins)
+        console.log('tabla instalacion CARGADA...')
+      } else {
+        callback("vacia")
+        console.log('tabla vacia instalacion...') 
+      }
+    }
+  })
+}
+
+db.updateInstalacion = function updateInstalacion (sUsaMail, sUsaReg) {
+
+  connection.query("UPDATE instalacion SET usaMail= '"+sUsaMail+"', usaRegistro= '"+sUsaReg+"' WHERE id LIKE 1",
+  function (err, res) {
+    if (err) {
+      console.log('error sql')
+      throw err
+    } else {
+      console.log('Configuracion de Instalacion actualizada')
+    }
+  })
+}
+// FIN CREAR / SELECT / ACTUALIZAR INSTALACION ----------------------------------------------------------------
 
 // Otras functions ----------------------------------------------------------------
 

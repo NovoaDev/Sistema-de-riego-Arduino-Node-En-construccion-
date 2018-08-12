@@ -58,6 +58,8 @@ void setup(){
   digitalWrite(RELE_BOMBA_3, HIGH);
   digitalWrite(RELE_INTERRUPTOR_LUZ, HIGH);
 
+  // Peticion de envio de correo cuando se reinicia el arduino 
+  Serial.println("#98#True");
   // Peticion de envio desde la db de configuracion 
   Serial.println("#99#True");
 }
