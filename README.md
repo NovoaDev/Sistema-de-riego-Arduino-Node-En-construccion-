@@ -2,7 +2,8 @@
 
 Pasos para realizar la instalación de riemon:
 
-Pasos previos: 
+Pasos previos:
+
 	1 -Instalar servidor de base de datos :
 		Si no se tiene ningún servidor de base de datos instalado procederemos a instalar "WAMPSERVER" es un servidor fácil
 		de instalar y usar.
@@ -25,6 +26,7 @@ Pasos previos:
 			Nota: Si se quiere usar otra clave se tiene que cambiar en los bats de instalación crearDatabase.bat y variablesDeEntorno.bat
 
 Ejecución de bats
+
 	1 -Crear variables de entorno :
 		Dentro de la ruta "SistemaDeRiego\install\1" se encuentra un .bat el que creara las siguientes variables de entorno
 		es importante ejecutarlo como administrador
@@ -50,6 +52,7 @@ Ejecución de bats
 		Procederemos a copiar los dos archivos y a ejecutar como administrador el archivo crearDatabase.bat
 
 Preparar arduino y servidor de node
+
 	1 -Preparación arduino
 		Físico:
 			Seguir el esquema que se encuentra en la ruta "SistemaDeRiego\arduino\Sistemas de riego.fzz" para abrir este archivo necesitaremos un programa llamado "fritzing"
