@@ -13,35 +13,34 @@ block contenido
 			input#var1(type='password', name='var1' required)
 			button#btn(type='submit', name='button', value='#')  Actualizar
 	
-	p  Email testigo
-	input#checkMail(name='checkMail', value='1', onchange='javascript:showContent("Mail")', type='checkbox')
-	#contentMail(style='display: none;')
-
 		form(method='post', action='/actualizarEmail')
-			p  Servicio 
-			input#var0(type='text', name='var0' required)
-			p  Correo Destino
-			input#var1(type='text', name='var1' required)
-			p  Correo Origen
-			input#var2(type='text', name='var2' required)
-			p  Usuario
-			input#var3(type='text', name='var3' required)
-			p  Password
-			input#var4(type='password', name='var4' required)
-			button#btn(type='submit', name='button', value='#')  Actualizar
-		div
+			p  Email testigo
+				input#checkMail(name='checkMail', value='1', onchange='javascript:showContent("Mail")', type='checkbox')
+			#contentMail(style='display: none;')
+				p  Servicio 
+				input#var0(type='text', name='var0')
+				p  Correo Destino
+				input#var1(type='text', name='var1')
+				p  Correo Origen
+				input#var2(type='text', name='var2')
+				p  Usuario
+				input#var3(type='text', name='var3')
+				p  Password
+				input#var4(type='password', name='var4')
+			button#btn(type='submit', name='button', value='#')  Guardar
+		#contentMailTest(style='display: none;')
 			form(method='post', action='/testEmail')
 				button#btn(type='submit', name='button', value='#')  Test Email 
 
-	p  Historico (horas del dia en las que se guarda registro. Dejar en blanco los campos sobrantes)
-	input#checkReg(name='checkReg', value='1', onchange='javascript:showContent("Registro")', type='checkbox')
-	#contentReg(style='display: none;')
-
 		form(method='post', action='/actualizarRegistro') 
-			input#var0(type='text', name='var0' )
-			input#var1(type='text', name='var1' )
-			input#var2(type='text', name='var2' )
-			
-			button#btn(type='submit', name='button', value='#')  Actualizar
+			p  Historico (horas del dia en las que se guarda registro. Dejar en blanco los campos sobrantes)
+				input#checkReg(name='checkReg', value='1', onchange='javascript:showContent("Registro")', type='checkbox')
+			#contentReg(style='display: none;')
+
+				input#var0(type='text', name='var0' )
+				input#var1(type='text', name='var1' )
+				input#var2(type='text', name='var2' )
+				
+			button#btn(type='submit', name='button', value='#')  Guardar
 	
      

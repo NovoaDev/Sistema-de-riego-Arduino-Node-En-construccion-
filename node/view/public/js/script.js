@@ -51,12 +51,15 @@ function showContent(sTipo) {
 
 	if (sTipo == "Mail") {
 		element = document.getElementById("contentMail");
+		testBtn = document.getElementById("contentMailTest");
 	  check = document.getElementById("checkMail");
 	  if (check.checked) {
 	    element.style.display='block';
+	    testBtn.style.display='block';
 	  }
 	  else {
 	    element.style.display='none';
+	    testBtn.style.display='none';
 	  }
 	}
 	
