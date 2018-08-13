@@ -55,7 +55,7 @@ db.crearTabla = function crearTabla (sTabla) {
     console.log('Tabla de mysql(mail) Creada!')
   }
   if (sTabla == "registro") {
-    connection.query('CREATE TABLE IF NOT EXISTS registro (id INT AUTO_INCREMENT PRIMARY KEY, fecha DATE, hora TIME, nivelAgua INT, claridad INT, humedadPlanta1 INT, humedadPlanta2 INT, humedadPlanta3 INT, humedadAmbiente INT, tempAmbiente INT)')
+    connection.query('CREATE TABLE IF NOT EXISTS registro (id INT AUTO_INCREMENT PRIMARY KEY, fecha varchar(6), hora varchar(6), nivelAgua INT, claridad INT, planta1 varchar(40), humedadOptima1 INT, humedadPlanta1 INT,planta2 varchar(40), humedadOptima2 INT, humedadPlanta2 INT, planta3 varchar(40), humedadOptima3 INT, humedadPlanta3 INT, humedadAmbiente INT, tempAmbiente INT)')
     console.log('Tabla de mysql(registro) Creada!')
   }
   if (sTabla == "horasRegistro") {
@@ -422,9 +422,9 @@ db.selectPlantas = function selectPlantas (callback) {
 // FIN CREAR / ACTUALIZAR /SELECT PLANTAS ------------------------------------------------------------------
 
 // CREAR / SELECT REGISTRO --------------------------------------------------------------------
-db.crearRegistro = function crearRegistro (dFecha, tHora, iNivelAgua, iClaridad, iHumedadPlanta1, iHumedadPlanta2, iHumedadPlanta3, iHumedadAmbiente, iTempAmbiente) {
+db.crearRegistro = function crearRegistro (dFecha, tHora, iNivelAgua, iClaridad, sPlanta1, iHumedadOptima1, iHumedadPlanta1, sPlanta2, iHumedadOptima2, iHumedadPlanta2, sPlanta3, iHumedadOptima3, iHumedadPlanta3, iHumedadAmbiente, iTempAmbiente) {
   
-  database = { fecha: dFecha, hora: tHora, nivelAgua: iNivelAgua, claridad: iClaridad, humedadPlanta1: iHumedadPlanta1, humedadPlanta2: iHumedadPlanta2, humedadPlanta3: iHumedadPlanta3, humedadAmbiente: iHumedadAmbiente, tempAmbiente: iTempAmbiente}
+  database = { fecha: dFecha, hora: tHora, nivelAgua: iNivelAgua, claridad: iClaridad, planta1: sPlanta1, humedadOptima1: iHumedadOptima1, humedadPlanta1: iHumedadPlanta1, planta2: sPlanta2, humedadOptima2: iHumedadOptima2, humedadPlanta2: iHumedadPlanta2, planta3: sPlanta3, humedadOptima3: iHumedadOptima3, humedadPlanta3: iHumedadPlanta3, humedadAmbiente: iHumedadAmbiente, tempAmbiente: iTempAmbiente}
 
   connection.query('INSERT INTO registro SET ?', database, function (err, res) {
     if (err) {
@@ -455,8 +455,14 @@ db.selectReg = function selectReg (callback) {
           registro.setHora(resultado[iIte].hora, iIte)
           registro.setNivelAgua(resultado[iIte].nivelAgua, iIte)
           registro.setClaridad(resultado[iIte].claridad, iIte)
+          registro.setPlanta1(resultado[iIte].planta1, iIte)
+          registro.setHumedadOptima1(resultado[iIte].humedadOptima1, iIte)
           registro.setHumedadPlanta1(resultado[iIte].humedadPlanta1, iIte)
+          registro.setPlanta2(resultado[iIte].planta2, iIte)
+          registro.setHumedadOptima2(resultado[iIte].humedadOptima2, iIte)
           registro.setHumedadPlanta2(resultado[iIte].humedadPlanta2, iIte)
+          registro.setPlanta3(resultado[iIte].planta3, iIte)
+          registro.setHumedadOptima3(resultado[iIte].humedadOptima3, iIte)
           registro.setHumedadPlanta3(resultado[iIte].humedadplanta3, iIte)
           registro.setHumedadAmbiente(resultado[iIte].humedadAmbiente, iIte)
           registro.setTempAmbiente(resultado[iIte].tempAmbiente, iIte)
