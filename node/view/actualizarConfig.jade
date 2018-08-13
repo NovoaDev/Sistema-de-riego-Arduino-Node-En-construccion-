@@ -12,8 +12,11 @@ block contenido
 			p  Password
 			input#var1(type='password', name='var1' required)
 			button#btn(type='submit', name='button', value='#')  Actualizar
-	div
-		p  Email testigo
+	
+	p  Email testigo
+	input#checkMail(name='checkMail', value='1', onchange='javascript:showContent("Mail")', type='checkbox')
+	#contentMail(style='display: none;')
+
 		form(method='post', action='/actualizarEmail')
 			p  Servicio 
 			input#var0(type='text', name='var0' required)
@@ -30,8 +33,10 @@ block contenido
 			form(method='post', action='/testEmail')
 				button#btn(type='submit', name='button', value='#')  Test Email 
 
-	div
-		p  Historico (horas del dia en las que se guarda registro. Dejar en blanco los campos sobrantes)
+	p  Historico (horas del dia en las que se guarda registro. Dejar en blanco los campos sobrantes)
+	input#checkReg(name='checkReg', value='1', onchange='javascript:showContent("Registro")', type='checkbox')
+	#contentReg(style='display: none;')
+
 		form(method='post', action='/actualizarRegistro') 
 			input#var0(type='text', name='var0' )
 			input#var1(type='text', name='var1' )
@@ -39,6 +44,4 @@ block contenido
 			
 			button#btn(type='submit', name='button', value='#')  Actualizar
 	
-
-      
-	
+     
