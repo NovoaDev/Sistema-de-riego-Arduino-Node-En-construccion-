@@ -199,9 +199,9 @@ void analisisDeRiego(){
   if (NIVEL_AGUA > NIVEL_AGUA_MIN) { 
     if ((VALOR_CLARIDAD > CLARIDAD_MIN) and (VALOR_CLARIDAD < CLARIDAD_MAX)) {
       if ((VALOR_TEMPERATURA > TEMPERATURA_MIN) and (VALOR_TEMPERATURA < TEMPERATURA_MAX)) {
-        if (HUMEDADA_FINAL_1 < HUMEDAD_MIN_PLANTA_1) { regarPlanta(1); }
-        if (HUMEDADA_FINAL_2 < HUMEDAD_MIN_PLANTA_2) { regarPlanta(2); }
-        if (HUMEDADA_FINAL_3 < HUMEDAD_MIN_PLANTA_3) { regarPlanta(3); }
+        if ((HUMEDADA_FINAL_1 < HUMEDAD_MIN_PLANTA_1) and (HUMEDADA_FINAL_1 < 90) and (HUMEDADA_FINAL_1 > 1)) { regarPlanta(1); }
+        if ((HUMEDADA_FINAL_2 < HUMEDAD_MIN_PLANTA_2) and (HUMEDADA_FINAL_2 < 90) and (HUMEDADA_FINAL_2 > 1)) { regarPlanta(2); }
+        if ((HUMEDADA_FINAL_3 < HUMEDAD_MIN_PLANTA_3) and (HUMEDADA_FINAL_3 < 90) and (HUMEDADA_FINAL_3 > 1)) { regarPlanta(3); }
       }
     }
   }

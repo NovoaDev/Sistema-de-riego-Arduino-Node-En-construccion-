@@ -182,7 +182,7 @@ app.get('/test', function (req, res) {
 
     //TES TABLA INSTALACION
     //datab.crearInstalacion("N", "N")
-    datab.updateInstalacion("S", "N")
+    //datab.updateInstalacion("N", "N")
 
 })
 
@@ -523,7 +523,7 @@ function selectorDeVar (sDatosArduino) {
   if (sDatosPrefijo == "#98#") { 
     datab.selectInstalacion(function (oIns) {
       if (oIns.usaMail == 'S') {
-        //let mail = new mailer("99")
+        let mail = new mailer("99")
       }
     })
   }
