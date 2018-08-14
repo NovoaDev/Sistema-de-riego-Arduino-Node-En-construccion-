@@ -354,7 +354,6 @@ app.post('/actualizarEmail', function (req, res) {
   } else {
     let check = req.body.checkMail
 
-    console.log("check "+check)
     if (check == 1) {
       let sVal0 = req.body.var0
       let sVal1 = req.body.var1
@@ -362,14 +361,38 @@ app.post('/actualizarEmail', function (req, res) {
       let sVal3 = req.body.var3
       let sVal4 = req.body.var4
 
+      datab.eliminarCFGMail()
       datab.crearCFGMail(sVal0, sVal1, sVal2, sVal3, sVal4)
       datab.updateInstalacion("S", "")
     } else {
       datab.eliminarCFGMail()
       datab.updateInstalacion("N", "")
     }
+  }
+})
 
-    
+app.post('/actualizarRegistro', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    let check = req.body.checkReg
+
+    if (check == 1) {
+      let sVal0 = req.body.var0
+      let sVal1 = req.body.var1
+      let sVal2 = req.body.var2
+
+      console.log(sVal0)
+      console.log(sVal1)
+      console.log(sVal2)
+
+      datab.eliminarHoraReg()
+      datab.crearhoraReg(sVal0, sVal1, sVal2)
+      datab.updateInstalacion("", "S")
+    } else {
+      datab.eliminarHoraReg()
+      datab.updateInstalacion("", "N")
+    }
   }
 })
 
