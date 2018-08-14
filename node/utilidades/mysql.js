@@ -159,7 +159,7 @@ db.validarUsu = function validarUsu (sUsu, sPass, callback) {
   let passcrypt = crypto(sPass)
   let usuario = sUsu
 
-  connection.query("SELECT * FROM usuarios WHERE usuario = '" + usuario +"' AND password = '" + passcrypt + "'",
+  connection.query("SELECT * FROM usuarios WHERE usuario = '" + usuario +"' && password = '" + passcrypt + "'",
   function (err, rows) {
     let resultado = rows
     if (err) {
@@ -209,7 +209,7 @@ db.crearCFGMail = function crearCFGMail (sService, sUsuario, sPass, sFromMail, s
 
 db.eliminarCFGMail = function eliminarCFGMail () {
 
-  connection.query("DELETE * FROM mail",
+  connection.query("DELETE FROM mail",
   function (err, res) {
     if (err) {
       console.log('error sql')
@@ -496,7 +496,7 @@ db.crearhoraReg = function crearhoraReg (sHora1, sHora2, sHora3) {
 
 db.eliminarHoraReg = function eliminarHoraReg () {
 
-  connection.query("DELETE * FROM horasRegistro",
+  connection.query("DELETE FROM horasRegistro",
   function (err, res) {
     if (err) {
       console.log('error sql')
@@ -609,8 +609,16 @@ db.updateValoresParaRiego = function updateValoresParaRiego (sNombre, iDatos) {
 // CREAR / SELECT / ACTUALIZAR INSTALACION --------------------------------------------------------------------
 db.crearInstalacion = function crearInstalacion (sUsaMail, sUsaReg) {
   
-  database = { usaMail: sUsaMail, usaRegistro: sUsaReg }
-
+  if (((sUsaMail != undefined) && (sUsaMail != "")) && ((sUsaReg == undefined) || (sUsaReg == ""))) {
+    database = { usaMail: sUsaMail }
+  }
+  else if (((sUsaMail == undefined) || (sUsaMail == "")) && ((sUsaReg != undefined) && (sUsaReg != ""))) {
+    database = { usaRegistro: sUsaReg }
+  }
+  else if ((sUsaMail != undefined) && (sUsaMail != "") && (sUsaReg != undefined) && (sUsaReg != "")) {
+    database = { usaMail: sUsaMail, usaRegistro: sUsaReg }
+  }
+  
   connection.query('INSERT INTO instalacion SET ?', database, function (err, res) {
     if (err) {
       throw err
@@ -647,15 +655,39 @@ db.selectInstalacion = function selectInstalacion (callback) {
 
 db.updateInstalacion = function updateInstalacion (sUsaMail, sUsaReg) {
 
-  connection.query("UPDATE instalacion SET usaMail= '"+sUsaMail+"', usaRegistro= '"+sUsaReg+"' WHERE id LIKE 1",
-  function (err, res) {
-    if (err) {
-      console.log('error sql')
-      throw err
-    } else {
-      console.log('Configuracion de Instalacion actualizada')
-    }
-  })
+  if (((sUsaMail != undefined) && (sUsaMail != "")) && ((sUsaReg == undefined) || (sUsaReg == ""))) {
+    connection.query("UPDATE instalacion SET usaMail= '"+sUsaMail+"' WHERE id LIKE 1",
+    function (err, res) {
+      if (err) {
+        console.log('error sql')
+        throw err
+      } else {
+        console.log('Configuracion de Instalacion actualizada')
+      }
+    })
+  }
+  else if (((sUsaMail == undefined) || (sUsaMail == "")) && ((sUsaReg != undefined) && (sUsaReg != ""))) {
+    connection.query("UPDATE instalacion SET usaRegistro= '"+sUsaReg+"' WHERE id LIKE 1",
+    function (err, res) {
+      if (err) {
+        console.log('error sql')
+        throw err
+      } else {
+        console.log('Configuracion de Instalacion actualizada')
+      }
+    })
+  }
+  else if ((sUsaMail != undefined) && (sUsaMail != "") && (sUsaReg != undefined) && (sUsaReg != "")) {
+    connection.query("UPDATE instalacion SET usaMail= '"+sUsaMail+"', usaRegistro= '"+sUsaReg+"' WHERE id LIKE 1",
+    function (err, res) {
+      if (err) {
+        console.log('error sql')
+        throw err
+      } else {
+        console.log('Configuracion de Instalacion actualizada')
+      }
+    })
+  }
 }
 // FIN CREAR / SELECT / ACTUALIZAR INSTALACION ----------------------------------------------------------------
 

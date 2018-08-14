@@ -241,17 +241,7 @@ app.post('/entrar', function (req, res) {
   })
 })
 
-app.post('/crearPlanta', function (req, res) {
-  if (!req.session.user_id) {
-    res.redirect("/")
-  } else {
-    let sVal1 = req.body.val1
-    let sVal2 = req.body.val2
-    let sVal3 = req.body.val3
-    
-    datab.crearTipoPlanta(sVal1, parseInt(sVal2), sVal3, "N/A")
-  }
-})
+//POST CONFIGURACION RIEGO ---------------------------------------------------------------------------------
 
 app.post('/actualizarVariablesP', function (req, res) {
   if (!req.session.user_id) {
@@ -294,6 +284,18 @@ app.post('/plantas', function (req, res) {
   }
 })
 
+app.post('/crearPlanta', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    let sVal1 = req.body.val1
+    let sVal2 = req.body.val2
+    let sVal3 = req.body.val3
+    
+    datab.crearTipoPlanta(sVal1, parseInt(sVal2), sVal3, "N/A")
+  }
+})
+
 //ORDENES DIRECTAS AL ARDUINO
 app.post('/regar1', function (req, res) {
   if (!req.session.user_id) {
@@ -333,7 +335,46 @@ app.post('/luzOnOff', function (req, res) {
   }
 })
 
-//CONFIGURACION DB
+//POST CONFIGURACION CFG ---------------------------------------------------------------------------------
+
+app.post('/actualizarUsuario', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    let sVal1 = req.body.var0
+    let sVal2 = req.body.var1
+    
+    datab.updateUsuario(sVal1, sVal2)
+  }
+})
+
+app.post('/actualizarEmail', function (req, res) {
+  if (!req.session.user_id) {
+    res.redirect("/")
+  } else {
+    let check = req.body.checkMail
+
+    console.log("check "+check)
+    if (check == 1) {
+      let sVal0 = req.body.var0
+      let sVal1 = req.body.var1
+      let sVal2 = req.body.var2
+      let sVal3 = req.body.var3
+      let sVal4 = req.body.var4
+
+      datab.crearCFGMail(sVal0, sVal1, sVal2, sVal3, sVal4)
+      datab.updateInstalacion("S", "")
+    } else {
+      datab.eliminarCFGMail()
+      datab.updateInstalacion("N", "")
+    }
+
+    
+  }
+})
+
+//POST CONFIGURACION DB ----------------------------------------------------------------------------------
+
 app.post('/cfgDB', function (req, res) {
   let sVal1 = req.body.val1
   let sVal2 = req.body.val2
