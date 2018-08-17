@@ -1,52 +1,57 @@
 extends ./layout.jade
 block contenido
 	.row.cloPadin
-		.col-12.col-sm-12.col-md-6.col-lg-12.inline
+		.col-12.col-sm-12.col-md-12.col-lg-12.inline
 			img.logo-xs(src='/img/riemon.jpg')
 	
-	div
-		form(method='post', action='/actualizarVariablesP')
-			p  Nivel de agua 
-			input#var0(type='text', name='var0' required)
-			p  Claridad Minima 
-			input#var1(type='text', name='var1' required)
-			p  Claridad Maxima 
-			input#var2(type='text', name='var2' required)
-			p  Temperatura Minima 
-			input#var3(type='text', name='var3' required)
-			p  Temperatura Maxima 
-			input#var4(type='text', name='var4' required)
-			button#btn(type='submit', name='button', value='#')  Actualizar
-			a(target="_blank" href="/variablesRiego") Ver Valores Actuales
+	.row.cloPadin
+		.col-12.col-sm-12.col-md-12.col-lg-12.inline
+			form(method='post', action='/actualizarVariablesP')
+				p  Nivel de agua 
+				input#var0(type='text', name='var0' required)
+				p  Claridad Minima 
+				input#var1(type='text', name='var1' required)
+				p  Claridad Maxima 
+				input#var2(type='text', name='var2' required)
+				p  Temperatura Minima 
+				input#var3(type='text', name='var3' required)
+				p  Temperatura Maxima 
+				input#var4(type='text', name='var4' required)
+				br
+				button#btn(type='submit', name='button', value='#')  Actualizar
+				a(target="_blank" href="/variablesRiego") Ver Valores Actuales
 
-	div
-		form(method='post', action='/plantas')
-			select(name='planta1')
-				- for (var i =0; i <= plantas.length - 1; i++)
-						option(value='#{plantas[i]}') #{plantas[i]}
-			
-			select(name='planta2')
-				- for (var i =0; i <= plantas.length - 1; i++)
-						option(value='#{plantas[i]}') #{plantas[i]}
+	.row.cloPadin
+		.col-12.col-sm-12.col-md-12.col-lg-12.inline
+			form(method='post', action='/plantas')
+				select(name='planta1')
+					- for (var i =0; i <= plantas.length - 1; i++)
+							option(value='#{plantas[i]}') #{plantas[i]}
+				
+				select(name='planta2')
+					- for (var i =0; i <= plantas.length - 1; i++)
+							option(value='#{plantas[i]}') #{plantas[i]}
 
-			select(name='planta3')
-				- for (var i =0; i <= plantas.length - 1; i++)
-						option(value='#{plantas[i]}') #{plantas[i]}      
-			button#btn(type='submit', name='button', value='#')  GRABAR
-			
-			a(target="_blank" href="/crearPlanta") Crear planta
-	
-	div
-		p Ordenes directas al Arduino          
-		div
-			form(method='post', action='/regar1')
-				button#btn(type='submit', name='button', value='#')  Encender Bomba1 
-		div
-			form(method='post', action='/regar2')
-				button#btn(type='submit', name='button', value='#')  Encender Bomba2 
-		div
-			form(method='post', action='/regar3')
-				button#btn(type='submit', name='button', value='#')  Encender Bomba3 
-		div
-			form(method='post', action='/luzOnOff')
-				button#btn(type='submit', name='button', value='#')  Encender / Apagar Luz 
+				select(name='planta3')
+					- for (var i =0; i <= plantas.length - 1; i++)
+							option(value='#{plantas[i]}') #{plantas[i]}      
+				br
+				button#btn(type='submit', name='button', value='#')  GRABAR
+				
+				a(target="_blank" href="/crearPlanta") Crear planta
+		
+	.row.cloPadin
+		.col-12.col-sm-12.col-md-12.col-lg-12.inline
+			p Ordenes directas al Arduino          
+			div
+				form(method='post', action='/regar1')
+					button#btn(type='submit', name='button', value='#')  Encender Bomba1 
+			div
+				form(method='post', action='/regar2')
+					button#btn(type='submit', name='button', value='#')  Encender Bomba2 
+			div
+				form(method='post', action='/regar3')
+					button#btn(type='submit', name='button', value='#')  Encender Bomba3 
+			div
+				form(method='post', action='/luzOnOff')
+					button#btn(type='submit', name='button', value='#')  Encender / Apagar Luz 

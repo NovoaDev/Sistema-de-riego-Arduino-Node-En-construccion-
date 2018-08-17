@@ -4,6 +4,7 @@ const session = require('express-session')
 const SocketIO = require('socket.io')
 const SerialPort = require('serialport')
 const bParser = require('body-parser')
+const tarea = require('node-cron')
 
 const mailer = require('./utilidades/mailer')
 const datab = require('./utilidades/mysql')
@@ -12,8 +13,6 @@ const valHora = require('./utilidades/validarHora')
 const rdm = require('./utilidades/randomNumber')
 
 const arduinoModel = require('./modelos/arduinoModel')
-const valoresParaRiegoModel = require('./modelos/valoresParaRiegoModel')
-const plantasModel = require('./modelos/plantasModel')
 
 const app = express()
 const server = http.createServer(app)
@@ -21,7 +20,6 @@ const io = SocketIO.listen(server)
 const ReadLine = SerialPort.parsers.Readline
 
 let sis = new arduinoModel()
-let plantas = new plantasModel()
 
 const port = new SerialPort("COM3", { baudRate: 9600 })
 const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
@@ -37,6 +35,8 @@ app.use(session({
 }))
 
 let bLuzEncendida = false
+
+validacionTareaInicio()
 //---------------------------------------------------------------------------------------------------------------------------------- IO
 parser.on('open', function () {
   	console.log('connection is opened')
@@ -81,7 +81,6 @@ app.get('/variablesRiego', function (req, res) {
   } else {
     datab.selecValoresParaRiego(function (iV) {
       if ((iV != "vacia") && (iV != "error")) {
-      
         res.render(__dirname + '/view/variablesRiego',{titulo: "Riem0n! - Valores actuales", V0: iV.nivelAguaMin, V1: iV.claridadMin, V2: iV.claridadMax, V3: iV.tempMin, V4: iV.tempMax, V5: iV.humedad1, V6: iV.humedad2, V7: iV.humedad3 })
       } else {
         res.send("Tabla Vacia")
@@ -180,7 +179,7 @@ app.get('/test', function (req, res) {
     datab.updateValoresParaRiego("humedadPlanta3", 0)
     */
 
-    //TES TABLA INSTALACION
+    //TEST TABLA INSTALACION
     //datab.crearInstalacion("N", "N")
     //datab.updateInstalacion("N", "N")
 
@@ -232,7 +231,14 @@ app.post('/entrar', function (req, res) {
           res.render(__dirname + '/view/actualizarConfig',{titulo: "Riem0n! - Configuracion"})
         break
         case "3" :
-          res.render(__dirname + '/view/actualizarDb',{titulo: "Riem0n! - Configuracion"})
+          datab.selectReg(function (oRegistro) {
+            if ((oRegistro != "vacia") && (oRegistro != "error")) {
+              console.log(oRegistro)
+              res.render(__dirname + '/view/verHistorico',{titulo: "Riem0n! - Historico", registro: oRegistro})
+            } else {
+              res.send("Tabla Registro Vacia")
+            }
+          })
         break
       } 
     } else {
@@ -382,13 +388,10 @@ app.post('/actualizarRegistro', function (req, res) {
       let sVal1 = req.body.var1
       let sVal2 = req.body.var2
 
-      console.log(sVal0)
-      console.log(sVal1)
-      console.log(sVal2)
-
       datab.eliminarHoraReg()
       datab.crearhoraReg(sVal0, sVal1, sVal2)
       datab.updateInstalacion("", "S")
+      crearTarea(sVal0, sVal1, sVal2)
     } else {
       datab.eliminarHoraReg()
       datab.updateInstalacion("", "N")
@@ -612,40 +615,6 @@ function selectorDeVar (sDatosArduino) {
   }  
 }
         
-function guardarReg (oSis) {
-
-  datab.selectHoraReg(function (oSIS, oHoras) {
-    let bGrabar
-
-    if ((oHoras != "vacia") && (oHoras != "error")) {
-
-      let sT1 = oHoras.hora1
-      let sT2 = oHoras.hora2
-      let sT3 = oHoras.hora3
-      
-      bGrabar = valHora(sT1, sT2, sT3)
-
-      if (bGrabar) {
-        let dia = new Date(day, month, year)
-        console.log(dia)
-        let hora = date.getHours()
-        let minutos = date.getMinutes()
-        let sHoraActural =  hora+":"+minutos
-
-        let iNivelAgua = sis.nivelAguaValor
-        let iClaridad = sis.claridadValor
-        let iHumedadPlanta1 = sis.humedadPlanta1
-        let iHumedadPlanta2 = sis.humedadPlanta2 
-        let iHumedadPlanta3 = sis.humedadPlanta3 
-        let iHumedadAmbiente = sis.humedadAmbiente
-        let iTempAmbiente =  sis.tempAmbiente
-
-        datab.crearRegistro(dia, sHoraActural, iNivelAgua, iClaridad, iHumedadPlanta1, iHumedadPlanta2, iHumedadPlanta3, iHumedadAmbiente, iTempAmbiente)
-      }
-    }
-  })
-}
-
 function enviarConfig (iOrden, sDatosA) {
 
   /* SENSOR         - Prefijo
@@ -675,9 +644,63 @@ function enviarConfig (iOrden, sDatosA) {
   if (iOrden == 9) port.write("#9#\n")
 }
 
+function crearTarea (sHora1, sHora2, sHora3) {
+  
+  let sDate = new Date()
+  let sFecha = (sDate.getDate()+"/"+sDate.getMonth()+"/"+sDate.getFullYear())
+  let sHora = sDate.getHours()
+  let sMinutos = sDate.getMinutes()
+  let sHoraActural =  (sHora+":"+sMinutos)
+  let sHorasAProg = ""
+
+  if ((sHora1 != "") && (sHora1 != undefined)) {
+    sHorasAProg = sHora1
+  }
+  if ((sHora2 != "") && (sHora2 != undefined)) {
+    if (sHorasAProg != "") {
+      sHorasAProg = (sHorasAProg+","+sHora2)
+    } else {
+      sHorasAProg = sHora2
+    }
+  }
+  if ((sHora3 != "") && (sHora3 != undefined)) {
+    if (sHorasAProg != "") {
+      sHorasAProg = (sHorasAProg+","+sHora3)
+    } else {
+      sHorasAProg = sHora3
+    }
+  }
+  datab.selectPlantas(function (oPlantas) {
+    tarea.schedule('1 1 '+sHorasAProg+' * * *', function(){
+      let sHumedadPlanta1Final = sis.humedadPlanta1.split(" ")
+      let sHumedadPlanta2Final = sis.humedadPlanta2.split(" ")
+      let sHumedadPlanta3Final = sis.humedadPlanta3.split(" ")
+      let sHumedadAmbiente3Final = sis.humedadAmbiente.split(" ")
+
+      datab.crearRegistro(sFecha, sHoraActural, sis.nivelAguaValor, sis.claridadValor, oPlantas.planta[0], oPlantas.humedad[0], sHumedadPlanta1Final[0], oPlantas.planta[1], oPlantas.humedad[1], sHumedadPlanta2Final[0], oPlantas.planta[2], oPlantas.humedad[2], sHumedadPlanta3Final[0], sHumedadAmbiente3Final[0], sis.tempAmbiente)
+      console.log("Tarea creada con exito")
+    })
+  })
+}
+
+function destruirTarea () {
+  tarea.destroy()
+}
+
+function validacionTareaInicio () {
+  datab.selectHoraReg(function (oHoras) {
+    if ((oHoras != "vacia") && (oHoras != "error")) {
+
+      let sT1 = oHoras.hora1
+      let sT2 = oHoras.hora2
+      let sT3 = oHoras.hora3
+      
+      crearTarea (sT1, sT2, sT3)
+      console.log("Se creo tarea programada horas para guardar reg")     
+    }
+  })
+}
+
 //---------------------------------------------------------------------------------------------------------------------------------- FUNC
 
 server.listen(3000, () => console.log('server on port 3000'))
-
-
-

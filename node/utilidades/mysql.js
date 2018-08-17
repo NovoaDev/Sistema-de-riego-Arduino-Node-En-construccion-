@@ -55,7 +55,7 @@ db.crearTabla = function crearTabla (sTabla) {
     console.log('Tabla de mysql(mail) Creada!')
   }
   if (sTabla == "registro") {
-    connection.query('CREATE TABLE IF NOT EXISTS registro (id INT AUTO_INCREMENT PRIMARY KEY, fecha varchar(6), hora varchar(6), nivelAgua INT, claridad INT, planta1 varchar(40), humedadOptima1 INT, humedadPlanta1 INT,planta2 varchar(40), humedadOptima2 INT, humedadPlanta2 INT, planta3 varchar(40), humedadOptima3 INT, humedadPlanta3 INT, humedadAmbiente INT, tempAmbiente INT)')
+    connection.query('CREATE TABLE IF NOT EXISTS registro (id INT AUTO_INCREMENT PRIMARY KEY, fecha varchar(10), hora varchar(6), nivelAgua INT, claridad INT, planta1 varchar(40), humedadOptima1 INT, humedadPlanta1 INT,planta2 varchar(40), humedadOptima2 INT, humedadPlanta2 INT, planta3 varchar(40), humedadOptima3 INT, humedadPlanta3 INT, humedadAmbiente INT, tempAmbiente INT)')
     console.log('Tabla de mysql(registro) Creada!')
   }
   if (sTabla == "horasRegistro") {
@@ -179,8 +179,11 @@ db.validarUsu = function validarUsu (sUsu, sPass, callback) {
 }
 
 db.updateUsuario = function updateUsuario (sUsu, sPass) {
+  console.log(sUsu)
+  console.log(sPass)
+  let passcrypt = crypto(sPass)
 
-  connection.query("UPDATE usuarios SET usuario= '"+sUsu+"', pass= '"+sPass+"' WHERE id LIKE 1",
+  connection.query("UPDATE usuarios SET usuario= '"+sUsu+"', password= '"+passcrypt+"' WHERE id LIKE 1",
   function (err, res) {
     if (err) {
       console.log('error sql')

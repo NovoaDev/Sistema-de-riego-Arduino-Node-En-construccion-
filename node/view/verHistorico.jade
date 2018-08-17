@@ -1,0 +1,60 @@
+extends ./layout.jade
+block contenido
+	.row.cloPadin
+		.col-12.col-sm-12.col-md-12.col-lg-12.inline
+			img.logo-xs(src='/img/riemon.jpg')
+	
+	.row.cloPadin
+		.col-12.col-sm-12.col-md-12.col-lg-12.inline
+			table.table.table-striped
+				thead
+					tr
+						th
+							strong Fecha
+						th
+							strong Hora
+						th
+							strong N.A
+						th
+							strong Luz
+						th
+							strong Planta1
+						th
+							strong H.O1
+						th
+							strong H.M1
+						th
+							strong Planta2
+						th
+							strong H.O2
+						th
+							strong H.M2
+						th
+							strong Planta3
+						th
+							strong H.O3
+						th
+							strong H.M3
+						th
+							strong H.A
+						th
+							strong T.A
+					
+					tbody
+						- for (var i =0; i <= registro.fecha.length - 1; i++)
+							tr
+								td #{registro.fecha[i]}
+								td #{registro.hora[i]}
+								td #{registro.nivelAgua[i]}
+								td #{registro.claridad[i]}
+								td #{registro.planta1[i]}
+								td #{registro.humedadOptima1[i]}
+								td #{registro.humedadPlanta1[i]}
+								td #{registro.planta2[i]}
+								td #{registro.humedadOptima2[i]}
+								td #{registro.humedadPlanta2[i]}
+								td #{registro.planta3[i]}
+								td #{registro.humedadOptima3[i]}
+								td #{registro.humedadPlanta3[i]}
+								td #{registro.humedadAmbiente[i]}
+								td #{registro.tempAmbiente[i]}

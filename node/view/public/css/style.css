@@ -8,7 +8,7 @@
  }
 
  .logo-xs {
-    width:30%;
+    width:auto;
 
  }
 
@@ -23,4 +23,20 @@
 
   .cloPadin {
  	padding: 2%;
+ }
+
+ .spacio_derecha {
+ 	margin-right: 1em;
+ }
+
+ .spacio_izq {
+ 	margin-left: 1.5em;
+ }
+
+.spacio_top {
+ 	margin-top: 1em;
+ }
+
+ .remove_float {
+ 	float: none;
  }
