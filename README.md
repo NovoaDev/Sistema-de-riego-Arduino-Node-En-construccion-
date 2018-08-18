@@ -1,4 +1,4 @@
-# Sistema-de-riego-Arduino-Node-En-construcción- 
+# Sistema-de-riego-Arduino-Node
 
 Pasos para realizar la instalación de riemon:
 

@@ -1,4 +1,4 @@
-Pasos para realizar la instalacion de riemon:
+﻿Pasos para realizar la instalacion de riemon:
 
 Pasos previos: 
 	1 -Instalar servidor de base de datos :
@@ -79,6 +79,6 @@ Iniciar Riemon.
 		Abrir un cmd, posicionarnos en la carpeta "\SistemaDeRiego\node" y escribir npm start
 
 Acceder a interfaz web
-	127.0.0.1:3000 (El usuario y la contraseña de el usuario por defecto son: Usuario "admin" Clave "admin")
+	127.0.0.1:3000 (El usuario por defecto son: Usuario "admin" Clave "admin")
 
 -----------------------------------------------------------------------------------

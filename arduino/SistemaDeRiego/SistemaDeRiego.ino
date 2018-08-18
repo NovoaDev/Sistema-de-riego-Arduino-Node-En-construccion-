@@ -142,7 +142,9 @@ void obtenerOtros(){
 
 void obtener_Nivel_Del_Agua (){
   NIVEL_AGUA = analogRead(MEDIDOR_NIVEL_AGUA);
-
+  if (NIVEL_AGUA < NIVEL_AGUA_MIN){
+    Serial.println("#10#Nivel agua Critico")
+  }
   Serial.println("#00#"+(String((NIVEL_AGUA))));
 }
 
@@ -152,6 +154,14 @@ void obtener_Humedad_Temperatura () {
       Serial.println("Error");
     return;
   }
+
+  if (((int)VALOR_HUMEDAD) < 10) or ((int)VALOR_HUMEDAD) > 90)){ 
+    Serial.println("#11#Niveleles de humedad Criticos")
+  }
+  if (((int)VALOR_TEMPERATURA) < 10) or ((int)VALOR_TEMPERATURA) > 40)){ 
+    Serial.println("#12#Niveleles de temperatura Criticos")
+  }
+  
   Serial.println("#05#"+(String((int)VALOR_HUMEDAD)));
   delay(100);
   Serial.println("#06#"+(String((int)VALOR_TEMPERATURA)));
@@ -235,12 +245,12 @@ void enciendeApagaLuz(int iOrden){
 
   if(iOrden == 0) {
     digitalWrite(RELE_INTERRUPTOR_LUZ, HIGH);
-    Serial.println("#09#Luz apagada");
+    Serial.println("#08#Luz apagada");
   }
   
   if(iOrden == 1) {
     digitalWrite(RELE_INTERRUPTOR_LUZ, LOW);
-    Serial.println("#09#Luz encendida");
+    Serial.println("#08#Luz encendida");
   }
 
 }

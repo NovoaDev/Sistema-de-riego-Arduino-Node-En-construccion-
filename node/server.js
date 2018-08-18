@@ -35,8 +35,10 @@ app.use(session({
 }))
 
 let bLuzEncendida = false
+let iUltimaHoraCorreo = 0
 
 validacionTareaInicio()
+
 //---------------------------------------------------------------------------------------------------------------------------------- IO
 parser.on('open', function () {
   	console.log('connection is opened')
@@ -539,6 +541,63 @@ function selectorDeVar (sDatosArduino) {
   if (sDatosPrefijo == "#04#") { sis.setHumedadPlanta3(sDatosFinal+" %") }
   if (sDatosPrefijo == "#05#") { sis.setHumedadAmbiente(sDatosFinal+" %") }
   if (sDatosPrefijo == "#06#") { sis.setTempAmbiente(sDatosFinal) }	
+
+  if (sDatosPrefijo == "#08#") { 
+    console.log(sDatosFinal) 
+    datab.selectInstalacion(function (oIns) {
+      if (oIns.usaMail == 'S') {
+        if (sDatosFinal == "Luz apagada") {
+          let mail = new mailer("4")
+        } else {
+          let mail = new mailer("5")
+        }
+      }
+    })
+  }
+  if (sDatosPrefijo == "#09#") { 
+    console.log(sDatosFinal) 
+    datab.selectInstalacion(function (oIns) {
+      if (oIns.usaMail == 'S') {
+        let mail = new mailer("2")
+      }
+    })
+  }
+  if (sDatosPrefijo == "#10#") { 
+    console.log(sDatosFinal) 
+    datab.selectInstalacion(function (oIns) {
+      if (oIns.usaMail == 'S') {
+        if (valHora(iUltimaHoraCorreo)){
+          let date = new Date()
+          iUltimaHoraCorreo = date.getHours()
+          let mail = new mailer("1")
+        }
+      }
+    })
+  }
+  if (sDatosPrefijo == "#11#") { 
+    console.log(sDatosFinal) 
+    datab.selectInstalacion(function (oIns) {
+      if (oIns.usaMail == 'S') {
+        if (valHora(iUltimaHoraCorreo)){
+          let date = new Date()
+          iUltimaHoraCorreo = date.getHours()
+          let mail = new mailer("6")
+        }
+      }
+    })
+  }  
+  if (sDatosPrefijo == "#12#") { 
+    console.log(sDatosFinal) 
+    datab.selectInstalacion(function (oIns) {
+      if (oIns.usaMail == 'S') {
+        if (valHora(iUltimaHoraCorreo)){
+          let date = new Date()
+          iUltimaHoraCorreo = date.getHours()
+          let mail = new mailer("3")
+        }
+      }
+    })
+  }  
 
   //20 Datos de las variables recien actualizados arduino. 
   if (sDatosPrefijo == "#20#") { console.log("NIVEL_AGUA_MIN Actualizado : "+ sDatosFinal) }
