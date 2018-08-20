@@ -167,7 +167,7 @@ app.get('/test', function (req, res) {
     //enviarConfig(9, "") // devuelve por console.log todas las variables de riego que se rellenan en el arduino
 
     //TEST DE TABLA DE VALORES DE RIEGO EN SQL QUE DEBERIA ESTAR A LA PAR CON LO QUE TIENE EL ARDUINO EN LAS VAR LOCALES
-    //datab.crearValoresParaRiego (10, 20, 30, 40, 50, 60, 70, 80)
+    //datab.crearValoresParaRiego (200, 420, 800, 15, 40, 45, 45, 45)
     
     //PUESTA A 0
     /*
@@ -499,17 +499,17 @@ app.post('/cfgDB', function (req, res) {
             datab.crearUsuario("admin", "admin")
 
             //CREAR PLANTAS GENERICAS
-            datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-            datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-            datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+            datab.crearPlantas(1, "generica", 45, "Planta generica 45% humedad", "C:/coso")
+            datab.crearPlantas(2, "generica", 45, "Planta generica 45% humedad", "C:/coso")
+            datab.crearPlantas(3, "generica", 45, "Planta generica 45% humedad", "C:/coso")
 
             //CREAR TIPOPLANTA GENERICO
-            datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+            datab.crearTipoPlanta("generica", 45, "Planta generica 45% humedad", "C:/coso")
 
             //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
 
             //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
-            datab.crearValoresParaRiego(10, 20, 30, 40, 50, 60, 70, 80)
+            datab.crearValoresParaRiego(200, 420, 800, 15, 40, 45, 45, 45)
             datab.crearInstalacion("N", "N")  
           } else {
             res.send('Ya existe registros para una puesta a punto realice wipe primero')
@@ -550,17 +550,17 @@ app.post('/cfgDB', function (req, res) {
         datab.crearUsuario("admin", "admin")
 
         //CREAR PLANTAS GENERICAS
-        datab.crearPlantas(1, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-        datab.crearPlantas(2, "generica", 70, "Planta generica 70% humedad", "C:/coso")
-        datab.crearPlantas(3, "generica", 70, "Planta generica 70% humedad", "C:/coso")
+        datab.crearPlantas(1, "generica", 45, "Planta generica 45% humedad", "C:/coso")
+        datab.crearPlantas(2, "generica", 45, "Planta generica 45% humedad", "C:/coso")
+        datab.crearPlantas(3, "generica", 45, "Planta generica 45% humedad", "C:/coso")
 
         //CREAR TIPOPLANTA GENERICO
-        datab.crearTipoPlanta("generica", 70, "Planta generica 70% humedad", "C:/coso")
+        datab.crearTipoPlanta("generica", 45, "Planta generica 45% humedad", "C:/coso")
 
         //MAIL, REGISTRO Y HORAS REGISTRO NO SE CREA NADA POR DEFECTO SI QUIEREN HABILITARSE SE HACE DESDE EL APARTADO DE CONFIGURACIONES. 
 
         //CREAR VALORES PARA RIEGO POR DEFECTO //REVISAR
-        datab.crearValoresParaRiego(10, 20, 30, 40, 50, 60, 70, 80)
+        datab.crearValoresParaRiego(200, 420, 800, 15, 40, 45, 45, 45)
 
         //CREAR CONFIGURACION POR DEFECTO PARA QUE NO USE NI EL MODULO DE REGISTRO NI EL DE MAIL
         datab.crearInstalacion("N", "N")
