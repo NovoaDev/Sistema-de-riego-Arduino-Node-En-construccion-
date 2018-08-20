@@ -82,6 +82,7 @@ link de descarga:
   www.wampserver.es/downloads/wampserver2.2e-php5.4.3-httpd2.2.22-mysql5.5.24-32b.exe
   
   64 bits 
+  
   www.wampserver.es/downloads/wampserver2.2e-php5.4.3-httpd-2.4.2-mysql5.5.24-x64.exe
 
   Tutorial oficial de como instalarlo
@@ -108,19 +109,20 @@ RIEMON_SERVER_SQL /m "127.0.0.1"  <--- IP servidor mysql
 
 RIEMON_PORT_SQL /m "3306"				  <--- Es importante que nuestro server use el puerto por defecto de mysql
 
-RIEMON_USER_SQL /m "root"				  <--.
+RIEMON_USER_SQL /m "root"				  <-- Usuario y password modificar segun nuestra configuracion de mysql
 
-RIEMON_PASS_SQL /m "L3nt3j4"         | Usuario y password modificar segun nuestra configuracion de mysql
+RIEMON_PASS_SQL /m "L3nt3j4"          
 
 RIEMON_DB_SQL /m "riemon"         <--- No cambiar este valor
 
-RIEMON_DB_VAL1 /m "papa"          <--.
+RIEMON_DB_VAL1 /m "papa"          <-- Estas son claves que nos pedirá a la hora de realizar la instalación inicial, wipe de tablas y restaurar configuración a la predeterminada
 
-RIEMON_DB_VAL2 /m "frita"				     | Estas son claves que nos pedirá a la hora de realizar la instalación
+RIEMON_DB_VAL2 /m "frita"	
 
-RIEMON_DB_VAL3 /m "rica"             | inicial, wipe de tablas y restaurar configuración a la predeterminada
-													               | si desea se pueden cambiar y usar personalizadas.
+RIEMON_DB_VAL3 /m "rica"             
+													               
 -Crear base de datos 
+
   Dentro de la ruta "SistemaDeRiego\install\2" se encuentran dos archivos esos tenemos que copiarlos a la carpeta donde se encuentra el ejecutable de mysql. en mi caso seria algo asi 
 
   C:\wamp64\bin\mysql\mysql5.7.21\bin 
@@ -134,6 +136,7 @@ RIEMON_DB_VAL3 /m "rica"             | inicial, wipe de tablas y restaurar confi
 Preparar arduino y servidor de node
 
 -Preparación arduino
+  
   Físico:
   
   Seguir el esquema que se encuentra en la ruta "SistemaDeRiego\arduino\Sistemas de riego.fzz" para abrir este archivo necesitaremos un programa llamado "fritzing"
@@ -156,7 +159,8 @@ Preparar arduino y servidor de node
   para verificar que este todo bien abrimos un navegador y accedemos a la IP 127.0.0.1:3000
 
   Creación de tablas y datos genéricos
-    Ahora ya desde la pagina principal donde nos pedirá unas credenciales para conectarnos haremos click sobre el link que dice "Configuración base de datos" nos abrirá una pagina donde pedirán 3 claves son las que previamente declaramos en las variables de entorno si no usaste alguna por defecto serán papa, frita, rica. Ahora seleccionamos "Puesta a punto inicial" en el menú desplegable y hacemos click sobre OK.
+    
+  Ahora ya desde la pagina principal donde nos pedirá unas credenciales para conectarnos haremos click sobre el link que dice "Configuración base de datos" nos abrirá una pagina donde pedirán 3 claves son las que previamente declaramos en las variables de entorno si no usaste alguna por defecto serán papa, frita, rica. Ahora seleccionamos "Puesta a punto inicial" en el menú desplegable y hacemos click sobre OK.
 
 Despues de todo esto ya se encuentra listo para trabajar con Riemon.
 
