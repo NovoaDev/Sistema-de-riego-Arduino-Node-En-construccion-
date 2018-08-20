@@ -2,16 +2,27 @@
 
 Sistema de riego automatizado creado para solucionar mi problema con las plantas. 
 Lo hice un poco más abstracto para que pudiera ser usado fácilmente por otra persona.
+
 •	Interfaz web sencillo.
+
 •	Login y sesiones para poder iniciar desde internet.
+
 •	Posibilidad de crear tipos de plantas con diferentes humedades.
+
 •	3 macetas con plantas modificables.
+
 •	Envió de correo electrónico (Encender Arduino, Nivel agua bajo, Temperatura extremas, riego, etc.)
+
 •	Modificación fácil de valores de riego (Iluminación mínima, máxima, etc)
+
 •	Creación de registros diario con el valor de los sensores.
+
 •	Bats para una instalación fácil.
+
 •	Permanencia de datos con mysql
+
 •	Órdenes directas desde Node al Arduino
+
 •	Diagrama de instalación Arduino (“sistema de riego.fzz”)
 
 SENSORES:
