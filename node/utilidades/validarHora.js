@@ -4,8 +4,7 @@ function validarHora (sHora) {
 	let bRetorno
 	
 	bRetorno = false
-	
-  if ((sHoraActural < sHora)) { bRetorno = true }
+  if ((hora > sHora)) { bRetorno = true }
 
 	return bRetorno
 }

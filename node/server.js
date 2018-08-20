@@ -266,6 +266,17 @@ app.post('/actualizarVariablesP', function (req, res) {
     if ((sVar2 != undefined) && (sVar2 != '')) { enviarConfig(2, sVar2) }
     if ((sVar3 != undefined) && (sVar3 != '')) { enviarConfig(3, sVar3) }
     if ((sVar4 != undefined) && (sVar4 != '')) { enviarConfig(4, sVar4) }
+    datab.selectTipoPlanta("", function (oPlantas) {
+      if ((oPlantas != "vacia") && (oPlantas != "error")) {
+        let plantas = []
+        oPlantas.planta.forEach(function(result) {
+          plantas.push(result)
+        })
+        res.render(__dirname + '/view/actualizarVariables',{titulo: "Riem0n! - Valores para riego!", plantas: plantas})
+      } else {
+        res.send("Tabla tipoPlanta Vacia")
+      }
+    })
   }
 })
 
@@ -289,6 +300,17 @@ app.post('/plantas', function (req, res) {
       datab.updatePlantas(3, oPlanta.planta, parseInt(oPlanta.humedad), oPlanta.notas, oPlanta.imagen)
       enviarConfig(7, parseInt(oPlanta.humedad))
     })
+    datab.selectTipoPlanta("", function (oPlantas) {
+      if ((oPlantas != "vacia") && (oPlantas != "error")) {
+        let plantas = []
+        oPlantas.planta.forEach(function(result) {
+          plantas.push(result)
+        })
+        res.render(__dirname + '/view/actualizarVariables',{titulo: "Riem0n! - Valores para riego!", plantas: plantas})
+      } else {
+        res.send("Tabla tipoPlanta Vacia")
+      }
+    })
   }
 })
 
@@ -301,6 +323,7 @@ app.post('/crearPlanta', function (req, res) {
     let sVal3 = req.body.val3
     
     datab.crearTipoPlanta(sVal1, parseInt(sVal2), sVal3, "N/A")
+    res.render(__dirname + '/view/crearPlanta',{titulo: "Riem0n! - Crear Planta"})
   }
 })
 
@@ -310,6 +333,17 @@ app.post('/regar1', function (req, res) {
     res.redirect("/")
   } else {
     enviarConfig(8, "1")
+    datab.selectTipoPlanta("", function (oPlantas) {
+      if ((oPlantas != "vacia") && (oPlantas != "error")) {
+        let plantas = []
+        oPlantas.planta.forEach(function(result) {
+          plantas.push(result)
+        })
+        res.render(__dirname + '/view/actualizarVariables',{titulo: "Riem0n! - Valores para riego!", plantas: plantas})
+      } else {
+        res.send("Tabla tipoPlanta Vacia")
+      }
+    })
   }
 })
 
@@ -318,6 +352,17 @@ app.post('/regar2', function (req, res) {
     res.redirect("/")
   } else {
     enviarConfig(8, "2")
+    datab.selectTipoPlanta("", function (oPlantas) {
+      if ((oPlantas != "vacia") && (oPlantas != "error")) {
+        let plantas = []
+        oPlantas.planta.forEach(function(result) {
+          plantas.push(result)
+        })
+        res.render(__dirname + '/view/actualizarVariables',{titulo: "Riem0n! - Valores para riego!", plantas: plantas})
+      } else {
+        res.send("Tabla tipoPlanta Vacia")
+      }
+    })
   }   
 })
 
@@ -326,6 +371,17 @@ app.post('/regar3', function (req, res) {
     res.redirect("/")
   } else {
     enviarConfig(8, "3")
+    datab.selectTipoPlanta("", function (oPlantas) {
+      if ((oPlantas != "vacia") && (oPlantas != "error")) {
+        let plantas = []
+        oPlantas.planta.forEach(function(result) {
+          plantas.push(result)
+        })
+        res.render(__dirname + '/view/actualizarVariables',{titulo: "Riem0n! - Valores para riego!", plantas: plantas})
+      } else {
+        res.send("Tabla tipoPlanta Vacia")
+      }
+    })
   } 
 })
 
@@ -340,6 +396,17 @@ app.post('/luzOnOff', function (req, res) {
       enviarConfig(8, "5")
       bLuzEncendida = true
     }
+    datab.selectTipoPlanta("", function (oPlantas) {
+      if ((oPlantas != "vacia") && (oPlantas != "error")) {
+        let plantas = []
+        oPlantas.planta.forEach(function(result) {
+          plantas.push(result)
+        })
+        res.render(__dirname + '/view/actualizarVariables',{titulo: "Riem0n! - Valores para riego!", plantas: plantas})
+      } else {
+        res.send("Tabla tipoPlanta Vacia")
+      }
+    })
   }
 })
 
@@ -353,6 +420,7 @@ app.post('/actualizarUsuario', function (req, res) {
     let sVal2 = req.body.var1
     
     datab.updateUsuario(sVal1, sVal2)
+    res.render(__dirname + '/view/actualizarConfig',{titulo: "Riem0n! - Configuracion"})
   }
 })
 
@@ -376,6 +444,7 @@ app.post('/actualizarEmail', function (req, res) {
       datab.eliminarCFGMail()
       datab.updateInstalacion("N", "")
     }
+    res.render(__dirname + '/view/actualizarConfig',{titulo: "Riem0n! - Configuracion"})
   }
 })
 
@@ -398,6 +467,7 @@ app.post('/actualizarRegistro', function (req, res) {
       datab.eliminarHoraReg()
       datab.updateInstalacion("", "N")
     }
+    res.render(__dirname + '/view/actualizarConfig',{titulo: "Riem0n! - Configuracion"})
   }
 })
 
@@ -542,6 +612,7 @@ function selectorDeVar (sDatosArduino) {
   if (sDatosPrefijo == "#05#") { sis.setHumedadAmbiente(sDatosFinal+" %") }
   if (sDatosPrefijo == "#06#") { sis.setTempAmbiente(sDatosFinal) }	
 
+  //Acciones que responden con correo 
   if (sDatosPrefijo == "#08#") { 
     console.log(sDatosFinal) 
     datab.selectInstalacion(function (oIns) {
@@ -555,48 +626,47 @@ function selectorDeVar (sDatosArduino) {
     })
   }
   if (sDatosPrefijo == "#09#") { 
-    console.log(sDatosFinal) 
     datab.selectInstalacion(function (oIns) {
       if (oIns.usaMail == 'S') {
         let mail = new mailer("2")
       }
     })
   }
-  if (sDatosPrefijo == "#10#") { 
-    console.log(sDatosFinal) 
-    datab.selectInstalacion(function (oIns) {
-      if (oIns.usaMail == 'S') {
-        if (valHora(iUltimaHoraCorreo)){
-          let date = new Date()
-          iUltimaHoraCorreo = date.getHours()
+  if (sDatosPrefijo == "#10#") {
+    if (valHora(iUltimaHoraCorreo)){
+      let date = new Date()
+      iUltimaHoraCorreo = date.getHours()
+          
+      datab.selectInstalacion(function (oIns) {
+        if (oIns.usaMail == 'S') {
           let mail = new mailer("1")
-        }
-      }
-    })
+        }  
+      })
+    }
   }
   if (sDatosPrefijo == "#11#") { 
-    console.log(sDatosFinal) 
-    datab.selectInstalacion(function (oIns) {
-      if (oIns.usaMail == 'S') {
-        if (valHora(iUltimaHoraCorreo)){
-          let date = new Date()
-          iUltimaHoraCorreo = date.getHours()
+    if (valHora(iUltimaHoraCorreo)){  
+      let date = new Date()
+      iUltimaHoraCorreo = date.getHours()
+  
+      datab.selectInstalacion(function (oIns) {
+        if (oIns.usaMail == 'S') {
           let mail = new mailer("6")
         }
-      }
-    })
+      })
+    }    
   }  
   if (sDatosPrefijo == "#12#") { 
-    console.log(sDatosFinal) 
-    datab.selectInstalacion(function (oIns) {
-      if (oIns.usaMail == 'S') {
-        if (valHora(iUltimaHoraCorreo)){
-          let date = new Date()
-          iUltimaHoraCorreo = date.getHours()
+    if (valHora(iUltimaHoraCorreo)){
+      let date = new Date()
+      iUltimaHoraCorreo = date.getHours()
+
+      datab.selectInstalacion(function (oIns) {
+        if (oIns.usaMail == 'S') {
           let mail = new mailer("3")
-        }
-      }
-    })
+        } 
+      })
+    }
   }  
 
   //20 Datos de las variables recien actualizados arduino. 
@@ -709,7 +779,7 @@ function crearTarea (sHora1, sHora2, sHora3) {
   let sFecha = (sDate.getDate()+"/"+sDate.getMonth()+"/"+sDate.getFullYear())
   let sHora = sDate.getHours()
   let sMinutos = sDate.getMinutes()
-  let sHoraActural =  (sHora+":"+sMinutos)
+  let sHoraActual =  (sHora+":"+sMinutos)
   let sHorasAProg = ""
 
   if ((sHora1 != "") && (sHora1 != undefined)) {
@@ -736,7 +806,7 @@ function crearTarea (sHora1, sHora2, sHora3) {
       let sHumedadPlanta3Final = sis.humedadPlanta3.split(" ")
       let sHumedadAmbiente3Final = sis.humedadAmbiente.split(" ")
 
-      datab.crearRegistro(sFecha, sHoraActural, sis.nivelAguaValor, sis.claridadValor, oPlantas.planta[0], oPlantas.humedad[0], sHumedadPlanta1Final[0], oPlantas.planta[1], oPlantas.humedad[1], sHumedadPlanta2Final[0], oPlantas.planta[2], oPlantas.humedad[2], sHumedadPlanta3Final[0], sHumedadAmbiente3Final[0], sis.tempAmbiente)
+      datab.crearRegistro(sFecha, sHoraActual, sis.nivelAguaValor, sis.claridadValor, oPlantas.planta[0], oPlantas.humedad[0], sHumedadPlanta1Final[0], oPlantas.planta[1], oPlantas.humedad[1], sHumedadPlanta2Final[0], oPlantas.planta[2], oPlantas.humedad[2], sHumedadPlanta3Final[0], sHumedadAmbiente3Final[0], sis.tempAmbiente)
       console.log("Tarea creada con exito")
     })
   })

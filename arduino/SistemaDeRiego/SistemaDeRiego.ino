@@ -143,7 +143,7 @@ void obtenerOtros(){
 void obtener_Nivel_Del_Agua (){
   NIVEL_AGUA = analogRead(MEDIDOR_NIVEL_AGUA);
   if (NIVEL_AGUA < NIVEL_AGUA_MIN){
-    Serial.println("#10#Nivel agua Critico")
+    Serial.println("#10#Nivel agua Critico");
   }
   Serial.println("#00#"+(String((NIVEL_AGUA))));
 }
@@ -155,11 +155,11 @@ void obtener_Humedad_Temperatura () {
     return;
   }
 
-  if (((int)VALOR_HUMEDAD) < 10) or ((int)VALOR_HUMEDAD) > 90)){ 
-    Serial.println("#11#Niveleles de humedad Criticos")
+  if ((((int)VALOR_HUMEDAD) < 10) or ((((int)VALOR_HUMEDAD)) > 90)){ 
+    Serial.println("#11#Niveleles de humedad Criticos");
   }
-  if (((int)VALOR_TEMPERATURA) < 10) or ((int)VALOR_TEMPERATURA) > 40)){ 
-    Serial.println("#12#Niveleles de temperatura Criticos")
+  if ((((int)VALOR_TEMPERATURA) < 10) or (((int)VALOR_TEMPERATURA) > 40)){ 
+    Serial.println("#12#Niveleles de temperatura Criticos");
   }
   
   Serial.println("#05#"+(String((int)VALOR_HUMEDAD)));
