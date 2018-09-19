@@ -21,7 +21,7 @@ const ReadLine = SerialPort.parsers.Readline
 
 let sis = new arduinoModel()
 
-const port = new SerialPort("COM3", { baudRate: 9600 })
+const port = new SerialPort("COM5", { baudRate: 9600 })
 const parser = port.pipe(new ReadLine({ delimiter: '\r\n' }))
 
 //Middleware`s

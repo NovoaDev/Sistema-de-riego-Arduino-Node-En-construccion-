@@ -1,5 +1,8 @@
 ﻿# Sistema-de-riego-Arduino-Node
 
+Primera prueba: https://www.youtube.com/watch?v=_u1acVTYa8w
+
+
 Sistema de riego automatizado creado para solucionar mi problema con las plantas. 
 Lo hice un poco más abstracto para que pudiera ser usado fácilmente por otra persona.
 
