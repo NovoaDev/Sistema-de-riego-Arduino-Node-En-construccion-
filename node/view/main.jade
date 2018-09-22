@@ -1,41 +1,42 @@
 extends ./layout.jade
 block contenido
-	.col-12.col-sm-12.col-md-12.col-lg-12.remove_float
-		.row
-			.col-12.col-sm-12.col-md-12.col-lg-12.inline
-				img.logo-xs(src='/img/riemon.jpg')
+	.container.remove_float
+		.row.margen-bottom-row
+			.col-lg-3.col-md-3.col-sm-3.col-6.inline
+				img(src='/img/riemon.jpg').col-lg-12.col-md-12.col-sm-12
 
+		.row.margen-bottom-row
+			.col-lg-2.col-md-2.col-sm-3.col-5.inline.col-centrada
+				img(src='/img/medidorAgua.png').col-lg-12.col-md-12.col-sm-12
+				.textoAlign
+					h5#valor0.inline
+					h5#senso0.inline
+			.col-lg-2.col-md-2.col-sm-3.col-5.inline.col-centrada
+				img(src='/img/medidorSol.jpg').col-lg-12.col-md-12.col-sm-12
+				.textoAlign
+					h5#valor1.inline
+					h5#senso1.inline
+			.col-lg-2.col-md-2.col-sm-3.col-5.inline.col-centrada
+				img(src='/img/humedadAmbiente.png').col-lg-12.col-md-12.col-sm-12
+				.textoAlign
+					h5#senso5.inline
+			.col-lg-2.col-md-2.col-sm-3.col-5.inline.col-centrada
+				img(src='/img/temAmbiente.png').col-lg-12.col-md-12.col-sm-12
+				.textoAlign
+					h5#senso6.inline
 		.row
-			.col-6.col-sm-6.col-md-6.col-lg-6.inline
-				img.logo-xs(src='/img/medidorAgua.png')
-				p#valor0.inline
-				p#senso0.inline
-			.col-6.col-sm-6.col-md-6.col-lg-6.inline
-				img.logo-xs(src='/img/medidorSol.jpg')
-				p#valor1.inline
-				p#senso1.inline
-		.row
-			.col-3.col-sm-12.col-md-6.col-lg-12.inline
-				img.logo-xs(src='/img/humedadAmbiente.png')
-			.col-3.col-sm-12.col-md-6.col-lg-12.inline
-				p#senso5.inline
-			.col-3.col-sm-12.col-md-6.col-lg-12.inline
-				img.logo-xs(src='/img/temAmbiente.png')
-			.col-3.col-sm-12.col-md-6.col-lg-12.inline
-				p#senso6.inline
-		.row
-			.hidden-xs.col-2.col-sm-12.col-md-6.col-lg-12.inline
-				img.logo-xs.rounded-circle(src='/img/plantaIco.png')
-				p - #{plantas[0]}
-			.col-2.col-sm-12.col-md-6.col-lg-12.inline
-				p#senso2.inline
-			.hidden-xs.col-2.col-sm-12.col-md-6.col-lg-12.inline
-				img.logo-xs.rounded-circle(src='/img/plantaIco.png')
-				p - #{plantas[1]}
-			.col-2.col-sm-12.col-md-6.col-lg-12.inline
-				p#senso3.inline
-			.hidden-xs.col-2.col-sm-12.col-md-6.col-lg-12.inline
-				img.logo-xs.rounded-circle(src='/img/plantaIco.png')
-				p - #{plantas[2]}
-			.col-2.col-sm-12.col-md-6.col-lg-12.inline
-				p#senso4.inline
+			.col-lg-2.col-md-2.col-sm-3.col-3.inline.col-centrada
+				img(src='/img/plantaIco.png').rounded-circle.col-lg-12.col-md-12.col-sm-12
+				.textoAlign
+					h5 -#{plantas[0]}
+					h5#senso2.inline
+			.col-lg-2.col-md-2.col-sm-3.col-3.inline.col-centrada
+				img(src='/img/plantaIco.png').rounded-circle.col-lg-12.col-md-12.col-sm-12
+				.textoAlign
+					h5 -#{plantas[1]}
+					h5#senso3.inline
+			.col-lg-2.col-md-2.col-sm-3.col-3.inline.col-centrada
+				img(src='/img/plantaIco.png').rounded-circle.col-lg-12.col-md-12.col-sm-12
+				.textoAlign
+					h5 -#{plantas[2]}
+					h5#senso4.inline

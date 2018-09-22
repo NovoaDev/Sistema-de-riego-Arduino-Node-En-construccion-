@@ -1,16 +1,17 @@
 extends ./layout.jade
 block contenido
-	.container-fluid
-		.row.cloPadin
-			.col-12.col-sm-12.col-md-6.col-lg-12.inline
-				img.logo-xs(src='/img/riemon.jpg')
-		div
-			form(method='post', action='/crearPlanta')
-				p  Planta : 
-				input#val1(type='text', name='val1')
-				p  Humedad : 
-				input#val2(type='text', name='val2')
-				p  Notas : 
-				input#val3(type='text', name='val3')
-				button#btn(type='submit', name='button', value='Crear')  CREAR 
-			p  Para que la nueva planta salga en los selectores de seleccionar planta es necesario recargar la pagina
+	.container.remove_float.center-block.text-center
+		.row.margen-bottom-row
+			.col-lg-4.col-md-3.col-sm-3.col-6.inline.centrarIMG
+				img(src='/img/riemon.jpg').col-lg-12.col-md-12.col-sm-12
+		.row
+			.col-12.col-sm-12.col-md-12.col-lg-12.inline
+				form(method='post', action='/crearPlanta')
+					p  Planta :
+					input#val1(type='text', name='val1', class='btnGuardar centrarIMG')
+					p  Humedad :
+					input#val2(type='text', name='val2', class='btnGuardar centrarIMG')
+					p  Notas :
+					input#val3(type='text', name='val3', class='btnGuardar centrarIMG')
+					button#btn(type='submit', name='button', value='Crear', class='btnGuardar centrarIMG')  CREAR
+				p  Para que la nueva planta salga en los selectores de seleccionar planta es necesario recargar la pagina

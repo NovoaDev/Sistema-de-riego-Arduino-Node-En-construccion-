@@ -40,3 +40,38 @@
  .remove_float {
  	float: none;
  }
+
+.col-centrada{
+    float: none;
+    margin: 0 auto;
+}
+
+h5 {
+  text-align: center;
+}
+
+.row {
+  align-items: center;
+}
+.margen-bottom-row {
+  margin-bottom: 3vh;
+}
+
+.textoAlign {
+  text-align: center;
+}
+
+.centrarIMG {
+  width: 50%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btnGuardar {
+  display: block;
+}
+
+.btnPlantas {
+  display: inline;
+}

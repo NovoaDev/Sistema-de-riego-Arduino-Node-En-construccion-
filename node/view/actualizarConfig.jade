@@ -1,28 +1,27 @@
 extends ./layout.jade
 block contenido
-	.col-md-12.remove_float.center-block
+	.container.remove_float.center-block.text-center
+		.row.margen-bottom-row
+			.col-lg-4.col-md-3.col-sm-3.col-6.inline.centrarIMG
+				img(src='/img/riemon.jpg').col-lg-12.col-md-12.col-sm-12
+		.row
+			.col-12.col-sm-12.col-md-12.col-lg-12.inline
+					p  Cambiar configuracion de usuario
+					form(method='post', action='/actualizarUsuario')
+						p.btnGuardar  Nuevo usuario
+						input#var0(type='text', name='var0' required, class='btnGuardar centrarIMG')
+						p.btnGuardar  Nuevo password
+						input#var1(type='password', name='var1' required, class='btnGuardar centrarIMG')
+						button#btn(type='submit', name='button', value='#', class'btnGuardar')  Guardar
+
 		.row.cloPadin
 			.col-12.col-sm-12.col-md-12.col-lg-12.inline
-				img.logo-xs(src='/img/riemon.jpg')
-		
-		.row.cloPadin
-			.col-12.col-sm-12.col-md-12.col-lg-12.inline
-				p  Usuario en login
-				form(method='post', action='/actualizarUsuario')
-					p  Usuario 
-					input#var0(type='text', name='var0' required)
-					p  Password
-					input#var1(type='password', name='var1' required)
-					button#btn(type='submit', name='button', value='#')  Guardar
-			
-		.row.cloPadin
-			.col-12.col-sm-12.col-md-12.col-lg-12.inline
-		
+
 				form(method='post', action='/actualizarEmail')
 					p  Email testigo
 						input#checkMail(name='checkMail', value='1', onchange='javascript:showContent("Mail")', type='checkbox')
 					#contentMail(style='display: none;')
-						p  Servicio 
+						p  Servicio
 						input#var0(type='text', name='var0')
 						p  Correo Destino
 						input#var1(type='text', name='var1')
@@ -35,12 +34,12 @@ block contenido
 					button#btn(type='submit', name='button', value='#')  Guardar
 				#contentMailTest(style='display: none;')
 					form(method='post', action='/testEmail')
-						button#btn(type='submit', name='button', value='#')  Test Email 
+						button#btn(type='submit', name='button', value='#')  Test Email
 
 		.row.cloPadin
 			.col-12.col-sm-12.col-md-12.col-lg-12.inline
-		
-				form(method='post', action='/actualizarRegistro') 
+
+				form(method='post', action='/actualizarRegistro')
 					p  Historico (horas del dia en las que se guarda registro. Dejar en blanco los campos sobrantes)
 						input#checkReg(name='checkReg', value='1', onchange='javascript:showContent("Registro")', type='checkbox')
 					#contentReg(style='display: none;')
@@ -48,5 +47,5 @@ block contenido
 						input#var0(type='text', name='var0' )
 						input#var1(type='text', name='var1' )
 						input#var2(type='text', name='var2' )
-						
+
 					button#btn(type='submit', name='button', value='#')  Guardar

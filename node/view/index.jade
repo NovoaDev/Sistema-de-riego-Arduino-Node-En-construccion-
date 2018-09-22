@@ -1,18 +1,18 @@
 extends ./layout.jade
 block contenido
-	.col-md-12.remove_float.center-block.text-center
+	.container.remove_float.center-block.text-center
+		.row.margen-bottom-row
+			.col-lg-4.col-md-3.col-sm-3.col-6.inline.centrarIMG
+				img(src='/img/riemon.jpg').col-lg-12.col-md-12.col-sm-12
 		.row
 			.col-12.col-sm-12.col-md-12.col-lg-12.inline
-				img.logo-xs(src='/img/riemon.jpg')
-		.row
-			.col-12.col-sm-12.col-md-12.col-lg-12.inline
-			
+
 				form(method='post', action='/entrar')
-					p Login : 
+					p Login :
 					input#usu(type='text', name='usuario')
-					p Password : 
+					p Password :
 					input#pass(type='password', name='password')
-					
+
 					br
 					select.spacio_top(name='selectorPagina')
 						option(value='0', selected='selected') Directo
@@ -20,6 +20,6 @@ block contenido
 						option(value='2') Configuracion Servidor
 						option(value='3') Historico
 					br
-					button.spacio_top#btn(type='submit', name='button', value='Login')  LOGIN 
+					button.spacio_top#btn(type='submit', name='button', value='Login')  LOGIN
 		br
 		a(target="_blank" href="/cfgDB") Configuracion Base de datos
